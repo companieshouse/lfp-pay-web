@@ -1,0 +1,6 @@
+app_name: lfp.web.ch.gov.uk
+group: web
+
+weight: 900
+routes:
+   1: /lfp/(.*)/.*
