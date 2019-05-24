@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE"></title>
+    <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
+    <link
+            th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+            media="all" rel="stylesheet" type="text/css" />
+    <link
+            rel="icon"
+            th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+            type="image/x-icon" />
+
+</head>
+<body>
+    <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+
+    <div class="entire-wrapper">
+        <div th:replace="fragments/header :: header (headerText = 'LFP')"></div>
+        <div class="govuk-width-container">
+            <div th:replace="fragments/betaBanner :: betaBanner"></div>
+            <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
+            <div th:replace="fragments/userBar :: userBar"></div>
+            <main id="content" role="main" class="govuk-main-wrapper">
+                <div layout:fragment="content"></div>
+            </main>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/vendor/selection-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+
+    <div th:replace="fragments/piwik :: piwik (moduleName = 'lfp')"></div>
+</body>
+</html>
