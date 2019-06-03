@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.gov.companieshouse</groupId>
-    <artifactId>lfp.web.ch.gov.uk</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>lfp-pay.web.ch.gov.uk</artifactId>
+    <version>445c236</version>
     <packaging>jar</packaging>
 
-    <name>lfp.web.ch.gov.uk</name>
+    <name>lfp-pay.web.ch.gov.uk</name>
     <description>Companies House Service for paying LFP penalties and associated fees</description>
 
     <parent>
@@ -45,7 +45,8 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

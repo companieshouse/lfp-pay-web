@@ -3,4 +3,5 @@ group: web
 
 weight: 900
 routes:
-   1: /lfp/(.*)/.*
+   1: /lfp/*
+   2: /healthcheck/*
