@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.gov.companieshouse</groupId>
-    <artifactId>lfp-pay.web.ch.gov.uk</artifactId>
-    <version>2c337ac</version>
+    <artifactId>lfp-pay-web</artifactId>
+    <version>0d72a94</version>
     <packaging>jar</packaging>
 
-    <name>lfp-pay.web.ch.gov.uk</name>
+    <name>lfp-pay-web</name>
     <description>Companies House Service for paying LFP penalties and associated fees</description>
 
     <parent>
