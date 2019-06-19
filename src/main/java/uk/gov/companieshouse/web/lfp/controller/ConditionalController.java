@@ -25,8 +25,8 @@ public interface ConditionalController {
      * @param transactionId     the transaction identifier
      * @param companyAccountsId the company accounts identifier
      *
-     * @see uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService
-     * @see uk.gov.companieshouse.web.accounts.exception.NavigationException
+     * @see uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService
+     * @see uk.gov.companieshouse.web.lfp.exception.NavigationException
      *
      * @return true if the template for a controller will be rendered
      */

@@ -5,8 +5,8 @@ package uk.gov.companieshouse.web.lfp.exception;
  * that is thrown if errors occur when attempting to determine if
  * a conditional controller should render or not during navigation.
  *
- * @see uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService
- * @see uk.gov.companieshouse.web.accounts.controller.ConditionalController
+ * @see uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService
+ * @see uk.gov.companieshouse.web.lfp.controller.ConditionalController
  **/
 public class NavigationException extends RuntimeException {
 

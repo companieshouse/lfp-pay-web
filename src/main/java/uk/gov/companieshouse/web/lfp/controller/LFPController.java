@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
-import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 
 import javax.servlet.http.HttpServletRequest;
 

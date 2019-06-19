@@ -5,7 +5,7 @@ package uk.gov.companieshouse.web.lfp.exception;
  * {@code RuntimeException} that should be used to indicate a missing message
  * key mapping for an API validation error.
  *
- * @see uk.gov.companieshouse.web.accounts.enumeration.ValidationMessage
+ * @see uk.gov.companieshouse.web.lfp.enumeration.ValidationMessage
  */
 public class MissingMessageKeyException extends RuntimeException {
 
