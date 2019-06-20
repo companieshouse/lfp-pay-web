@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.gov.companieshouse</groupId>
-    <artifactId>lfp.web.ch.gov.uk</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>lfp-pay-web</artifactId>
+    <version>b7b93d0</version>
     <packaging>jar</packaging>
 
-    <name>lfp.web.ch.gov.uk</name>
+    <name>lfp-pay-web</name>
     <description>Companies House Service for paying LFP penalties and associated fees</description>
 
     <parent>
@@ -24,7 +24,17 @@
         <java.version>1.8</java.version>
         <structured-logging.version>1.5.0-rc2</structured-logging.version>
         <common-web-java.version>1.0.1-rc3</common-web-java.version>
+        <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
+        <java-session-handler.version>2.2.0</java-session-handler.version>
+        <web-security-java.version>1.1.0-rc1</web-security-java.version>
+        <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
+        <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
 
+        <!-- Maven and Surefire plugins -->
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
+        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+        <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
     </properties>
 
     <dependencies>
@@ -44,8 +54,15 @@
         </dependency>
 
         <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>${thymeleaf-layout-dialect.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -60,6 +77,47 @@
             <version>${common-web-java.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>java-session-handler</artifactId>
+            <version>${java-session-handler.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>web-security-java</artifactId>
+            <version>${web-security-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-jupiter-engine.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito-junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Security dependencies -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -68,8 +126,43 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>${junit-platform-surefire-provider.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>${junit-platform-surefire-provider.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <fork>true</fork>
+                    <meminitial>128m</meminitial>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <maxmem>512m</maxmem>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>

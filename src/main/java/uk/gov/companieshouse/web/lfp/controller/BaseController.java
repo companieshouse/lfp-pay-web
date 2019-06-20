@@ -1,11 +1,16 @@
 package uk.gov.companieshouse.web.lfp.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.lfp.LFPWebApplication;
+import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
 public abstract class BaseController {
+
+    @Autowired
+    protected NavigatorService navigatorService;
 
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);

@@ -1,6 +1,7 @@
-app_name: lfp.web.ch.gov.uk
+app_name: lfp-pay-web
 group: web
 
 weight: 900
 routes:
-   1: /lfp/(.*)/.*
+   1: /lfp/*
+   2: /healthcheck/*
