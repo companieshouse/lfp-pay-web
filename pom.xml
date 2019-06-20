@@ -35,6 +35,10 @@
         <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
         <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
+
+        <!-- Repositories -->
+        <artifactoryResolveSnapshotRepo>libs-snapshot-local</artifactoryResolveSnapshotRepo>
+        <artifactoryResolveReleaseRepo>virtual-release</artifactoryResolveReleaseRepo>
     </properties>
 
     <dependencies>
@@ -165,4 +169,15 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>ch-artifactory-release</id>
+            <url>${MAVEN_REPOSITORY_URL}/${artifactoryResolveReleaseRepo}</url>
+        </repository>
+        <repository>
+            <id>ch-artifactory-snapshot</id>
+            <url>${MAVEN_REPOSITORY_URL}/${artifactoryResolveSnapshotRepo}</url>
+        </repository>
+    </repositories>
 </project>
