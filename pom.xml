@@ -12,9 +12,9 @@
     <description>Companies House Service for paying LFP penalties and associated fees</description>
 
     <parent>
-        <groupId>uk.gov.companieshouse</groupId>
-        <artifactId>companies-house-spring-boot-parent</artifactId>
-        <version>1.0.0-rc1</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.1.RELEASE</version>
         <relativePath/>
     </parent>
 
