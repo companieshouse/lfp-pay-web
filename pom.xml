@@ -5,7 +5,7 @@
 
     <groupId>uk.gov.companieshouse</groupId>
     <artifactId>lfp-pay-web</artifactId>
-    <version>b7b93d0</version>
+    <version>unversioned</version>
     <packaging>jar</packaging>
 
     <name>lfp-pay-web</name>
@@ -19,6 +19,7 @@
     </parent>
 
     <properties>
+        <lombok.version>1.18.0</lombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -117,6 +118,12 @@
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>
             <version>${sonar-maven-plugin.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
 
         <!-- Security dependencies -->

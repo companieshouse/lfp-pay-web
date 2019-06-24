@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.lfp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
@@ -22,4 +23,9 @@ public abstract class BaseController {
 
     @ModelAttribute("templateName")
     protected abstract String getTemplateName();
+
+    protected void addBackPageAttributeToModel(Model model, String... pathVars) {
+
+        model.addAttribute("backButton", navigatorService.getPreviousControllerPath(this.getClass(), pathVars));
+    }
 }
