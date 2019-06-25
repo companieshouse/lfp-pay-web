@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
-import uk.gov.companieshouse.web.lfp.models.lfp.EnterLFPDetails;
+import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
 import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 
 import javax.validation.Valid;

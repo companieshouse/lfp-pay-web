@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.lfp.models.lfp;
+package uk.gov.companieshouse.web.lfp.models;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
