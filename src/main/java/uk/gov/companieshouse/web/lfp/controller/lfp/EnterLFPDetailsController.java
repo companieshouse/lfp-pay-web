@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.lfp.controller.lfp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,11 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.models.lfp.EnterLFPDetails;
+import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,9 @@ import javax.validation.Valid;
 public class EnterLFPDetailsController extends BaseController {
 
     private static String LFP_ENTER_DETAILS = "lfp/details";
+
+    @Autowired
+    private EnterLFPDetailsService enterLFPDetailsService;
 
     @Override protected String getTemplateName() {
         return LFP_ENTER_DETAILS;
@@ -37,7 +41,7 @@ public class EnterLFPDetailsController extends BaseController {
 
     @PostMapping
     public String postLFPEnterDetails(@ModelAttribute("enterLFPDetails") @Valid EnterLFPDetails enterLFPDetails,
-                                      BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+                                      BindingResult bindingResult, Model model) {
 
         addBackPageAttributeToModel(model);
 
@@ -45,7 +49,9 @@ public class EnterLFPDetailsController extends BaseController {
             return getTemplateName();
         }
 
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + enterLFPDetails.getCompanyNumber();
+        String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
+
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + companyNumber;
     }
 
 }
