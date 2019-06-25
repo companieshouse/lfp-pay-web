@@ -20,11 +20,11 @@
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 
     <div class="entire-wrapper">
-        <div th:replace="fragments/header :: header (headerText = 'LFP')"></div>
+        <div th:replace="fragments/header :: header (headerText = 'Pay a late filing penalty')"></div>
         <div class="govuk-width-container">
             <div th:replace="fragments/betaBanner :: betaBanner"></div>
             <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
-            <div th:replace="fragments/userBar :: userBar"></div>
+<!--            <div th:replace="fragments/userBar :: userBar"></div>-->
             <main id="content" role="main" class="govuk-main-wrapper">
                 <div layout:fragment="content"></div>
             </main>
