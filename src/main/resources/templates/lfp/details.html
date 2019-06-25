@@ -13,35 +13,27 @@
 
 <body>
 <div id="lfp-enter-details" layout:fragment="content">
-    
     <div class="govuk-width-container">
-
         <form th:action="@{''}" method="post" class="form" id="lfpenterdetails">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     <h1 id="page-title " class="govuk-heading-xl">
                         <span id="page-title-heading">Tell us your penalty details</span>
                     </h1>
-
                     <div class="govuk-form-group">
-
                         <div class="govuk-form-group">
                             <label class="govuk-label" for="company-ref">
                                 Company number
                             </label>
                             <input class="govuk-input govuk-input--width-10" id="company-ref" name="penalty-ref" type="text">
                         </div>
-
-
                         <div class="govuk-form-group">
                             <label class="govuk-label" for="penalty-ref">
                                 Penalty reference
                             </label>
                             <input class="govuk-input govuk-input--width-20" id="penalty-ref" name="penalty-ref" type="text">
                         </div>
-
                         <div class="govuk-form-group">
-
                             <details class="govuk-details">
                                 <summary class="govuk-details__summary">
                                     <span class="govuk-details__summary-text">
@@ -55,7 +47,6 @@
                                     <div id="penalty-notice-image"/></div>
                             </details>
                         </div>
-
                         <button type="submit" class="govuk-button">
                             Continue
                         </button>
