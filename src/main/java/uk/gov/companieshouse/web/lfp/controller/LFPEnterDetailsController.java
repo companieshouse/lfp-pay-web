@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.lfp.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
@@ -17,10 +18,12 @@ public class LFPEnterDetailsController extends BaseController {
     }
 
     @GetMapping
-    public String getLFPEnterDetails() {
+    public String getLFPEnterDetails(Model model) {
+
+        addBackPageAttributeToModel(model);
+
         return getTemplateName();
     }
-
 }
 
 
