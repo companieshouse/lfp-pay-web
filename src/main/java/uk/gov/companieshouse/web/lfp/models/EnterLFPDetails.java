@@ -16,7 +16,7 @@ public class EnterLFPDetails {
      * Doesn't allow spaces or empty strings
      */
     @NotNull
-    @Pattern(regexp = "^([a-zA-Z0-9]{8}|[0-9]+$)$", message = "{enterLfpDetails.companyNumber.wrongLength}")
+    @Pattern(regexp = "^([a-zA-Z0-9]{8}|[0-9]{1,8})$", message = "{enterLfpDetails.companyNumber.wrongLength}")
 
     private String companyNumber;
 }
