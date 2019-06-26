@@ -15,8 +15,6 @@ public class EnterLFPDetailsServiceImpl implements EnterLFPDetailsService {
         }
 
         //If company number is less than 8 digits long append 0's to the beginning.
-        companyNumber = String.format("%8s", companyNumber).replace(' ', '0');
-
-        return companyNumber;
+        return String.format("%8s", companyNumber).replace(' ', '0');
     }
 }
