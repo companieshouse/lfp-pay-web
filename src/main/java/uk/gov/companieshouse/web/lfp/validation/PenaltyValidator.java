@@ -25,7 +25,7 @@ public class PenaltyValidator implements ConstraintValidator<Penalty, String> {
         if(penaltyNumber == null || StringUtils.isEmpty(penaltyNumber)) {
             context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
             return false;
-        } else if (penaltyNumber.length() != stringSize) {
+        } else if (!penaltyNumber.matches("^([a-zA-Z0-9]{8})$")) {
             context.buildConstraintViolationWithTemplate(messageNotLongEnough).addConstraintViolation();
             return false;
         }
