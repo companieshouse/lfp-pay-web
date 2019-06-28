@@ -43,8 +43,6 @@ public class EnterLFPDetailsController extends BaseController {
     public String postLFPEnterDetails(@ModelAttribute("enterLFPDetails") @Valid EnterLFPDetails enterLFPDetails,
                                       BindingResult bindingResult, Model model) {
 
-        addBackPageAttributeToModel(model);
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
