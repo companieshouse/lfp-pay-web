@@ -39,15 +39,28 @@
                                    id="company-ref"
                                    th:field="*{companyNumber}"
                                    th:errorclass="govuk-input--error"
-                                   name="penalty-ref"
+                                   name="company-ref"
                                    type="text"
                                    maxlength="8">
                         </div>
-                        <div class="govuk-form-group">
+                        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('penaltyNumber')} ? 'govuk-form-group--error' : ''">
                             <label class="govuk-label" for="penalty-ref">
                                 Penalty reference
                             </label>
-                            <input class="govuk-input govuk-input--width-20" id="penalty-ref" name="penalty-ref" type="text">
+
+                            <span class="govuk-error-message"
+                                  id="penaltyNumber-errorId"
+                                  th:if="${#fields.hasErrors('penaltyNumber')}"
+                                  th:each="e : ${#fields.errors('penaltyNumber')}" th:text="${e}">
+                            </span>
+
+                            <input class="govuk-input govuk-input--width-10"
+                                   id="penalty-ref"
+                                   th:field="*{penaltyNumber}"
+                                   th:errorclass="govuk-input--error"
+                                   name="penalty-ref"
+                                   type="text"
+                                   maxlength="8">
                         </div>
                         <div class="govuk-form-group">
                             <details class="govuk-details">
