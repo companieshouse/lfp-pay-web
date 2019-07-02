@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 
 @Controller
 @PreviousController(LFPStartController.class)
+@NextController(ViewPenaltiesController.class)
 @RequestMapping("/lfp/enter-details")
 public class EnterLFPDetailsController extends BaseController {
 
@@ -49,7 +51,7 @@ public class EnterLFPDetailsController extends BaseController {
 
         String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
 
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + companyNumber;
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 
 }
