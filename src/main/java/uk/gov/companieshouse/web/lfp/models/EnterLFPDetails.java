@@ -2,13 +2,8 @@ package uk.gov.companieshouse.web.lfp.models;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import lombok.Getter;
-import lombok.Setter;
 import uk.gov.companieshouse.web.lfp.annotation.Penalty;
 
-@Getter
-@Setter
 public class EnterLFPDetails {
 
     /**
@@ -29,4 +24,21 @@ public class EnterLFPDetails {
     @NotNull
     @Pattern(regexp = "^([a-zA-Z0-9]{8}|[0-9]{1,8})$", message = "{enterLfpDetails.companyNumber.wrongLength}")
     private String companyNumber;
+
+    public String getPenaltyNumber() {
+        return penaltyNumber;
+    }
+
+    public void setPenaltyNumber(String penaltyNumber) {
+        this.penaltyNumber = penaltyNumber;
+    }
+
+    public String getCompanyNumber() {
+        return companyNumber;
+    }
+
+    public void setCompanyNumber(String companyNumber) {
+        this.companyNumber = companyNumber;
+    }
+
 }
