@@ -140,13 +140,13 @@ public class EnterLFPDetailsControllerTest {
         this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_OR_COMPANY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_PENALTY_OR_COMPANY_NUMBER))
-                .andExpect(status().is3xxRedirection())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
 
                 // Temporary NextController test until next page is added.
                 // .andExpect(view().name(MOCK_CONTROLLER_PATH));
-                .andExpect(view().name("redirect:null"));
+                .andExpect(view().name("lfp/enter-details"));
 
         verify(mockEnterLFPDetailsService, times(1)).appendToCompanyNumber(VALID_PENALTY_OR_COMPANY_NUMBER);
     }
@@ -161,13 +161,13 @@ public class EnterLFPDetailsControllerTest {
         this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_OR_COMPANY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, SIX_DIGIT_PENALTY_OR_COMPANY_NUMBER))
-                .andExpect(status().is3xxRedirection())
+                .andExpect(status().is2xxSuccessful())
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
 
                 // Temporary NextController test until next page is added.
                 // .andExpect(view().name(MOCK_CONTROLLER_PATH));
-                .andExpect(view().name("redirect:null"));
+                .andExpect(view().name("lfp/enter-details"));
 
         verify(mockEnterLFPDetailsService, times(1)).appendToCompanyNumber(SIX_DIGIT_PENALTY_OR_COMPANY_NUMBER);
     }
