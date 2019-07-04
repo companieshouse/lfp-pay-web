@@ -51,6 +51,10 @@ public class EnterLFPDetailsController extends BaseController {
 
         String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
 
+        if (companyNumber.equals("11111111")){
+            return "lfp/onlinePaymentUnavailable";
+        }
+
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 
