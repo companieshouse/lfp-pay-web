@@ -20,7 +20,7 @@ public class ViewPenaltiesController extends BaseController {
     }
 
     @GetMapping
-    public String getLFPEnterDetails(Model model) {
+    public String getViewPenalties(Model model) {
 
         addBackPageAttributeToModel(model);
 
