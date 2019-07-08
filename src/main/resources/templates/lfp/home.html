@@ -8,7 +8,7 @@
     <title>Home</title>
 </head>
 <body>
-<div id="payments-main-content" layout:fragment="content">
+<div id="temp-home-main-content"  layout:fragment="content">
 
     <form th:action="@{''}" method="post" class="form" id="home">
         <div class="govuk-grid-row">
@@ -19,14 +19,17 @@
 
                 </h1>
                 <p class="govuk-body-l">You can use this service to pay a company's late filing penalty with a credit or debit card.</p>
-                <p class="govuk-body">You can't use this service to pay a penalty that has been taken to court</p>
+                <p class="govuk-body">You cannot use this service to pay:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>a penalty that has fees</li>
+                    <li>a penalty under an instalment plan</li>
+                    <li>the remaining balance of a part-paid penalty</li>
+                </ul>
                 <p class="govuk-body">You'll need:</p>
                 <ul class="govuk-list govuk-list--bullet">
                     <li>the company number</li>
-                    <li>the penalty reference shown on the penalty notice &ndash;
-                        <a href="/lost-your-penalty-notice" class="govuk-link">What to do if you've lost your penalty notice</a>
-                    </li>
-                    <li>an email address</li>
+                    <li>the reference number on the penalty notice</li>
+                    <li>an email address or Companies House account</li>
                     <li>a credit or debit card</li>
                 </ul>
                 <p class="govuk-body">It takes around 5 minutes to pay.</p>

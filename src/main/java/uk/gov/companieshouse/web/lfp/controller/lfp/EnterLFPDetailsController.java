@@ -51,6 +51,12 @@ public class EnterLFPDetailsController extends BaseController {
 
         String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
 
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber.equals("11111111")){
+            return "lfp/onlinePaymentUnavailable";
+        }
+
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 
