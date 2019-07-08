@@ -64,6 +64,11 @@ public class EnterLFPDetailsController extends BaseController {
             model.addAttribute("penaltyNumber", penaltyNumber);
             return "lfp/noPenaltyFound";
         }
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber != null && companyNumber.equals("33333333")){
+            return "lfp/legalFeesDCA";
+        }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
