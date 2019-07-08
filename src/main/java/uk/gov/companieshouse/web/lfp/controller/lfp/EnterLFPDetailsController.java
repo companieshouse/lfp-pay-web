@@ -53,7 +53,7 @@ public class EnterLFPDetailsController extends BaseController {
 
         //TODO temporary use of this if statement to allow access to error screen. Needs to be
         // removed when endpoints are working.
-        if (companyNumber.equals("11111111")){
+        if (companyNumber != null && companyNumber.equals("11111111")){
             return "lfp/onlinePaymentUnavailable";
         }
 
