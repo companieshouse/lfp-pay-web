@@ -12,7 +12,6 @@ In order to run this Web App locally you will need to install:
 - [Git](https://git-scm.com/downloads)
 - [Payments API](https://github.com/companieshouse/payments.api.ch.gov.uk)
 - [LFP API](https://github.com/companieshouse/lfp-pay-api)
-- If using IntelliJ Lombok plugin will need to be installed. 
 
 ### Getting Started
 
