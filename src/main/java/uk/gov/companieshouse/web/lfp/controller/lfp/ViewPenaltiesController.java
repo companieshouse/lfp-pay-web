@@ -34,7 +34,7 @@ public class ViewPenaltiesController extends BaseController {
     }
 
     @GetMapping
-    public String getLFPEnterDetails(@PathVariable String companyNumber, Model model, HttpServletRequest request) {
+    public String getViewPenalties(@PathVariable String companyNumber, Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model);
 

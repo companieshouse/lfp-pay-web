@@ -51,6 +51,32 @@ public class EnterLFPDetailsController extends BaseController {
 
         String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
 
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber != null && companyNumber.equals("11111111")){
+            return "lfp/onlinePaymentUnavailable";
+        }
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are implemented.
+        if (companyNumber != null && companyNumber.equals("22222222")) {
+            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
+            model.addAttribute("companyNumber", companyNumber);
+            model.addAttribute("penaltyNumber", penaltyNumber);
+            return "lfp/noPenaltyFound";
+        }
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber != null && companyNumber.equals("33333333")){
+            return "lfp/legalFeesDCA";
+        }
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber != null && companyNumber.equals("44444444")){
+            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
+            model.addAttribute("penaltyNumber", penaltyNumber);
+            return "lfp/penaltyPaid";
+        }
+
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 
