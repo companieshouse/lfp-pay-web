@@ -17,11 +17,10 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <h1 id="page-title " class="govuk-heading-xl">
-                    <span id="page-title-heading">Late filing penalty for BATTERSEA POWER LIMITED</span>
+                    <span id="page-title-heading">Late filing penalty for </span>
+                    <span id="company-name" th:text="${companyName}"></span>
                 </h1>
-                <p class="govuk-heading-m">
-                    Accounts period made up to 1 September 2018
-                </p>
+                <p class="govuk-heading-m" th:text="'Accounts period made up to ' + ${madeUpDate}"></p>
                 <table class="govuk-table">
                     <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -34,17 +33,14 @@
 
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">Late filing penalty</td>
-                        <td class="govuk-table__cell">01 June 2019</td>
-                        <div>
-                            <td class="govuk-table__cell govuk-table__cell--numeric">£150</td>
-                        </div>
+                        <td class="govuk-table__cell" th:text="${dueDate}"></td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric" th:text="'£' + ${outstanding}"></td>
                     </tr>
 
                     </tbody>
                 </table>
 
-                <h2 id="page-total" class="govuk-heading-m">Total amount due: £150
-                </h2>
+                <h2 id="page-total" class="govuk-heading-m" th:text="'Total amount due: £' + ${outstanding}"></h2>
                 <div class="form-group">
                     <input id="next-button" class="govuk-button piwik-event" data-event-id="View Penalties - Continue" type="submit" role="button" value="Continue"/>
                 </div>
