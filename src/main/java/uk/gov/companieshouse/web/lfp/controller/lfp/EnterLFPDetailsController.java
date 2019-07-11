@@ -12,6 +12,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
+import uk.gov.companieshouse.web.lfp.interceptor.UserDetailsInterceptor;
 import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
 import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 
@@ -75,6 +76,14 @@ public class EnterLFPDetailsController extends BaseController {
             String penaltyNumber = enterLFPDetails.getPenaltyNumber();
             model.addAttribute("penaltyNumber", penaltyNumber);
             return "lfp/penaltyPaid";
+        }
+        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber != null && companyNumber.equals("55555555")){
+            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
+            model.addAttribute("companyNumber", companyNumber);
+            model.addAttribute("penaltyNumber", penaltyNumber);
+            return "lfp/confirmationPage";
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);

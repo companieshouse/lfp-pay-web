@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title>
+        Confirmation
+    </title>
+</head>
+
+<div id="no-payment-found-main-content" layout:fragment="content">
+    <form th:action="@{''}" method="post" class="form" id="no-payment-found">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-panel govuk-panel--confirmation" id="confirmation-details">
+
+                    <div class="govuk-panel__body govuk-!-margin-bottom-6" id="confirmation-company-name-number">
+                        <h1 class="govuk-panel__title">
+                            Payment received/unsuccessful
+                        </h1>
+                        <div class="govuk-panel__body">
+                            Your reference number is
+                            <br>
+                            <span class="govuk-!-font-weight-bold" th:text="*{penaltyNumber}"/>
+
+                        </div>
+                    </div>
+                </div>
+
+                <p class="govuk-body-l">
+                    We've sent a confirmation email containing this reference number to
+                    <span class="govuk-!-font-weight-bold" th:text="${userEmail}">keyvalue</span>.
+                </p>
+                <p class="govuk-body">
+                    <a href="javascript:window.print()" class="govuk-link">Print this page for your records</a>
+                </p>
+                <p class="govuk-body">
+                    <a href="/public/files/Late_filing_penalty_pdf.pdf" class="govuk-link">Save a copy of this page (PDF, 304KB)</a>
+                </p>
+                <h2 class="govuk-heading-m">
+                    What happens next?
+                </h2>
+                <p class="govuk-body">
+                    Your penalty has been paid and you don't need to do anything else.
+
+                    Any debt recovery or legal activity will now stop.
+
+                    Future correspondence for this penalty should be ignored.
+                </p>
+                <h2 class="govuk-heading-m">Email reminders</h2>
+                <p class="govuk-body">
+                    Companies can now choose to
+                    <a href="https://www.gov.uk/government/news/email-reminders-help-companies-file-on-time" class="govuk-link">receive filing reminders by email</a>. Companies who have switched to email reminders are more likely to file on time and avoid a penalty.
+                </p>
+                <p class="govuk-body">
+                    <a class="govuk-link" href="https://www.gov.uk/service-manual/user-centred-design/resources/patterns/feedback-pages.html">What did you think of this service?</a>
+                    (takes 30 seconds)
+                </p>
+            </div>
+            <div class="govuk-grid-column-one-third">
+                <p class="govuk-body">
+                    <a href="" class="govuk-link">Sign out</a>
+                </p>
+            </div>
+        </div>
+    </form>
+</div>
+</html>
