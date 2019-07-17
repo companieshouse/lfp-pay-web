@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
-import uk.gov.companieshouse.web.lfp.interceptor.UserDetailsInterceptor;
 import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
 import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 
@@ -81,7 +79,6 @@ public class EnterLFPDetailsController extends BaseController {
         // removed when endpoints are working.
         if (companyNumber != null && companyNumber.equals("55555555")){
             String penaltyNumber = enterLFPDetails.getPenaltyNumber();
-            model.addAttribute("companyNumber", companyNumber);
             model.addAttribute("penaltyNumber", penaltyNumber);
             return "lfp/confirmationPage";
         }
