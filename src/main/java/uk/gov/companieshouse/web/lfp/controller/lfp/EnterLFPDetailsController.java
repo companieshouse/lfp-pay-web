@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
@@ -75,6 +74,13 @@ public class EnterLFPDetailsController extends BaseController {
             String penaltyNumber = enterLFPDetails.getPenaltyNumber();
             model.addAttribute("penaltyNumber", penaltyNumber);
             return "lfp/penaltyPaid";
+        }
+        //TODO temporary use of this if statement to allow access to confirmation screen. Needs to be
+        // removed when endpoints are working.
+        if (companyNumber != null && companyNumber.equals("55555555")){
+            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
+            model.addAttribute("penaltyNumber", penaltyNumber);
+            return "lfp/confirmationPage";
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
