@@ -75,7 +75,7 @@ public class EnterLFPDetailsController extends BaseController {
             model.addAttribute("penaltyNumber", penaltyNumber);
             return "lfp/penaltyPaid";
         }
-        //TODO temporary use of this if statement to allow access to error screen. Needs to be
+        //TODO temporary use of this if statement to allow access to confirmation screen. Needs to be
         // removed when endpoints are working.
         if (companyNumber != null && companyNumber.equals("55555555")){
             String penaltyNumber = enterLFPDetails.getPenaltyNumber();
