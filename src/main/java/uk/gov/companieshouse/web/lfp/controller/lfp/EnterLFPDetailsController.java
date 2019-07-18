@@ -57,7 +57,8 @@ public class EnterLFPDetailsController extends BaseController {
 
     @PostMapping
     public String postLFPEnterDetails(@ModelAttribute("enterLFPDetails") @Valid EnterLFPDetails enterLFPDetails,
-                                      BindingResult bindingResult, HttpServletRequest request) {
+                                      BindingResult bindingResult,
+                                      HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
