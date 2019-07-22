@@ -94,9 +94,8 @@ public class EnterLFPDetailsController extends BaseController {
                             || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
                         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
                     }
-                } else {
-                    // If the provided penalty number does not exist for company display 'No Penalty Found'
-                    return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
+
+                    return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, penaltyNumber);
                 }
             }
         } catch (ServiceException ex) {
@@ -105,7 +104,8 @@ public class EnterLFPDetailsController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, penaltyNumber);
+        // If no company number and penalty match is made, display 'No Penalty Found'
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
     }
 
     private String urlGenerator(String companyNumber, String penaltyNumber) {

@@ -66,13 +66,13 @@ public class ViewPenaltiesController extends BaseController {
                                 .format(DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)));
 
                 model.addAttribute("companyName", companyProfileApi.getCompanyName());
-            } else {
-                // If penalty doesn't exist for company after check in previous controller an error has happened.
-                return ERROR_VIEW;
+
+                return getTemplateName();
             }
         }
 
-        return getTemplateName();
+        // If penalty doesn't exist for company after check in previous controller an error has happened.
+        return ERROR_VIEW;
     }
 
 }
