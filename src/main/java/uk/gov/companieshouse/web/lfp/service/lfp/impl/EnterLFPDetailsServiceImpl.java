@@ -8,9 +8,13 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
+import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EnterLFPDetailsServiceImpl implements EnterLFPDetailsService {
@@ -20,6 +24,9 @@ public class EnterLFPDetailsServiceImpl implements EnterLFPDetailsService {
 
     private static final UriTemplate GET_COMPANY_URI =
             new UriTemplate("/company/{companyNumber}");
+
+    private static final String PENALTY_TYPE = "penalty";
+
 
     @Autowired
     private ApiClientService apiClientService;
@@ -54,7 +61,7 @@ public class EnterLFPDetailsServiceImpl implements EnterLFPDetailsService {
     }
 
     @Override
-    public LateFilingPenalties getLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException {
+    public List<LateFilingPenalty> getPayableLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException {
         ApiClient apiClient = apiClientService.getPublicApiClient();
         LateFilingPenalties lateFilingPenalties;
 
@@ -67,6 +74,22 @@ public class EnterLFPDetailsServiceImpl implements EnterLFPDetailsService {
             throw new ServiceException("Invalid URI for Late Filing Penalty", ex);
         }
 
-        return lateFilingPenalties;
+        List<LateFilingPenalty> payableLateFilingPenalties = new ArrayList<>();
+
+        // If no Late Filing Penalties for company return an empty list.
+        if (lateFilingPenalties.getTotalResults() == 0) {
+            return payableLateFilingPenalties;
+        }
+
+        // Compile all payable penalties into one List to be returned.
+        // Always include penalty with the ID provided so the correct error page can be displayed.
+        for (LateFilingPenalty lateFilingPenalty: lateFilingPenalties.getItems()) {
+            if ((!lateFilingPenalty.getPaid() && lateFilingPenalty.getType().equals(PENALTY_TYPE))
+                    || lateFilingPenalty.getId().equals(penaltyNumber)) {
+                payableLateFilingPenalties.add(lateFilingPenalty);
+            }
+        }
+
+        return payableLateFilingPenalties;
     }
 }

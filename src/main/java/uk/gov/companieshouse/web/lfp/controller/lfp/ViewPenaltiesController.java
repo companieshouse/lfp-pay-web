@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
@@ -41,38 +40,34 @@ public class ViewPenaltiesController extends BaseController {
 
         addBackPageAttributeToModel(model);
 
-        LateFilingPenalties lateFilingPenalties;
+        LateFilingPenalty lateFilingPenalty;
         CompanyProfileApi companyProfileApi;
 
         try {
             companyProfileApi = enterLFPDetailsService.getCompanyProfile(companyNumber);
-            lateFilingPenalties = enterLFPDetailsService.getLateFilingPenalties(companyNumber, penaltyNumber);
+            lateFilingPenalty = enterLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber).get(0);
         } catch (ServiceException ex) {
             LOGGER.errorRequest(request, ex.getMessage(), ex);
             return ERROR_VIEW;
         }
 
-        // Loop through all penalties for company and find provided one.
-        for (LateFilingPenalty lateFilingPenalty: lateFilingPenalties.getItems()) {
-            if (lateFilingPenalty.getId().equals(penaltyNumber)) {
-                model.addAttribute("outstanding", lateFilingPenalty.getOutstanding());
-                model.addAttribute("madeUpDate",
-                        LocalDate.parse(lateFilingPenalty.getMadeUpDate(),
-                                DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.UK))
-                                .format(DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)));
-                model.addAttribute("dueDate",
-                        LocalDate.parse(lateFilingPenalty.getDueDate(),
-                                DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.UK))
-                                .format(DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)));
-
-                model.addAttribute("companyName", companyProfileApi.getCompanyName());
-
-                return getTemplateName();
-            }
+        if (lateFilingPenalty == null) {
+            return ERROR_VIEW;
         }
 
-        // If penalty doesn't exist for company after check in previous controller an error has happened.
-        return ERROR_VIEW;
+        model.addAttribute("outstanding", lateFilingPenalty.getOutstanding());
+        model.addAttribute("madeUpDate",
+                LocalDate.parse(lateFilingPenalty.getMadeUpDate(),
+                        DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.UK))
+                        .format(DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)));
+        model.addAttribute("dueDate",
+                LocalDate.parse(lateFilingPenalty.getDueDate(),
+                        DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.UK))
+                        .format(DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)));
+
+        model.addAttribute("companyName", companyProfileApi.getCompanyName());
+
+        return getTemplateName();
     }
 
 }

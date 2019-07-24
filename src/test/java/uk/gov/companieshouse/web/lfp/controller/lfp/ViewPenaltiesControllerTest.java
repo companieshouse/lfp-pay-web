@@ -18,6 +18,7 @@ import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -41,7 +42,7 @@ public class ViewPenaltiesControllerTest {
     private NavigatorService mockNavigatorService;
 
     @Mock
-    private LateFilingPenalties lateFilingPenalties;
+    private List<LateFilingPenalty> lateFilingPenalties;
 
     @Mock
     private LateFilingPenalty lateFilingPenalty;
@@ -81,8 +82,8 @@ public class ViewPenaltiesControllerTest {
         lateFilingPenalty.setId(PENALTY_NUMBER);
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockEnterLFPDetailsService.getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER)).thenReturn(lateFilingPenalties);
-        when(lateFilingPenalties.getItems()).thenReturn(Arrays.asList(getValidLateFilingPenalty()));
+        when(mockEnterLFPDetailsService.getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER)).thenReturn(lateFilingPenalties);
+        when(lateFilingPenalties.get(0)).thenReturn(getValidLateFilingPenalty());
         when(mockEnterLFPDetailsService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
         when(companyProfileApi.getCompanyName()).thenReturn(COMPANY_NAME);
 
@@ -95,7 +96,7 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NAME_MODEL_ATTR));
 
         verify(mockEnterLFPDetailsService, times(1)).getCompanyProfile(COMPANY_NUMBER);
-        verify(mockEnterLFPDetailsService, times(1)).getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockEnterLFPDetailsService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
     }
 

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
@@ -20,6 +19,7 @@ import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @PreviousController(LFPStartController.class)
@@ -68,44 +68,52 @@ public class EnterLFPDetailsController extends BaseController {
         String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
         try {
-            LateFilingPenalties lateFilingPenalties = enterLFPDetailsService.getLateFilingPenalties(companyNumber, penaltyNumber);
+            List<LateFilingPenalty> payableLateFilingPenalties = enterLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber);
 
-            // If the company has no late filing penalties or doesn't exist, display 'No Penalty Found'
-            if (lateFilingPenalties.getTotalResults() == 0) {
+            // If there are no payable late filing penalties either the company does not exist or has no penalties.
+            if (payableLateFilingPenalties.size() == 0) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
             }
 
-            // Loop through all Late Filing Penalties for company.
-            for (LateFilingPenalty lateFilingPenalty: lateFilingPenalties.getItems()) {
-                if (lateFilingPenalty.getId().equals(penaltyNumber)) {
-                    // If penalty is paid return 'Penalty Paid'
-                    if (lateFilingPenalty.getPaid()) {
-                        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_PENALTY_PAID;
-                    }
-                    // If penalty has DCA fees return 'DCA'
-                    if (lateFilingPenalty.getDca()) {
-                        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_DCA;
-                    }
-                    // If the penalty has a 0 or negative outstanding amount,
-                    // Or the outstanding amount is different to the original amount (partially paid),
-                    // Or the type is not 'penalty', then return 'Online Payment Unavailable'
-                    if (lateFilingPenalty.getOutstanding() <= 0
-                            || !lateFilingPenalty.getOriginalAmount().equals(lateFilingPenalty.getOutstanding())
-                            || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
-                        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
-                    }
-
-                    return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, penaltyNumber);
-                }
+            // If there is more than one payable penalty.
+            if (payableLateFilingPenalties.size() > 1) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
             }
+
+            LateFilingPenalty lateFilingPenalty;
+            // If the only penalty in the List does not have the provided penalty number return Penalty Not Found.
+            if (payableLateFilingPenalties.get(0).getId().equals(penaltyNumber)) {
+                lateFilingPenalty = payableLateFilingPenalties.get(0);
+            } else {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
+            }
+
+            // If the payable penalty has DCA payments.
+            if (lateFilingPenalty.getDca()) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_DCA;
+            }
+
+            // If the penalty is already paid.
+            if (lateFilingPenalty.getPaid()) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_PENALTY_PAID;
+            }
+
+            // If the penalty has a 0 or negative outstanding amount,
+            // Or the outstanding amount is different to the original amount (partially paid),
+            // Or the type is not 'penalty', then return 'Online Payment Unavailable'
+            if (lateFilingPenalty.getOutstanding() <= 0
+                    || !lateFilingPenalty.getOriginalAmount().equals(lateFilingPenalty.getOutstanding())
+                    || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
+            }
+
+            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, penaltyNumber);
+
         } catch (ServiceException ex) {
 
             LOGGER.errorRequest(request, ex.getMessage(), ex);
             return ERROR_VIEW;
         }
-
-        // If no company number and penalty match is made, display 'No Penalty Found'
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
     }
 
     private String urlGenerator(String companyNumber, String penaltyNumber) {
