@@ -11,16 +11,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LFPItems;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
-import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-import uk.gov.companieshouse.web.lfp.service.lfp.ViewPenaltiesService;
+import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -34,25 +36,30 @@ public class ViewPenaltiesControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private ViewPenaltiesService mockViewPenaltiesService;
+    private EnterLFPDetailsService mockEnterLFPDetailsService;
 
     @Mock
     private NavigatorService mockNavigatorService;
 
     @Mock
+    private List<LateFilingPenalty> lateFilingPenalties;
+
+    @Mock
     private LateFilingPenalty lateFilingPenalty;
+
+    @Mock
+    private CompanyProfileApi companyProfileApi;
 
     @InjectMocks
     private ViewPenaltiesController controller;
 
-    @BeforeEach
-    private void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }
-
     private static final String COMPANY_NUMBER = "12345678";
+    private static final String PENALTY_NUMBER = "44444444";
+    private static final String MADE_UP_DATE = "2016-01-01";
+    private static final String DUE_DATE = "2016-12-12";
+    private static final String COMPANY_NAME = "TEST COMPANY";
 
-    private static final String VIEW_PENALTIES_PATH = "/lfp/view-penalties/" + COMPANY_NUMBER;
+    private static final String VIEW_PENALTIES_PATH = "/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/lfp/view-penalties";
 
     private static final String ENTER_LFP_DETAILS_VIEW = "lfp/viewPenalties";
     private static final String ERROR_VIEW = "error";
@@ -64,14 +71,21 @@ public class ViewPenaltiesControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
+    @BeforeEach
+    private void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
+
     @Test
-    @DisplayName("Get View Penalties - success path")
+    @DisplayName("Get View LFP - success path")
     void getRequestSuccess() throws Exception {
+        lateFilingPenalty.setId(PENALTY_NUMBER);
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockViewPenaltiesService.getLateFilingPenalty(COMPANY_NUMBER)).thenReturn(lateFilingPenalty);
-        when(lateFilingPenalty.getTotalResults()).thenReturn(1);
-        when(lateFilingPenalty.getItems()).thenReturn(returnValidLfpItems());
+        when(mockEnterLFPDetailsService.getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER)).thenReturn(lateFilingPenalties);
+        when(lateFilingPenalties.get(0)).thenReturn(getValidLateFilingPenalty());
+        when(mockEnterLFPDetailsService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
+        when(companyProfileApi.getCompanyName()).thenReturn(COMPANY_NAME);
 
         this.mockMvc.perform(get(VIEW_PENALTIES_PATH))
                 .andExpect(status().isOk())
@@ -80,27 +94,20 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(model().attributeExists(MADE_UP_DATE_MODEL_ATTR))
                 .andExpect(model().attributeExists(DUE_DATE_MODEL_ATTR))
                 .andExpect(model().attributeExists(COMPANY_NAME_MODEL_ATTR));
+
+        verify(mockEnterLFPDetailsService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+        verify(mockEnterLFPDetailsService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+
     }
 
-    @Test
-    @DisplayName("Get View Penalties - Throws Exception")
-    void getRequestThrowsException() throws Exception {
+    LateFilingPenalty getValidLateFilingPenalty() {
+        LateFilingPenalty lateFilingPenalty = new LateFilingPenalty();
+        lateFilingPenalty.setId(PENALTY_NUMBER);
+        lateFilingPenalty.setOutstanding(1500);
+        lateFilingPenalty.setMadeUpDate(MADE_UP_DATE);
+        lateFilingPenalty.setDueDate(DUE_DATE);
 
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockViewPenaltiesService.getLateFilingPenalty(COMPANY_NUMBER)).thenThrow(ServiceException.class);
-
-        this.mockMvc.perform(get(VIEW_PENALTIES_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(ERROR_VIEW));
+        return lateFilingPenalty;
     }
 
-    //TODO: - Add additional unit tests when filter is applied to show error screens.
-
-    List<LFPItems> returnValidLfpItems() {
-        LFPItems lfpItems = new LFPItems();
-        lfpItems.setMadeUpDate("2018-12-12");
-        lfpItems.setDueDate("2020-01-01");
-        lfpItems.setOutstanding(1500);
-        return Arrays.asList(lfpItems);
-    }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -134,19 +135,13 @@ public class EnterLFPDetailsControllerTest {
     @DisplayName("Post LFP Details success path")
     void postRequestSuccess() throws Exception {
 
-        // Will need to be invoked when next page is added.
-        // when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-
         this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_OR_COMPANY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_PENALTY_OR_COMPANY_NUMBER))
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
-
-                // Temporary NextController test until next page is added.
-                // .andExpect(view().name(MOCK_CONTROLLER_PATH));
-                .andExpect(view().name("lfp/enter-details"));
+                .andExpect(view().name("redirect:/company/null/penalty/12345678/lfp/no-penalties-found"));
 
         verify(mockEnterLFPDetailsService, times(1)).appendToCompanyNumber(VALID_PENALTY_OR_COMPANY_NUMBER);
     }
@@ -155,19 +150,13 @@ public class EnterLFPDetailsControllerTest {
     @DisplayName("Post LFP Details success path - 6 digit company number, correct penalty number")
     void postRequestSuccess6DigitCompanyNumber() throws Exception {
 
-        // Will need to be invoked when next page is added.
-        // when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-
         this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_OR_COMPANY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, SIX_DIGIT_PENALTY_OR_COMPANY_NUMBER))
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
-
-                // Temporary NextController test until next page is added.
-                // .andExpect(view().name(MOCK_CONTROLLER_PATH));
-                .andExpect(view().name("lfp/enter-details"));
+                .andExpect(view().name("redirect:/company/null/penalty/12345678/lfp/no-penalties-found"));
 
         verify(mockEnterLFPDetailsService, times(1)).appendToCompanyNumber(SIX_DIGIT_PENALTY_OR_COMPANY_NUMBER);
     }

@@ -8,13 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
+import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
 import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @PreviousController(LFPStartController.class)
@@ -26,6 +31,16 @@ public class EnterLFPDetailsController extends BaseController {
 
     @Autowired
     private EnterLFPDetailsService enterLFPDetailsService;
+
+    private static String LFP_NO_PENALTY_FOUND = "/no-penalties-found";
+
+    private static String LFP_PENALTY_PAID = "/penalty-paid";
+
+    private static String LFP_DCA = "/legal-fees-required";
+
+    private static String LFP_ONLINE_PAYMENT_UNAVAILABLE = "/online-payment-unavailable";
+
+    private static final String PENALTY_TYPE = "penalty";
 
     @Override protected String getTemplateName() {
         return LFP_ENTER_DETAILS;
@@ -42,48 +57,67 @@ public class EnterLFPDetailsController extends BaseController {
 
     @PostMapping
     public String postLFPEnterDetails(@ModelAttribute("enterLFPDetails") @Valid EnterLFPDetails enterLFPDetails,
-                                      BindingResult bindingResult, Model model) {
+                                      BindingResult bindingResult,
+                                      HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
 
         String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
+        String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
-        //TODO temporary use of this if statement to allow access to error screen. Needs to be
-        // removed when endpoints are working.
-        if (companyNumber != null && companyNumber.equals("11111111")){
-            return "lfp/onlinePaymentUnavailable";
-        }
-        //TODO temporary use of this if statement to allow access to error screen. Needs to be
-        // removed when endpoints are implemented.
-        if (companyNumber != null && companyNumber.equals("22222222")) {
-            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
-            model.addAttribute("companyNumber", companyNumber);
-            model.addAttribute("penaltyNumber", penaltyNumber);
-            return "lfp/noPenaltyFound";
-        }
-        //TODO temporary use of this if statement to allow access to error screen. Needs to be
-        // removed when endpoints are working.
-        if (companyNumber != null && companyNumber.equals("33333333")){
-            return "lfp/legalFeesDCA";
-        }
-        //TODO temporary use of this if statement to allow access to error screen. Needs to be
-        // removed when endpoints are working.
-        if (companyNumber != null && companyNumber.equals("44444444")){
-            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
-            model.addAttribute("penaltyNumber", penaltyNumber);
-            return "lfp/penaltyPaid";
-        }
-        //TODO temporary use of this if statement to allow access to confirmation screen. Needs to be
-        // removed when endpoints are working.
-        if (companyNumber != null && companyNumber.equals("55555555")){
-            String penaltyNumber = enterLFPDetails.getPenaltyNumber();
-            model.addAttribute("penaltyNumber", penaltyNumber);
-            return "lfp/confirmationPage";
-        }
+        try {
+            List<LateFilingPenalty> payableLateFilingPenalties = enterLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber);
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
+            // If there are no payable late filing penalties either the company does not exist or has no penalties.
+            if (payableLateFilingPenalties.size() == 0) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
+            }
+
+            // If there is more than one payable penalty.
+            if (payableLateFilingPenalties.size() > 1) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
+            }
+
+            LateFilingPenalty lateFilingPenalty;
+            // If the only penalty in the List does not have the provided penalty number return Penalty Not Found.
+            if (payableLateFilingPenalties.get(0).getId().equals(penaltyNumber)) {
+                lateFilingPenalty = payableLateFilingPenalties.get(0);
+            } else {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
+            }
+
+            // If the payable penalty has DCA payments.
+            if (lateFilingPenalty.getDca()) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_DCA;
+            }
+
+            // If the penalty is already paid.
+            if (lateFilingPenalty.getPaid()) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_PENALTY_PAID;
+            }
+
+            // If the penalty has a 0 or negative outstanding amount,
+            // Or the outstanding amount is different to the original amount (partially paid),
+            // Or the type is not 'penalty', then return 'Online Payment Unavailable'
+            if (lateFilingPenalty.getOutstanding() <= 0
+                    || !lateFilingPenalty.getOriginalAmount().equals(lateFilingPenalty.getOutstanding())
+                    || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
+            }
+
+            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, penaltyNumber);
+
+        } catch (ServiceException ex) {
+
+            LOGGER.errorRequest(request, ex.getMessage(), ex);
+            return ERROR_VIEW;
+        }
+    }
+
+    private String urlGenerator(String companyNumber, String penaltyNumber) {
+        return "/company/" + companyNumber + "/penalty/" + penaltyNumber + "/lfp";
     }
 
 }

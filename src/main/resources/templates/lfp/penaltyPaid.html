@@ -5,9 +5,7 @@
       layout:decorate="~{layouts/baseLayout}">
 
 <head>
-    <title>
-        Late filing penalties for BATTERSEA POWER LIMITED
-    </title>
+    <title th:text="'Late filing penalties for ' + ${companyName}"></title>
 </head>
 
 <div id="no-payment-found-main-content" layout:fragment="content">
@@ -16,11 +14,11 @@
             <div class="govuk-grid-column-two-thirds">
                 <h1 class="govuk-heading-xl">
                     Late filing penalty for
-                    BATTERSEA POWER LIMITED
+                    <span class="govuk-heading-xl" id="company-name" th:text="${companyName}"></span>
                 </h1>
                 <p class="govuk-body-l">
                     The penalty with a reference of
-                    <span class="govuk-!-font-weight-bold" th:text="${penaltyNumber}">keyvalue</span>
+                    <span class="govuk-!-font-weight-bold" th:text="${penaltyNumber}"></span>
                     has been paid. No further action is required.
                 </p>
             </div>
