@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +31,7 @@ public class EnterLFPDetailsControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private EnterLFPDetailsService mockEnterLFPDetailsService;
+    private LFPDetailsService mockLFPDetailsService;
 
     @Mock
     private NavigatorService mockNavigatorService;
@@ -143,7 +142,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name("redirect:/company/null/penalty/12345678/lfp/no-penalties-found"));
 
-        verify(mockEnterLFPDetailsService, times(1)).appendToCompanyNumber(VALID_PENALTY_OR_COMPANY_NUMBER);
+        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_PENALTY_OR_COMPANY_NUMBER);
     }
 
     @Test
@@ -158,6 +157,6 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name("redirect:/company/null/penalty/12345678/lfp/no-penalties-found"));
 
-        verify(mockEnterLFPDetailsService, times(1)).appendToCompanyNumber(SIX_DIGIT_PENALTY_OR_COMPANY_NUMBER);
+        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(SIX_DIGIT_PENALTY_OR_COMPANY_NUMBER);
     }
 }
