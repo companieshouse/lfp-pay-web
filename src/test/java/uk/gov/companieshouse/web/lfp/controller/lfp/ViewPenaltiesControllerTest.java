@@ -12,12 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
-import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +34,7 @@ public class ViewPenaltiesControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private EnterLFPDetailsService mockEnterLFPDetailsService;
+    private LFPDetailsService mockLFPDetailsService;
 
     @Mock
     private NavigatorService mockNavigatorService;
@@ -82,9 +80,9 @@ public class ViewPenaltiesControllerTest {
         lateFilingPenalty.setId(PENALTY_NUMBER);
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockEnterLFPDetailsService.getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER)).thenReturn(lateFilingPenalties);
+        when(mockLFPDetailsService.getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER)).thenReturn(lateFilingPenalties);
         when(lateFilingPenalties.get(0)).thenReturn(getValidLateFilingPenalty());
-        when(mockEnterLFPDetailsService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
+        when(mockLFPDetailsService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
         when(companyProfileApi.getCompanyName()).thenReturn(COMPANY_NAME);
 
         this.mockMvc.perform(get(VIEW_PENALTIES_PATH))
@@ -95,8 +93,8 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(model().attributeExists(DUE_DATE_MODEL_ATTR))
                 .andExpect(model().attributeExists(COMPANY_NAME_MODEL_ATTR));
 
-        verify(mockEnterLFPDetailsService, times(1)).getCompanyProfile(COMPANY_NUMBER);
-        verify(mockEnterLFPDetailsService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockLFPDetailsService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+        verify(mockLFPDetailsService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
     }
 

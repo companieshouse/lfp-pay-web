@@ -15,7 +15,7 @@ import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
-import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,7 +30,7 @@ public class EnterLFPDetailsController extends BaseController {
     private static String LFP_ENTER_DETAILS = "lfp/details";
 
     @Autowired
-    private EnterLFPDetailsService enterLFPDetailsService;
+    private LFPDetailsService LFPDetailsService;
 
     private static String LFP_NO_PENALTY_FOUND = "/no-penalties-found";
 
@@ -64,11 +64,11 @@ public class EnterLFPDetailsController extends BaseController {
             return getTemplateName();
         }
 
-        String companyNumber = enterLFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
+        String companyNumber = LFPDetailsService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
         String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
         try {
-            List<LateFilingPenalty> payableLateFilingPenalties = enterLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber);
+            List<LateFilingPenalty> payableLateFilingPenalties = LFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber);
 
             // If there are no payable late filing penalties either the company does not exist or has no penalties.
             if (payableLateFilingPenalties.size() == 0) {
