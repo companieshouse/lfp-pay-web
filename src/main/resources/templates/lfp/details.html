@@ -6,43 +6,70 @@
 
 <head>
     <title>
-
         Tell us your penalty details
     </title>
 </head>
 
 <body>
-<div id="lfp-enter-details" layout:fragment="content">
-    <div class="govuk-width-container">
-        <form th:action="@{''}" method="post" class="form" id="lfpenterdetails">
+    <div id="lfp-enter-details"  layout:fragment="content">
+        <form id="lfpenterdetails" th:action="@{''}" th:object="${enterLFPDetails}" method="post" class="form">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
+
+                    <div th:replace="fragments/lfpGlobalErrors :: globalErrors"></div>
+
                     <h1 id="page-title " class="govuk-heading-xl">
                         <span id="page-title-heading">Tell us your penalty details</span>
                     </h1>
                     <div class="govuk-form-group">
-                        <div class="govuk-form-group">
+                        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('companyNumber')} ? 'govuk-form-group--error' : ''">
                             <label class="govuk-label" for="company-ref">
                                 Company number
                             </label>
-                            <input class="govuk-input govuk-input--width-10" id="company-ref" name="penalty-ref" type="text">
+
+                            <span class="govuk-error-message"
+                                  id="companyNumber-errorId"
+                                  th:if="${#fields.hasErrors('companyNumber')}"
+                                  th:each="e : ${#fields.errors('companyNumber')}" th:text="${e}">
+                            </span>
+
+                            <input class="govuk-input govuk-input--width-10"
+                                   id="company-ref"
+                                   th:field="*{companyNumber}"
+                                   th:errorclass="govuk-input--error"
+                                   name="company-ref"
+                                   type="text"
+                                   maxlength="8">
                         </div>
-                        <div class="govuk-form-group">
+                        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('penaltyNumber')} ? 'govuk-form-group--error' : ''">
                             <label class="govuk-label" for="penalty-ref">
-                                Penalty reference
+                                Reference number
                             </label>
-                            <input class="govuk-input govuk-input--width-20" id="penalty-ref" name="penalty-ref" type="text">
+
+                            <span class="govuk-error-message"
+                                  id="penaltyNumber-errorId"
+                                  th:if="${#fields.hasErrors('penaltyNumber')}"
+                                  th:each="e : ${#fields.errors('penaltyNumber')}" th:text="${e}">
+                            </span>
+
+                            <input class="govuk-input govuk-input--width-10"
+                                   id="penalty-ref"
+                                   th:field="*{penaltyNumber}"
+                                   th:errorclass="govuk-input--error"
+                                   name="penalty-ref"
+                                   type="text"
+                                   maxlength="8">
                         </div>
                         <div class="govuk-form-group">
                             <details class="govuk-details">
                                 <summary class="govuk-details__summary">
                                     <span class="govuk-details__summary-text">
-                                      Where can I find these details?
+                                        Where can I find these details?
                                     </span>
                                 </summary>
                                 <div class="govuk-details__text">
                                     <p>
-                                        Your company number and penalty reference are shown in a box on the right side of the penalty notice.
+                                        Your company number and reference number are shown at the bottom of your penalty notice.
                                     </p>
                                     <div id="penalty-notice-image"/></div>
                             </details>
@@ -55,6 +82,5 @@
             </div>
         </form>
     </div>
-</div>
 </body>
 </html>

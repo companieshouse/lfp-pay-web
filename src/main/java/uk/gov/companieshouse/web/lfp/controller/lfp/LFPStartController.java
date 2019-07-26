@@ -1,17 +1,16 @@
-package uk.gov.companieshouse.web.lfp.controller;
+package uk.gov.companieshouse.web.lfp.controller.lfp;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
-
-import javax.servlet.http.HttpServletRequest;
+import uk.gov.companieshouse.web.lfp.controller.BaseController;
 
 @Controller
-@NextController(LFPEnterDetailsController.class)
+@NextController(EnterLFPDetailsController.class)
 @RequestMapping("/lfp/temp")
-public class LFPController extends BaseController{
+public class LFPStartController extends BaseController {
 
     private static String LFP_TEMP_HOME = "lfp/home";
 
@@ -27,7 +26,7 @@ public class LFPController extends BaseController{
 
 
     @PostMapping
-    public String postEnterDetails(HttpServletRequest request) {
+    public String postEnterDetails() {
 
         return navigatorService.getNextControllerRedirect(this.getClass());
     }

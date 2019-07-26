@@ -34,6 +34,8 @@ public class UserDetailsInterceptorTests {
 
     private static final String TEST_EMAIL_ADDRESS = "test_email_address";
 
+    private static final String MODEL_VIEW_NAME = "model_view_name";
+
     private static final Map<String, Object> userProfile = new HashMap<>();
 
     @Mock
@@ -64,6 +66,7 @@ public class UserDetailsInterceptorTests {
 
         when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
+        when(modelAndView.getViewName()).thenReturn(MODEL_VIEW_NAME);
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
@@ -108,6 +111,7 @@ public class UserDetailsInterceptorTests {
 
         when(sessionService.getSessionDataFromContext()).thenReturn(new HashMap<>());
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
+        when(modelAndView.getViewName()).thenReturn(MODEL_VIEW_NAME);
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
