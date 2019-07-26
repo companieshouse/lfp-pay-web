@@ -5,13 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
+import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.lfp.EnterLFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.lfp.ViewLFPDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -31,6 +35,9 @@ public class ViewPenaltiesController extends BaseController {
 
     @Autowired
     private EnterLFPDetailsService enterLFPDetailsService;
+
+    @Autowired
+    private ViewLFPDetailsService viewLFPDetailsService;
 
     @GetMapping
     public String getViewPenalties(@PathVariable String companyNumber,
@@ -68,6 +75,34 @@ public class ViewPenaltiesController extends BaseController {
         model.addAttribute("companyName", companyProfileApi.getCompanyName());
 
         return getTemplateName();
+    }
+
+    @PostMapping
+    public String postViewPenalties(@PathVariable String companyNumber,
+                                    @PathVariable String penaltyNumber,
+                                    Model model,
+                                    HttpServletRequest request) {
+
+        PayableLateFilingPenaltySession payableLateFilingPenaltySession;
+
+        try {
+            // Call penalty details for create request
+            LateFilingPenalty lateFilingPenalty = enterLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber).get(0);
+
+            // Create payable session
+            payableLateFilingPenaltySession = viewLFPDetailsService.createLateFilingPenaltySession(
+                    companyNumber,
+                    penaltyNumber,
+                    lateFilingPenalty.getOutstanding());
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+
+        //TODO - Use resource link to redirect to payments service
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + payableLateFilingPenaltySession.getLinks().get("self");
     }
 
 }
