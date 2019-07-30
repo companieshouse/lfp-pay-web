@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import uk.gov.companieshouse.web.lfp.interceptor.UserDetailsInterceptor;
+import uk.gov.companieshouse.web.lfp.interceptor.LoggingInterceptor;
 
 
 @SpringBootApplication
@@ -14,10 +15,13 @@ public class LFPWebApplication implements WebMvcConfigurer {
     public static final String APPLICATION_NAME_SPACE = "lfp-pay-web";
 
     private UserDetailsInterceptor userDetailsInterceptor;
+    private LoggingInterceptor loggingInterceptor;
 
     @Autowired
-    public LFPWebApplication(UserDetailsInterceptor userDetailsInterceptor) {
+    public LFPWebApplication(UserDetailsInterceptor userDetailsInterceptor,
+                                LoggingInterceptor loggingInterceptor) {
         this.userDetailsInterceptor = userDetailsInterceptor;
+        this.loggingInterceptor = loggingInterceptor;
     }
 
     public static void main(String[] args) {
@@ -26,6 +30,7 @@ public class LFPWebApplication implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loggingInterceptor);
         registry.addInterceptor(userDetailsInterceptor);
     }
 }
