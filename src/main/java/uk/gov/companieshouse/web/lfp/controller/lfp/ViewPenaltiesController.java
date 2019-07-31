@@ -15,6 +15,7 @@ import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -34,6 +35,9 @@ public class ViewPenaltiesController extends BaseController {
 
     @Autowired
     private LFPDetailsService LFPDetailsService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @GetMapping
     public String getViewPenalties(@PathVariable String companyNumber,
@@ -97,8 +101,14 @@ public class ViewPenaltiesController extends BaseController {
             return ERROR_VIEW;
         }
 
-        //TODO - Use resource link to redirect to payments service
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + payableLateFilingPenaltySession.getLinks().get("self");
+        try {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    paymentService.createPaymentSession(payableLateFilingPenaltySession);
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
     }
 
 }
