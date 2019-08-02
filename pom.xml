@@ -23,7 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <structured-logging.version>1.5.0-rc2</structured-logging.version>
-        <common-web-java.version>1.0.1-rc3</common-web-java.version>
+        <common-web-java.version>1.1.0-rc1</common-web-java.version>
         <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
         <java-session-handler.version>2.2.0</java-session-handler.version>
         <web-security-java.version>1.1.0-rc1</web-security-java.version>
