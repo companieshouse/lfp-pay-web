@@ -13,7 +13,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.lfp.util.LFPTestUtility;
 
@@ -38,7 +39,10 @@ public class EnterLFPDetailsControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private LFPDetailsService mockLFPDetailsService;
+    private CompanyService mockCompanyService;
+
+    @Mock
+    private LateFilingPenaltyService mockLateFilingPenaltyService;
 
     @Mock
     private NavigatorService mockNavigatorService;
@@ -163,7 +167,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(NO_PENALTY_FOUND_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -181,7 +185,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -199,7 +203,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(NO_PENALTY_FOUND_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -217,7 +221,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(DCA_PAYMENTS_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -235,7 +239,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(ALREADY_PAID_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -253,7 +257,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -271,7 +275,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -289,7 +293,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -307,7 +311,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(ERROR_PAGE));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     @Test
@@ -325,7 +329,7 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(mockLFPDetailsService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     private void configurePreviousController() {
@@ -339,7 +343,7 @@ public class EnterLFPDetailsControllerTest {
     }
 
     private void configureValidAppendCompanyNumber(String companyNumber) {
-        when(mockLFPDetailsService.appendToCompanyNumber(companyNumber))
+        when(mockCompanyService.appendToCompanyNumber(companyNumber))
                 .thenReturn(VALID_COMPANY_NUMBER);
     }
 
@@ -347,7 +351,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> validLFPs = new ArrayList<>();
         validLFPs.add(LFPTestUtility.validLateFilingPenalty(penaltyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(validLFPs);
     }
 
@@ -356,7 +360,7 @@ public class EnterLFPDetailsControllerTest {
         multipleValidLFPs.add(LFPTestUtility.validLateFilingPenalty("12345678"));
         multipleValidLFPs.add(LFPTestUtility.validLateFilingPenalty("23456789"));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(multipleValidLFPs);
     }
 
@@ -365,7 +369,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> wrongIdLfp = new ArrayList<>();
         wrongIdLfp.add(LFPTestUtility.validLateFilingPenalty(companyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(wrongIdLfp);
     }
 
@@ -374,7 +378,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> dcaLfp = new ArrayList<>();
         dcaLfp.add(LFPTestUtility.dcaLateFilingPenalty(penaltyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(dcaLfp);
     }
 
@@ -383,7 +387,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> paidLfp = new ArrayList<>();
         paidLfp.add(LFPTestUtility.paidLateFilingPenalty(penaltyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(paidLfp);
     }
 
@@ -392,7 +396,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> negativeLFP = new ArrayList<>();
         negativeLFP.add(LFPTestUtility.negativeOustandingLateFilingPenalty(penaltyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(negativeLFP);
     }
 
@@ -401,7 +405,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> partialPaidLFP = new ArrayList<>();
         partialPaidLFP.add(LFPTestUtility.partialPaidLateFilingPenalty(penaltyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(partialPaidLFP);
     }
 
@@ -410,7 +414,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> notPenaltyTypeLfp = new ArrayList<>();
         notPenaltyTypeLfp.add(LFPTestUtility.notPenaltyTypeLateFilingPenalty(penaltyNumber));
 
-        when(mockLFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(notPenaltyTypeLfp);
     }
 
@@ -418,6 +422,6 @@ public class EnterLFPDetailsControllerTest {
             throws ServiceException {
 
         doThrow(ServiceException.class)
-                .when(mockLFPDetailsService).getPayableLateFilingPenalties(companyNumber, penaltyNumber);
+                .when(mockLateFilingPenaltyService).getPayableLateFilingPenalties(companyNumber, penaltyNumber);
     }
 }

@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.lfp.util.LFPTestUtility;
 
@@ -33,7 +34,10 @@ public class PenaltyPaidControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private LFPDetailsService mockLFPDetailsService;
+    private LateFilingPenaltyService mockLateFilingPenaltyService;
+
+    @Mock
+    private CompanyService mockCompanyService;
 
     @Mock
     private NavigatorService mockNavigatorService;
@@ -73,7 +77,7 @@ public class PenaltyPaidControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NAME_ATTR))
                 .andExpect(model().attributeExists(PENALTY_NUMBER_ATTR));
 
-        verify(mockLFPDetailsService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
     }
 
     @Test
@@ -86,7 +90,7 @@ public class PenaltyPaidControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(mockLFPDetailsService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+        verify(mockCompanyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
     }
 
     private void configurePreviousController() {
@@ -95,13 +99,13 @@ public class PenaltyPaidControllerTest {
     }
 
     private void configureValidCompanyProfile(String companyNumber) throws ServiceException {
-        when(mockLFPDetailsService.getCompanyProfile(companyNumber))
+        when(mockCompanyService.getCompanyProfile(companyNumber))
                 .thenReturn(LFPTestUtility.validCompanyProfile(companyNumber));
     }
 
     private void configureErrorRetrievingCompany(String companyNumber) throws ServiceException {
 
         doThrow(ServiceException.class)
-                .when(mockLFPDetailsService).getCompanyProfile(companyNumber);
+                .when(mockCompanyService).getCompanyProfile(companyNumber);
     }
 }
