@@ -14,7 +14,8 @@ import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalt
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,10 @@ public class ViewPenaltiesController extends BaseController {
     }
 
     @Autowired
-    private LFPDetailsService LFPDetailsService;
+    private CompanyService companyService;
+
+    @Autowired
+    private LateFilingPenaltyService LateFilingPenaltyService;
 
     @Autowired
     private PaymentService paymentService;
@@ -51,8 +55,8 @@ public class ViewPenaltiesController extends BaseController {
         CompanyProfileApi companyProfileApi;
 
         try {
-            companyProfileApi = LFPDetailsService.getCompanyProfile(companyNumber);
-            lateFilingPenalty = LFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber).get(0);
+            companyProfileApi = companyService.getCompanyProfile(companyNumber);
+            lateFilingPenalty = LateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber).get(0);
         } catch (ServiceException ex) {
             LOGGER.errorRequest(request, ex.getMessage(), ex);
             return ERROR_VIEW;
@@ -87,10 +91,10 @@ public class ViewPenaltiesController extends BaseController {
 
         try {
             // Call penalty details for create request
-            LateFilingPenalty lateFilingPenalty = LFPDetailsService.getPayableLateFilingPenalties(companyNumber, penaltyNumber).get(0);
+            LateFilingPenalty lateFilingPenalty = LateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber).get(0);
 
             // Create payable session
-            payableLateFilingPenaltySession = LFPDetailsService.createLateFilingPenaltySession(
+            payableLateFilingPenaltySession = LateFilingPenaltyService.createLateFilingPenaltySession(
                     companyNumber,
                     penaltyNumber,
                     lateFilingPenalty.getOutstanding());

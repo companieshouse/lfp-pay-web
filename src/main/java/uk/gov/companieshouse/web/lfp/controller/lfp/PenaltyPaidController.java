@@ -10,7 +10,7 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-import uk.gov.companieshouse.web.lfp.service.lfp.LFPDetailsService;
+import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +26,7 @@ public class PenaltyPaidController extends BaseController {
     }
 
     @Autowired
-    private LFPDetailsService LFPDetailsService;
+    private CompanyService companyService;
 
     @GetMapping
     public String getLfpNoPenaltyFound(@PathVariable String companyNumber,
@@ -37,7 +37,7 @@ public class PenaltyPaidController extends BaseController {
         CompanyProfileApi companyProfileApi;
 
         try {
-            companyProfileApi = LFPDetailsService.getCompanyProfile(companyNumber);
+            companyProfileApi = companyService.getCompanyProfile(companyNumber);
         } catch (ServiceException ex) {
             LOGGER.errorRequest(request, ex.getMessage(), ex);
             return ERROR_VIEW;
