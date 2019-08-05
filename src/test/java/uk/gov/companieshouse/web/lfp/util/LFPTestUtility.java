@@ -1,11 +1,14 @@
 package uk.gov.companieshouse.web.lfp.util;
 
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LFPTestUtility {
@@ -114,5 +117,38 @@ public class LFPTestUtility {
         payableLateFilingPenaltySession.setLinks(links);
 
         return payableLateFilingPenaltySession;
+    }
+
+    public static LateFilingPenalties oneLateFilingPenalties(LateFilingPenalty lateFilingPenalty) {
+        LateFilingPenalties lateFilingPenalties = new LateFilingPenalties();
+        List<LateFilingPenalty> items = new ArrayList<LateFilingPenalty>() {{
+            add(lateFilingPenalty);
+        }};
+
+        lateFilingPenalties.setTotalResults(1);
+        lateFilingPenalties.setItems(items);
+
+        return lateFilingPenalties;
+    }
+
+    public static LateFilingPenalties twoLateFilingPenalties(LateFilingPenalty lateFilingPenalty1,
+                                                             LateFilingPenalty lateFilingPenalty2) {
+        LateFilingPenalties lateFilingPenalties = new LateFilingPenalties();
+        List<LateFilingPenalty> items = new ArrayList<LateFilingPenalty>() {{
+            add(lateFilingPenalty1);
+            add(lateFilingPenalty2);
+        }};
+
+        lateFilingPenalties.setTotalResults(2);
+        lateFilingPenalties.setItems(items);
+
+        return lateFilingPenalties;
+    }
+
+    public static LateFilingPenalties noPenalties() {
+        LateFilingPenalties lateFilingPenalties = new LateFilingPenalties();
+        lateFilingPenalties.setTotalResults(0);
+
+        return lateFilingPenalties;
     }
 }

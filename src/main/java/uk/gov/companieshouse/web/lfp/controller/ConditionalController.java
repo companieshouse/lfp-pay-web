@@ -23,12 +23,12 @@ public interface ConditionalController {
      *
      * @param companyNumber     the company number
      * @param transactionId     the transaction identifier
-     * @param companyAccountsId the company accounts identifier
+     * @param companylfpId the company lfp identifier
      *
      * @see uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService
      * @see uk.gov.companieshouse.web.lfp.exception.NavigationException
      *
      * @return true if the template for a controller will be rendered
      */
-    boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
+    boolean willRender(String companyNumber, String transactionId, String companylfpId) throws ServiceException;
 }
