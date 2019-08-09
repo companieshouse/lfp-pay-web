@@ -67,7 +67,6 @@ public class ConfirmationController extends BaseController {
         // If the payment is anything but paid return user to beginning of journey
         if (!paymentStatus.equals("paid")) {
 
-
             PayableLateFilingPenalty payableLateFilingPenalty;
             try {
                 payableLateFilingPenalty = PayableLateFilingPenaltyService.getPayableLateFilingPenalty(companyNumber, penaltyId);

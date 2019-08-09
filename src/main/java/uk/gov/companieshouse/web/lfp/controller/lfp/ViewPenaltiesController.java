@@ -25,7 +25,7 @@ import java.util.Locale;
 
 @Controller
 @PreviousController(EnterLFPDetailsController.class)
-@RequestMapping("/company/{companyNumber}/penalty/{penaltyNumber}/lfp/view-penalties")
+@RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/view-penalties")
 public class ViewPenaltiesController extends BaseController {
 
     private static String LFP_VIEW_PENALTIES = "lfp/viewPenalties";

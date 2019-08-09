@@ -58,7 +58,7 @@ public class ViewPenaltiesControllerTest {
     private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_NUMBER = "44444444";
 
-    private static final String VIEW_PENALTIES_PATH = "/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/lfp/view-penalties";
+    private static final String VIEW_PENALTIES_PATH = "/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/view-penalties";
 
     private static final String ENTER_LFP_DETAILS_VIEW = "lfp/viewPenalties";
     private static final String ERROR_VIEW = "error";
