@@ -11,13 +11,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
-import uk.gov.companieshouse.api.handler.latefilingpenalty.LateFilingPenaltyResourceHandler;
-import uk.gov.companieshouse.api.handler.latefilingpenalty.request.LateFilingPenaltyCreate;
-import uk.gov.companieshouse.api.handler.latefilingpenalty.request.LateFilingPenaltyGet;
+import uk.gov.companieshouse.api.handler.latefilingpenalty.e5latefilingpenalty.LateFilingPenaltyResourceHandler;
+import uk.gov.companieshouse.api.handler.latefilingpenalty.e5latefilingpenalty.request.LateFilingPenaltyGet;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenaltySession;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
@@ -28,8 +26,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,9 +43,6 @@ public class LateFilingPenaltyServiceImplTest {
 
     @Mock
     private LateFilingPenaltyGet lateFilingPenaltyGet;
-
-    @Mock
-    private LateFilingPenaltyCreate lateFilingPenaltyCreate;
 
     @Mock
     private ApiResponse<LateFilingPenalties> responseWithData;
@@ -179,50 +172,6 @@ public class LateFilingPenaltyServiceImplTest {
 
         assertThrows(ServiceException.class, () ->
                 mockLateFilingPenaltyService.getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER));
-    }
-
-    /**
-     * Create Late Filing Penalty Session Tests.
-     */
-    @Test
-    @DisplayName("Create Late Filing Penalty Session - Success Path")
-    void createLateFilingPenaltySessionSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        PayableLateFilingPenaltySession payableLateFilingPenaltySession = LFPTestUtility.payableLateFilingPenaltySession(COMPANY_NUMBER);
-        when(lateFilingPenaltyResourceHandler.create(eq(POST_LFP_URI), any(LateFilingPenaltySession.class)))
-                .thenReturn(lateFilingPenaltyCreate);
-        when(lateFilingPenaltyCreate.execute()).thenReturn(sessionResponseWithData);
-
-        when(sessionResponseWithData.getData()).thenReturn(payableLateFilingPenaltySession);
-
-        PayableLateFilingPenaltySession createdLateFilingPenaltySession =
-                mockLateFilingPenaltyService.createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, AMOUNT);
-
-        assertEquals(createdLateFilingPenaltySession, payableLateFilingPenaltySession);
-    }
-
-    @Test
-    @DisplayName("Create Late Filing Penalty Session - Throws ApiErrorResponseException")
-    void createLateFilingPenaltySessionThrowsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
-        when(lateFilingPenaltyResourceHandler.create(eq(POST_LFP_URI), any(LateFilingPenaltySession.class)))
-                .thenReturn(lateFilingPenaltyCreate);
-        when(lateFilingPenaltyCreate.execute()).thenThrow(ApiErrorResponseException.class);
-
-        assertThrows(ServiceException.class, () ->
-                mockLateFilingPenaltyService.createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, AMOUNT));
-    }
-
-    @Test
-    @DisplayName("Create Late Filing Penalty Session - Throws URIValidationException")
-    void createLateFilingPenaltySessionThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
-        when(lateFilingPenaltyResourceHandler.create(eq(POST_LFP_URI), any(LateFilingPenaltySession.class)))
-                .thenReturn(lateFilingPenaltyCreate);
-        when(lateFilingPenaltyCreate.execute()).thenThrow(URIValidationException.class);
-
-        assertThrows(ServiceException.class, () ->
-                mockLateFilingPenaltyService.createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, AMOUNT));
     }
 
 }

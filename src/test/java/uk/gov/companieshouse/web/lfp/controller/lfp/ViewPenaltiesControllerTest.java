@@ -164,7 +164,7 @@ public class ViewPenaltiesControllerTest {
         verify(mockLateFilingPenaltyService, times(1))
                 .createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, LFPTestUtility.validLateFilingPenalty(COMPANY_NUMBER).getOutstanding());
         verify(mockPaymentService, times(1))
-                .createPaymentSession(payableLateFilingPenaltySession);
+                .createPaymentSession(payableLateFilingPenaltySession, COMPANY_NUMBER);
 
     }
 
@@ -218,7 +218,7 @@ public class ViewPenaltiesControllerTest {
         verify(mockLateFilingPenaltyService, times(1))
                 .createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, LFPTestUtility.validLateFilingPenalty(COMPANY_NUMBER).getOutstanding());
         verify(mockPaymentService, times(1))
-                .createPaymentSession(payableLateFilingPenaltySession);
+                .createPaymentSession(payableLateFilingPenaltySession, COMPANY_NUMBER);
     }
 
 
@@ -280,7 +280,7 @@ public class ViewPenaltiesControllerTest {
     private void configureCreatingPaymentSession(PayableLateFilingPenaltySession payableLateFilingPenaltySession)
             throws ServiceException {
 
-        when(mockPaymentService.createPaymentSession(payableLateFilingPenaltySession))
+        when(mockPaymentService.createPaymentSession(payableLateFilingPenaltySession, COMPANY_NUMBER))
                 .thenReturn(MOCK_PAYMENTS_URL);
     }
 
@@ -288,7 +288,7 @@ public class ViewPenaltiesControllerTest {
             throws ServiceException {
 
         doThrow(ServiceException.class).when(mockPaymentService)
-                .createPaymentSession(payableLateFilingPenaltySession);
+                .createPaymentSession(payableLateFilingPenaltySession, COMPANY_NUMBER);
     }
 
 }

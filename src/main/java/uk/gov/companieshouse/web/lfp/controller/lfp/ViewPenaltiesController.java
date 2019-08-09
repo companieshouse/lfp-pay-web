@@ -107,7 +107,7 @@ public class ViewPenaltiesController extends BaseController {
 
         try {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                    paymentService.createPaymentSession(payableLateFilingPenaltySession);
+                    paymentService.createPaymentSession(payableLateFilingPenaltySession, companyNumber);
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);

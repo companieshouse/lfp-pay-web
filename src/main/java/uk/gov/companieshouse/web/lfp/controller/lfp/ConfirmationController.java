@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
-import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
+import uk.gov.companieshouse.web.lfp.exception.ServiceException;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/lfp/penalty/{penaltyId}/confirmation")
+@RequestMapping("/lfp/company/{companyNumber}/penalty/{penaltyId}/confirmation")
 public class ConfirmationController extends BaseController {
 
     private static String LFP_CONFIRMATION_PAGE = "lfp/confirmationPage";
@@ -29,13 +31,14 @@ public class ConfirmationController extends BaseController {
     }
 
     @Autowired
-    private LateFilingPenaltyService lateFilingPenaltyService;
+    private PayableLateFilingPenaltyService PayableLateFilingPenaltyService;
 
     @Autowired
     private SessionService sessionService;
 
     @GetMapping
-    public String getConfirmation(@PathVariable String penaltyId,
+    public String getConfirmation(@PathVariable String companyNumber,
+                                  @PathVariable String penaltyId,
                                   @RequestParam("ref") Optional<String> reference,
                                   @RequestParam("state") String paymentState,
                                   @RequestParam("status") String paymentStatus,
@@ -64,8 +67,18 @@ public class ConfirmationController extends BaseController {
         // If the payment is anything but paid return user to beginning of journey
         if (!paymentStatus.equals("paid")) {
 
-            //TODO: Retrieve URL from 'resume-url' in API once implemented.
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/lfp/enter-details";
+
+            PayableLateFilingPenalty payableLateFilingPenalty;
+            try {
+                payableLateFilingPenalty = PayableLateFilingPenaltyService.getPayableLateFilingPenalty(companyNumber, penaltyId);
+            } catch (ServiceException ex) {
+                LOGGER.errorRequest(request, ex.getMessage(), ex);
+                return ERROR_VIEW;
+            }
+
+            Map<String, String> links = payableLateFilingPenalty.getLinks();
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + links.get("resume_journey_uri");
+
         }
 
         model.addAttribute("penaltyNumber", penaltyId);

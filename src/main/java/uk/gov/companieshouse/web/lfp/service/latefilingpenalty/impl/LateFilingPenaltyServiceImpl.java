@@ -75,7 +75,7 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
         try {
             String uri = POST_LFP_URI.expand(companyNumber).toString();
             LateFilingPenaltySession lateFilingPenaltySession = generateLateFilingPenaltySessionData(penaltyNumber, amount);
-            apiResponse = apiClient.lateFilingPenalty().create(uri, lateFilingPenaltySession).execute();
+            apiResponse = apiClient.payableLateFilingPenalty().create(uri, lateFilingPenaltySession).execute();
         } catch (ApiErrorResponseException ex) {
             throw new ServiceException("Error retrieving Late Filing Penalty", ex);
         } catch (URIValidationException ex) {
