@@ -53,7 +53,7 @@ public class PaymentServiceImpl implements PaymentService {
         String paymentState = UUID.randomUUID().toString();
 
         PaymentSessionApi paymentSessionApi = new PaymentSessionApi();
-        paymentSessionApi.setRedirectUri(chsUrl + "/penalty/" + payableLateFilingPenaltySession.getId() + "/confirmation");
+        paymentSessionApi.setRedirectUri(chsUrl + "/lfp/penalty/" + payableLateFilingPenaltySession.getId() + "/confirmation");
         paymentSessionApi.setResource(apiUrl + payableLateFilingPenaltySession.getLinks().get("self") + "/payment");
         paymentSessionApi.setReference("late_filing_penalty_" + payableLateFilingPenaltySession.getId());
         paymentSessionApi.setState(paymentState);
