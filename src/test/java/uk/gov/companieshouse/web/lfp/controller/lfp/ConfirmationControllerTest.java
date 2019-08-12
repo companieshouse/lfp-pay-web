@@ -10,12 +10,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
 import uk.gov.companieshouse.web.lfp.util.LFPTestUtility;
 
 import java.util.Map;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,7 +48,7 @@ public class ConfirmationControllerTest {
 
     private static final String VIEW_CONFIRMATION_PATH = "/lfp/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/confirmation";
 
-    private static final String RESUME_URL_PATH = "redirect:/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/lfp/view-penalties";
+    private static final String RESUME_URL_PATH = "redirect:/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/view-penalties";
 
     private static final String CONFIRMATION_VIEW = "lfp/confirmationPage";
     private static final String ERROR_VIEW = "error";
@@ -137,6 +139,28 @@ public class ConfirmationControllerTest {
                 .param("status", PAYMENT_STATUS_CANCELLED))
                 .andExpect(view().name(RESUME_URL_PATH))
                 .andExpect(status().is3xxRedirection());
+
+        verify(sessionData).remove(PAYMENT_STATE);
+    }
+
+    @Test
+    @DisplayName("Get View Confirmation Screen - payment status cancelled - error retrieving payment session")
+    void getRequestStatusIsCancelledErrorRetrievingPaymentSession() throws Exception {
+
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+        when(sessionData.containsKey(PAYMENT_STATE)).thenReturn(true);
+
+        when(sessionData.get(PAYMENT_STATE)).thenReturn(STATE);
+
+        doThrow(ServiceException.class)
+                .when(mockPayableLateFilingPenaltyService).getPayableLateFilingPenalty(COMPANY_NUMBER, PENALTY_ID);
+
+        this.mockMvc.perform(get(VIEW_CONFIRMATION_PATH)
+                .param("ref", REF)
+                .param("state", STATE)
+                .param("status", PAYMENT_STATUS_CANCELLED))
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(status().isOk());
 
         verify(sessionData).remove(PAYMENT_STATE);
     }

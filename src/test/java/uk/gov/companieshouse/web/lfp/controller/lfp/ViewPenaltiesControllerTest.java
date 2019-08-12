@@ -16,6 +16,7 @@ import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalt
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
 import uk.gov.companieshouse.web.lfp.util.LFPTestUtility;
@@ -42,6 +43,9 @@ public class ViewPenaltiesControllerTest {
 
     @Mock
     private LateFilingPenaltyService mockLateFilingPenaltyService;
+
+    @Mock
+    private PayableLateFilingPenaltyService mockPayableLateFilingPenaltyService;
 
     @Mock
     private CompanyService mockCompanyService;
@@ -94,7 +98,7 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NAME_MODEL_ATTR));
 
         verify(mockCompanyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
     }
 
@@ -109,7 +113,7 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
     }
 
@@ -141,7 +145,7 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(view().name(ERROR_VIEW));
 
         verify(mockCompanyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
     }
 
@@ -160,8 +164,8 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(REDIRECT_PATH + MOCK_PAYMENTS_URL));
 
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
-        verify(mockLateFilingPenaltyService, times(1))
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockPayableLateFilingPenaltyService, times(1))
                 .createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, LFPTestUtility.validLateFilingPenalty(COMPANY_NUMBER).getOutstanding());
         verify(mockPaymentService, times(1))
                 .createPaymentSession(payableLateFilingPenaltySession, COMPANY_NUMBER);
@@ -178,7 +182,7 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
     }
 
@@ -193,8 +197,8 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
-        verify(mockLateFilingPenaltyService, times(1))
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockPayableLateFilingPenaltyService, times(1))
                 .createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, LFPTestUtility.validLateFilingPenalty(COMPANY_NUMBER).getOutstanding());
 
     }
@@ -214,8 +218,8 @@ public class ViewPenaltiesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(mockLateFilingPenaltyService, times(1)).getPayableLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
-        verify(mockLateFilingPenaltyService, times(1))
+        verify(mockLateFilingPenaltyService, times(1)).getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+        verify(mockPayableLateFilingPenaltyService, times(1))
                 .createLateFilingPenaltySession(COMPANY_NUMBER, PENALTY_NUMBER, LFPTestUtility.validLateFilingPenalty(COMPANY_NUMBER).getOutstanding());
         verify(mockPaymentService, times(1))
                 .createPaymentSession(payableLateFilingPenaltySession, COMPANY_NUMBER);
@@ -232,7 +236,7 @@ public class ViewPenaltiesControllerTest {
         List<LateFilingPenalty> validLFPs = new ArrayList<>();
         validLFPs.add(LFPTestUtility.validLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(validLFPs);
     }
 
@@ -241,7 +245,7 @@ public class ViewPenaltiesControllerTest {
                                                PayableLateFilingPenaltySession payableLateFilingPenaltySession)
             throws ServiceException {
 
-        when(mockLateFilingPenaltyService.createLateFilingPenaltySession(companyNumber, penaltyNumber, lateFilingPenalty.getOutstanding()))
+        when(mockPayableLateFilingPenaltyService.createLateFilingPenaltySession(companyNumber, penaltyNumber, lateFilingPenalty.getOutstanding()))
                 .thenReturn(payableLateFilingPenaltySession);
     }
 
@@ -249,7 +253,7 @@ public class ViewPenaltiesControllerTest {
         List<LateFilingPenalty> nullLFP = new ArrayList<>();
         nullLFP.add(null);
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(nullLFP);
     }
 
@@ -261,7 +265,7 @@ public class ViewPenaltiesControllerTest {
     private void configureErrorRetrievingPenalty(String companyNumber, String penaltyNumber) throws ServiceException {
 
         doThrow(ServiceException.class)
-                .when(mockLateFilingPenaltyService).getPayableLateFilingPenalties(companyNumber, penaltyNumber);
+                .when(mockLateFilingPenaltyService).getlateFilingPenalties(companyNumber, penaltyNumber);
     }
 
     private void configureErrorRetrievingCompany(String companyNumber) throws ServiceException {
@@ -273,7 +277,7 @@ public class ViewPenaltiesControllerTest {
     private void configureErrorCreatingLateFilingPenalty(String companyNumber, String penaltyNumber, LateFilingPenalty lateFilingPenalty)
             throws ServiceException {
 
-        doThrow(ServiceException.class).when(mockLateFilingPenaltyService)
+        doThrow(ServiceException.class).when(mockPayableLateFilingPenaltyService)
                 .createLateFilingPenaltySession(companyNumber, penaltyNumber, lateFilingPenalty.getOutstanding());
     }
 

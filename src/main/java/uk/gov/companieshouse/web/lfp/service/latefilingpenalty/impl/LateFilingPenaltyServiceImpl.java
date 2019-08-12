@@ -6,18 +6,13 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
-import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenaltySession;
-import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
-import uk.gov.companieshouse.api.model.latefilingpenalty.Transaction;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,16 +21,13 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
     private static final UriTemplate GET_LFP_URI =
             new UriTemplate("/company/{companyNumber}/penalties/late-filing");
 
-    private static final UriTemplate POST_LFP_URI =
-            new UriTemplate("/company/{companyNumber}/penalties/late-filing/payable");
-
     private static final String PENALTY_TYPE = "penalty";
 
     @Autowired
     private ApiClientService apiClientService;
 
     @Override
-    public List<LateFilingPenalty> getPayableLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException {
+    public List<LateFilingPenalty> getlateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException {
         ApiClient apiClient = apiClientService.getPublicApiClient();
         LateFilingPenalties lateFilingPenalties;
 
@@ -65,35 +57,5 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
         }
 
         return payableLateFilingPenalties;
-    }
-
-    @Override
-    public PayableLateFilingPenaltySession createLateFilingPenaltySession(String companyNumber, String penaltyNumber, Integer amount) throws ServiceException {
-        ApiClient apiClient = apiClientService.getPublicApiClient();
-        ApiResponse<PayableLateFilingPenaltySession> apiResponse;
-
-        try {
-            String uri = POST_LFP_URI.expand(companyNumber).toString();
-            LateFilingPenaltySession lateFilingPenaltySession = generateLateFilingPenaltySessionData(penaltyNumber, amount);
-            apiResponse = apiClient.payableLateFilingPenalty().create(uri, lateFilingPenaltySession).execute();
-        } catch (ApiErrorResponseException ex) {
-            throw new ServiceException("Error retrieving Late Filing Penalty", ex);
-        } catch (URIValidationException ex) {
-            throw new ServiceException("Invalid URI for Late Filing Penalty", ex);
-        }
-
-        return apiResponse.getData();
-
-    }
-
-    private LateFilingPenaltySession generateLateFilingPenaltySessionData(String penaltyNumber, Integer amount) {
-        Transaction transaction = new Transaction();
-        transaction.setTransactionId(penaltyNumber);
-        transaction.setAmount(amount);
-
-        LateFilingPenaltySession lateFilingPenaltySession = new LateFilingPenaltySession();
-        lateFilingPenaltySession.setTransactions(Collections.singletonList(transaction));
-
-        return lateFilingPenaltySession;
     }
 }

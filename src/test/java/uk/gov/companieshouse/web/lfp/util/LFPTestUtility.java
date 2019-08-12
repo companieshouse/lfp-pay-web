@@ -43,7 +43,7 @@ public class LFPTestUtility {
     public static PayableLateFilingPenalty validPayableLateFilingPenalty(String companyNumber, String ID) {
         PayableLateFilingPenalty payableLateFilingPenalty = new PayableLateFilingPenalty();
         payableLateFilingPenalty.setCompanyNumber(companyNumber);
-        String resumeURI = "/company/" + companyNumber + "/penalty/" + ID + "/lfp/view-penalties";
+        String resumeURI = "/late-filing-penalty/company/" + companyNumber + "/penalty/" + ID + "/view-penalties";
 
         payableLateFilingPenalty.setLinks(new HashMap<String, String>(){{put("resume_journey_uri", resumeURI);}});
 

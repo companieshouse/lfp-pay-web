@@ -351,7 +351,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> validLFPs = new ArrayList<>();
         validLFPs.add(LFPTestUtility.validLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(validLFPs);
     }
 
@@ -360,7 +360,7 @@ public class EnterLFPDetailsControllerTest {
         multipleValidLFPs.add(LFPTestUtility.validLateFilingPenalty("12345678"));
         multipleValidLFPs.add(LFPTestUtility.validLateFilingPenalty("23456789"));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(multipleValidLFPs);
     }
 
@@ -369,7 +369,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> wrongIdLfp = new ArrayList<>();
         wrongIdLfp.add(LFPTestUtility.validLateFilingPenalty(companyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(wrongIdLfp);
     }
 
@@ -378,7 +378,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> dcaLfp = new ArrayList<>();
         dcaLfp.add(LFPTestUtility.dcaLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(dcaLfp);
     }
 
@@ -387,7 +387,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> paidLfp = new ArrayList<>();
         paidLfp.add(LFPTestUtility.paidLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(paidLfp);
     }
 
@@ -396,7 +396,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> negativeLFP = new ArrayList<>();
         negativeLFP.add(LFPTestUtility.negativeOustandingLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(negativeLFP);
     }
 
@@ -405,7 +405,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> partialPaidLFP = new ArrayList<>();
         partialPaidLFP.add(LFPTestUtility.partialPaidLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(partialPaidLFP);
     }
 
@@ -414,7 +414,7 @@ public class EnterLFPDetailsControllerTest {
         List<LateFilingPenalty> notPenaltyTypeLfp = new ArrayList<>();
         notPenaltyTypeLfp.add(LFPTestUtility.notPenaltyTypeLateFilingPenalty(penaltyNumber));
 
-        when(mockLateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber))
+        when(mockLateFilingPenaltyService.getlateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(notPenaltyTypeLfp);
     }
 
@@ -422,6 +422,6 @@ public class EnterLFPDetailsControllerTest {
             throws ServiceException {
 
         doThrow(ServiceException.class)
-                .when(mockLateFilingPenaltyService).getPayableLateFilingPenalties(companyNumber, penaltyNumber);
+                .when(mockLateFilingPenaltyService).getlateFilingPenalties(companyNumber, penaltyNumber);
     }
 }
