@@ -88,7 +88,7 @@ public class LateFilingPenaltyServiceImplTest {
         );
 
         List<LateFilingPenalty> payableLateFilingPenalties =
-                mockLateFilingPenaltyService.getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+                mockLateFilingPenaltyService.getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
         assertEquals(1, payableLateFilingPenalties.size());
         assertEquals(validLateFilingPenalty, payableLateFilingPenalties.get(0));
@@ -109,7 +109,7 @@ public class LateFilingPenaltyServiceImplTest {
         );
 
         List<LateFilingPenalty> payableLateFilingPenalties =
-                mockLateFilingPenaltyService.getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+                mockLateFilingPenaltyService.getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
         assertEquals(2, payableLateFilingPenalties.size());
         assertEquals(validLateFilingPenalty1, payableLateFilingPenalties.get(0));
@@ -128,7 +128,7 @@ public class LateFilingPenaltyServiceImplTest {
         );
 
         List<LateFilingPenalty> payableLateFilingPenalties =
-                mockLateFilingPenaltyService.getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+                mockLateFilingPenaltyService.getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
 
         assertEquals(0, payableLateFilingPenalties.size());
     }
@@ -147,7 +147,7 @@ public class LateFilingPenaltyServiceImplTest {
         );
 
         List<LateFilingPenalty> payableLateFilingPenalties =
-                mockLateFilingPenaltyService.getlateFilingPenalties(COMPANY_NUMBER, "84738483");
+                mockLateFilingPenaltyService.getLateFilingPenalties(COMPANY_NUMBER, "84738483");
 
         assertEquals(0, payableLateFilingPenalties.size());
     }
@@ -160,7 +160,7 @@ public class LateFilingPenaltyServiceImplTest {
         when(lateFilingPenaltyGet.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
-                mockLateFilingPenaltyService.getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER));
+                mockLateFilingPenaltyService.getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER));
     }
 
     @Test
@@ -171,6 +171,6 @@ public class LateFilingPenaltyServiceImplTest {
         when(lateFilingPenaltyGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
-                mockLateFilingPenaltyService.getlateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER));
+                mockLateFilingPenaltyService.getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER));
     }
 }

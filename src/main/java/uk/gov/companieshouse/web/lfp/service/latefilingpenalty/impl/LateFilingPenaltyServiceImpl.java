@@ -27,7 +27,7 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
     private ApiClientService apiClientService;
 
     @Override
-    public List<LateFilingPenalty> getlateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException {
+    public List<LateFilingPenalty> getLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException {
         ApiClient apiClient = apiClientService.getPublicApiClient();
         LateFilingPenalties lateFilingPenalties;
 

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface LateFilingPenaltyService {
 
-    List<LateFilingPenalty> getlateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException;
+    List<LateFilingPenalty> getLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException;
 }
