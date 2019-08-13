@@ -72,7 +72,7 @@ public class EnterLFPDetailsController extends BaseController {
         String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
         try {
-            List<LateFilingPenalty> payableLateFilingPenalties = LateFilingPenaltyService.getPayableLateFilingPenalties(companyNumber, penaltyNumber);
+            List<LateFilingPenalty> payableLateFilingPenalties = LateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber);
 
             // If there are no payable late filing penalties either the company does not exist or has no penalties.
             if (payableLateFilingPenalties.size() == 0) {

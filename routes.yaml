@@ -5,3 +5,4 @@ weight: 900
 routes:
    1: /lfp/*
    2: /healthcheck/*
+   3: /late-filing-penalty/*

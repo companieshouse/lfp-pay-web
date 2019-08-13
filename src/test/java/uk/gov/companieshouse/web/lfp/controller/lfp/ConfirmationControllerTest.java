@@ -10,11 +10,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.lfp.exception.ServiceException;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
+import uk.gov.companieshouse.web.lfp.util.LFPTestUtility;
 
 import java.util.Map;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,15 +37,18 @@ public class ConfirmationControllerTest {
     @Mock
     private Map<String, Object> sessionData;
 
+    @Mock
+    private PayableLateFilingPenaltyService mockPayableLateFilingPenaltyService;
+
     @InjectMocks
     private ConfirmationController controller;
 
+    private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_ID = "EXAMPLE12345";
 
-    private static final String VIEW_CONFIRMATION_PATH = "/lfp/penalty/" + PENALTY_ID + "/confirmation";
+    private static final String VIEW_CONFIRMATION_PATH = "/lfp/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/confirmation";
 
-    //TODO - Update with correct resume-url once implemented.
-    private static final String RESUME_URL_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/lfp/enter-details";
+    private static final String RESUME_URL_PATH = "redirect:/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/view-penalties";
 
     private static final String CONFIRMATION_VIEW = "lfp/confirmationPage";
     private static final String ERROR_VIEW = "error";
@@ -78,7 +84,6 @@ public class ConfirmationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(PENALTY_ID_MODEL_ATTR));
 
-
         verify(sessionData).remove(PAYMENT_STATE);
     }
 
@@ -113,7 +118,6 @@ public class ConfirmationControllerTest {
                 .andExpect(view().name(ERROR_VIEW))
                 .andExpect(status().isOk());
 
-
         verify(sessionData).remove(PAYMENT_STATE);
     }
 
@@ -126,15 +130,37 @@ public class ConfirmationControllerTest {
 
         when(sessionData.get(PAYMENT_STATE)).thenReturn(STATE);
 
+        when(mockPayableLateFilingPenaltyService.getPayableLateFilingPenalty(COMPANY_NUMBER, PENALTY_ID))
+                .thenReturn(LFPTestUtility.validPayableLateFilingPenalty(COMPANY_NUMBER, PENALTY_ID));
 
         this.mockMvc.perform(get(VIEW_CONFIRMATION_PATH)
                 .param("ref", REF)
                 .param("state", STATE)
                 .param("status", PAYMENT_STATUS_CANCELLED))
-                //TODO - Update with correct RESUME_URL_PATH once resume-url is implemented.
                 .andExpect(view().name(RESUME_URL_PATH))
                 .andExpect(status().is3xxRedirection());
 
+        verify(sessionData).remove(PAYMENT_STATE);
+    }
+
+    @Test
+    @DisplayName("Get View Confirmation Screen - payment status cancelled - error retrieving payment session")
+    void getRequestStatusIsCancelledErrorRetrievingPaymentSession() throws Exception {
+
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+        when(sessionData.containsKey(PAYMENT_STATE)).thenReturn(true);
+
+        when(sessionData.get(PAYMENT_STATE)).thenReturn(STATE);
+
+        doThrow(ServiceException.class)
+                .when(mockPayableLateFilingPenaltyService).getPayableLateFilingPenalty(COMPANY_NUMBER, PENALTY_ID);
+
+        this.mockMvc.perform(get(VIEW_CONFIRMATION_PATH)
+                .param("ref", REF)
+                .param("state", STATE)
+                .param("status", PAYMENT_STATUS_CANCELLED))
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(status().isOk());
 
         verify(sessionData).remove(PAYMENT_STATE);
     }

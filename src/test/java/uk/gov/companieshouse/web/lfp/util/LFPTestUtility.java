@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.lfp.util;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
+import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
 
 import java.util.ArrayList;
@@ -37,6 +38,16 @@ public class LFPTestUtility {
         lateFilingPenalty.setDueDate(DATE);
 
         return lateFilingPenalty;
+    }
+
+    public static PayableLateFilingPenalty validPayableLateFilingPenalty(String companyNumber, String ID) {
+        PayableLateFilingPenalty payableLateFilingPenalty = new PayableLateFilingPenalty();
+        payableLateFilingPenalty.setCompanyNumber(companyNumber);
+        String resumeURI = "/late-filing-penalty/company/" + companyNumber + "/penalty/" + ID + "/view-penalties";
+
+        payableLateFilingPenalty.setLinks(new HashMap<String, String>(){{put("resume_journey_uri", resumeURI);}});
+
+        return payableLateFilingPenalty;
     }
 
     public static CompanyProfileApi validCompanyProfile(String ID) {
