@@ -16,7 +16,7 @@ public class WebSecurity {
 
     @Configuration
     @Order(1)
-    public static class StaticResourcesSecurityConfig extends WebSecurityConfigurerAdapter {
+    public static class TemporaryStartPageSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
