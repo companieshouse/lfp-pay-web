@@ -10,7 +10,7 @@ import uk.gov.companieshouse.web.lfp.controller.BaseController;
 
 @Controller
 @PreviousController(EnterLFPDetailsController.class)
-@RequestMapping("/company/{companyNumber}/penalty/{penaltyNumber}/lfp/online-payment-unavailable")
+@RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/online-payment-unavailable")
 public class OnlinePaymentUnavailableController extends BaseController {
 
     private static String LFP_ONLINE_PAYMENT_UNAVAILABLE= "lfp/onlinePaymentUnavailable";

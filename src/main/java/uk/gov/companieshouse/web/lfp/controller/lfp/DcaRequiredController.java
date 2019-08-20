@@ -10,7 +10,7 @@ import uk.gov.companieshouse.web.lfp.controller.BaseController;
 
 @Controller
 @PreviousController(EnterLFPDetailsController.class)
-@RequestMapping("/company/{companyNumber}/penalty/{penaltyNumber}/lfp/legal-fees-required")
+@RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/legal-fees-required")
 public class DcaRequiredController extends BaseController {
 
     private static String LFP_DCA_REQUIRED = "lfp/legalFeesDCA";
