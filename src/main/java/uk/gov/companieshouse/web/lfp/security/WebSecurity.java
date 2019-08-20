@@ -11,16 +11,29 @@ import uk.gov.companieshouse.session.handler.SessionHandler;
 import uk.gov.companieshouse.auth.filter.HijackFilter;
 
 @EnableWebSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class WebSecurity {
+
 
     @Configuration
     @Order(1)
+    public static class StaticResourcesSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/late-filing-penalty");
+        }
+    }
+
+    @Configuration
+    @Order(2)
     public static class LFPWebSecurityFilterConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+            http.antMatcher("/late-filing-penalty/**")
+                    .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new UserAuthFilter(), BasicAuthenticationFilter.class);
         }
