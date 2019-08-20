@@ -121,7 +121,7 @@ public class EnterLFPDetailsController extends BaseController {
     }
 
     private String urlGenerator(String companyNumber, String penaltyNumber) {
-        return "late-filing-penalty/company/" + companyNumber + "/penalty/" + penaltyNumber;
+        return "/late-filing-penalty/company/" + companyNumber + "/penalty/" + penaltyNumber;
     }
 
 }

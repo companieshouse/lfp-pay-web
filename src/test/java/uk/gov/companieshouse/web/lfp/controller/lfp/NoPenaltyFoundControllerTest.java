@@ -35,7 +35,7 @@ public class NoPenaltyFoundControllerTest {
     private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_NUMBER = "44444444";
 
-    private static final String NO_PENALTY_FOUND_PATH = "/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/lfp/no-penalties-found";
+    private static final String NO_PENALTY_FOUND_PATH = "/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/no-penalties-found";
 
     private static final String LFP_NO_PENALTY_FOUND = "lfp/noPenaltyFound";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
