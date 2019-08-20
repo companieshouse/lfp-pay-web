@@ -35,7 +35,7 @@ public class OnlinePaymentUnavailableControllerTest {
     private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_NUMBER = "44444444";
 
-    private static final String ONLINE_PAYMENT_UNAVAILABLE_PATH = "/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/lfp/online-payment-unavailable";
+    private static final String ONLINE_PAYMENT_UNAVAILABLE_PATH = "/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/online-payment-unavailable";
 
     private static final String LFP_ONLINE_PAYMENT_UNAVAILABLE = "lfp/onlinePaymentUnavailable";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
