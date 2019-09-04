@@ -99,7 +99,7 @@ public class LateFilingPenaltyServiceImplTest {
     void getPayableLateFilingPenaltiesTwoUnpaid() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         LateFilingPenalty validLateFilingPenalty1 = LFPTestUtility.validLateFilingPenalty(PENALTY_NUMBER);
-        LateFilingPenalty validLateFilingPenalty2 = LFPTestUtility.validLateFilingPenalty("77777777");
+        LateFilingPenalty validLateFilingPenalty2 = LFPTestUtility.validLateFilingPenalty(PENALTY_NUMBER);
 
         when(lateFilingPenaltyResourceHandler.get(GET_LFP_URI)).thenReturn(lateFilingPenaltyGet);
         when(lateFilingPenaltyGet.execute()).thenReturn(responseWithData);
