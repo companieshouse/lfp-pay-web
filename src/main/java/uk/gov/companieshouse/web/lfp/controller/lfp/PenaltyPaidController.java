@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @PreviousController(EnterLFPDetailsController.class)
-@RequestMapping("/company/{companyNumber}/penalty/{penaltyNumber}/lfp/penalty-paid")
+@RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/penalty-paid")
 public class PenaltyPaidController extends BaseController {
 
     private static String LFP_PENALTY_PAID = "lfp/penaltyPaid";

@@ -35,7 +35,7 @@ public class DcaRequiredControllerTest {
     private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_NUMBER = "44444444";
 
-    private static final String DCA_REQUIRED_PATH = "/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/lfp/legal-fees-required";
+    private static final String DCA_REQUIRED_PATH = "/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/legal-fees-required";
 
     private static final String LFP_DCA_REQUIRED = "lfp/legalFeesDCA";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";

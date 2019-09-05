@@ -3,6 +3,5 @@ group: web
 
 weight: 900
 routes:
-   1: /lfp/*
+   1: /late-filing-penalty/*
    2: /healthcheck/*
-   3: /late-filing-penalty/*

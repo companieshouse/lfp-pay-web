@@ -9,7 +9,7 @@ import uk.gov.companieshouse.web.lfp.controller.BaseController;
 
 @Controller
 @NextController(EnterLFPDetailsController.class)
-@RequestMapping("/lfp/temp")
+@RequestMapping("/late-filing-penalty")
 public class LFPStartController extends BaseController {
 
     private static String LFP_TEMP_HOME = "lfp/home";
