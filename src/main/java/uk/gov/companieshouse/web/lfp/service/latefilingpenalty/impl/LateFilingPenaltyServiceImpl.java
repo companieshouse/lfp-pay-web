@@ -51,7 +51,7 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
         // Always include penalty with the ID provided so the correct error page can be displayed.
         for (LateFilingPenalty lateFilingPenalty: lateFilingPenalties.getItems()) {
             if ((!lateFilingPenalty.getPaid() && lateFilingPenalty.getType().equals(PENALTY_TYPE))
-                    && lateFilingPenalty.getId().equals(penaltyNumber)) {
+                    || lateFilingPenalty.getId().equals(penaltyNumber)) {
                 payableLateFilingPenalties.add(lateFilingPenalty);
             }
         }

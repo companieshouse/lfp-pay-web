@@ -150,6 +150,23 @@ public class ViewPenaltiesControllerTest {
     }
 
     @Test
+    @DisplayName("Get View LFP - late filing penalty is already paid")
+    void getRequestLateFilingPenaltyIsPaid() throws Exception {
+
+        configurePreviousController();
+        configurePaidPenalty(COMPANY_NUMBER, PENALTY_NUMBER);
+        configureValidCompanyProfile(COMPANY_NUMBER);
+
+        this.mockMvc.perform(get(VIEW_PENALTIES_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+
+        verify(mockCompanyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+        verify(mockLateFilingPenaltyService, times(1)).getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
+
+    }
+
+    @Test
     @DisplayName("Post View LFP - success path")
     void postRequestSuccess() throws Exception {
 
@@ -255,6 +272,14 @@ public class ViewPenaltiesControllerTest {
 
         when(mockLateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber))
                 .thenReturn(nullLFP);
+    }
+
+    private void configurePaidPenalty(String companyNumber, String penaltyNumber) throws ServiceException {
+        List<LateFilingPenalty> paidLFP = new ArrayList<>();
+        paidLFP.add(LFPTestUtility.paidLateFilingPenalty(penaltyNumber));
+
+        when(mockLateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber))
+                .thenReturn(paidLFP);
     }
 
     private void configureValidCompanyProfile(String companyNumber) throws ServiceException {

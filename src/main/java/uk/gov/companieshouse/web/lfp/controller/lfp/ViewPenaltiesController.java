@@ -22,6 +22,7 @@ import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -30,6 +31,8 @@ import java.util.Locale;
 public class ViewPenaltiesController extends BaseController {
 
     private static String LFP_VIEW_PENALTIES = "lfp/viewPenalties";
+
+    private static final String PENALTY_TYPE = "penalty";
 
     @Override protected String getTemplateName() {
         return LFP_VIEW_PENALTIES;
@@ -55,18 +58,28 @@ public class ViewPenaltiesController extends BaseController {
 
         addBackPageAttributeToModel(model);
 
+        List<LateFilingPenalty> lateFilingPenalties;
         LateFilingPenalty lateFilingPenalty;
         CompanyProfileApi companyProfileApi;
 
         try {
             companyProfileApi = companyService.getCompanyProfile(companyNumber);
-            lateFilingPenalty = LateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber).get(0);
+            lateFilingPenalties = LateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber);
+            lateFilingPenalty = lateFilingPenalties.get(0);
         } catch (ServiceException ex) {
             LOGGER.errorRequest(request, ex.getMessage(), ex);
             return ERROR_VIEW;
         }
 
-        if (lateFilingPenalty == null) {
+        // If this screen is accessed directly for an invalid penalty return an error view.
+        if (lateFilingPenalty == null
+                || lateFilingPenalties.size() != 1
+                || !lateFilingPenalty.getId().equals(penaltyNumber)
+                || lateFilingPenalty.getDca()
+                || lateFilingPenalty.getPaid()
+                || lateFilingPenalty.getOutstanding() <= 0
+                || !lateFilingPenalty.getOriginalAmount().equals(lateFilingPenalty.getOutstanding())
+                || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
             return ERROR_VIEW;
         }
 
