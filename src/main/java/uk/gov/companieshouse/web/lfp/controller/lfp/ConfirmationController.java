@@ -26,6 +26,8 @@ public class ConfirmationController extends BaseController {
 
     private static final String PAYMENT_STATE = "payment_state";
 
+    private static final String not_used = "not used";
+
     @Override protected String getTemplateName() {
         return LFP_CONFIRMATION_PAGE;
     }
