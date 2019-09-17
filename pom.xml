@@ -15,6 +15,7 @@
         <groupId>uk.gov.companieshouse</groupId>
         <artifactId>companies-house-spring-boot-parent</artifactId>
         <version>1.2.0</version>
+        <relativePath />
     </parent>
 
     <properties>
