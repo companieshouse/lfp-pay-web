@@ -68,6 +68,9 @@ public class ConfirmationController extends BaseController {
         if (!paymentStatus.equals("paid")) {
 
             PayableLateFilingPenalty payableLateFilingPenalty;
+
+            String unusuedString;
+
             try {
                 payableLateFilingPenalty = PayableLateFilingPenaltyService.getPayableLateFilingPenalty(companyNumber, penaltyId);
             } catch (ServiceException ex) {
