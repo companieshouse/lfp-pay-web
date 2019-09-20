@@ -42,7 +42,7 @@ public class ViewPenaltiesController extends BaseController {
     private CompanyService companyService;
 
     @Autowired
-    private LateFilingPenaltyService LateFilingPenaltyService;
+    private LateFilingPenaltyService lateFilingPenaltyService;
 
     @Autowired
     private PayableLateFilingPenaltyService payableLateFilingPenaltyService;
@@ -64,7 +64,7 @@ public class ViewPenaltiesController extends BaseController {
 
         try {
             companyProfileApi = companyService.getCompanyProfile(companyNumber);
-            lateFilingPenalties = LateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber);
+            lateFilingPenalties = lateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber);
             lateFilingPenalty = lateFilingPenalties.get(0);
         } catch (ServiceException ex) {
             LOGGER.errorRequest(request, ex.getMessage(), ex);
@@ -108,7 +108,7 @@ public class ViewPenaltiesController extends BaseController {
 
         try {
             // Call penalty details for create request
-            LateFilingPenalty lateFilingPenalty = LateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber).get(0);
+            LateFilingPenalty lateFilingPenalty = lateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber).get(0);
 
             // Create payable session
             payableLateFilingPenaltySession = payableLateFilingPenaltyService.createLateFilingPenaltySession(
