@@ -25,7 +25,7 @@ import java.util.List;
 @Controller
 @PreviousController(LFPStartController.class)
 @NextController(ViewPenaltiesController.class)
-@RequestMapping("/lfp/enter-details")
+@RequestMapping("/late-filing-penalty/enter-details")
 public class EnterLFPDetailsController extends BaseController {
 
     private static String LFP_ENTER_DETAILS = "lfp/serviceUnavailable";
@@ -121,7 +121,7 @@ public class EnterLFPDetailsController extends BaseController {
     }
 
     private String urlGenerator(String companyNumber, String penaltyNumber) {
-        return "/company/" + companyNumber + "/penalty/" + penaltyNumber + "/lfp";
+        return "/late-filing-penalty/company/" + companyNumber + "/penalty/" + penaltyNumber;
     }
 
 }

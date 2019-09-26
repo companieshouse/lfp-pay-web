@@ -56,15 +56,15 @@ public class EnterLFPDetailsControllerTest {
 
     private static final String SIX_DIGIT_COMPANY_NUMBER = "987654";
 
-    private static final String ENTER_LFP_DETAILS_PATH = "/lfp/enter-details";
+    private static final String ENTER_LFP_DETAILS_PATH = "/late-filing-penalty/enter-details";
 
-    private static final String NO_PENALTY_FOUND_PATH = "redirect:/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/lfp/no-penalties-found";
+    private static final String NO_PENALTY_FOUND_PATH = "redirect:/late-filing-penalty/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/no-penalties-found";
 
-    private static final String ONLINE_PAYMENT_UNAVAILABLE_PATH = "redirect:/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/lfp/online-payment-unavailable";
+    private static final String ONLINE_PAYMENT_UNAVAILABLE_PATH = "redirect:/late-filing-penalty/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/online-payment-unavailable";
 
-    private static final String DCA_PAYMENTS_PATH = "redirect:/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/lfp/legal-fees-required";
+    private static final String DCA_PAYMENTS_PATH = "redirect:/late-filing-penalty/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/legal-fees-required";
 
-    private static final String ALREADY_PAID_PATH = "redirect:/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/lfp/penalty-paid";
+    private static final String ALREADY_PAID_PATH = "redirect:/late-filing-penalty/company/" + VALID_COMPANY_NUMBER + "/penalty/" + VALID_PENALTY_NUMBER + "/penalty-paid";
 
     private static final String ERROR_PAGE = "error";
 

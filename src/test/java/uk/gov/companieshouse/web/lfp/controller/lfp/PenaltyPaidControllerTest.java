@@ -48,7 +48,7 @@ public class PenaltyPaidControllerTest {
     private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_NUMBER = "44444444";
 
-    private static final String PENALTY_PAID_PATH = "/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/lfp/penalty-paid";
+    private static final String PENALTY_PAID_PATH = "/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_NUMBER + "/penalty-paid";
 
     private static final String LFP_PENALTY_PAID = "lfp/penaltyPaid";
     private static final String ERROR_VIEW = "error";

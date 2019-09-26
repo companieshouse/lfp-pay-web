@@ -32,5 +32,5 @@ Key                | Description
 
 Page                                     | Address
 -----------------------------------------|-----------------------------
-Temporary page replacing GovUk start     | `/lfp/temp`
-Tell us your penalty details             | `/lfp/enter-details`
+Temporary page replacing GovUk start     | `/late-filing-penalty`
+Tell us your penalty details             | `/late-filing-penalty/enter-details`

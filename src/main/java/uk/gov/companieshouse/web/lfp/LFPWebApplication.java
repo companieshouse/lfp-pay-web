@@ -31,6 +31,6 @@ public class LFPWebApplication implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor);
-        registry.addInterceptor(userDetailsInterceptor);
+        registry.addInterceptor(userDetailsInterceptor).excludePathPatterns("/late-filing-penalty");
     }
 }

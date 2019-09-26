@@ -46,7 +46,7 @@ public class ConfirmationControllerTest {
     private static final String COMPANY_NUMBER = "12345678";
     private static final String PENALTY_ID = "EXAMPLE12345";
 
-    private static final String VIEW_CONFIRMATION_PATH = "/lfp/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/confirmation";
+    private static final String VIEW_CONFIRMATION_PATH = "/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/confirmation";
 
     private static final String RESUME_URL_PATH = "redirect:/late-filing-penalty/company/" + COMPANY_NUMBER + "/penalty/" + PENALTY_ID + "/view-penalties";
 
