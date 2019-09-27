@@ -8,13 +8,11 @@ import javax.validation.ConstraintValidatorContext;
 
 public class PenaltyValidator implements ConstraintValidator<Penalty, String> {
 
-    private int stringSize;
     private String message;
     private String messageNotLongEnough;
 
     @Override
     public void initialize(Penalty penalty) {
-        stringSize = penalty.stringSize();
         message = penalty.message();
         messageNotLongEnough = penalty.messageNotLongEnough();
     }

@@ -62,7 +62,7 @@ public class CompanyServiceImplTest {
     void validateCompanyNumberWithLettersNotAppended() throws Exception {
 
         String companyNumber = mockCompanyService.appendToCompanyNumber(COMPANY_NUMBER_WITH_LETTERS);
-        assertEquals(companyNumber, COMPANY_NUMBER_WITH_LETTERS);
+        assertEquals(COMPANY_NUMBER_WITH_LETTERS, companyNumber);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class CompanyServiceImplTest {
     void validationEightDigitCompanyNumberReturnedTheSame() throws Exception {
 
         String companyNumber = mockCompanyService.appendToCompanyNumber(COMPANY_NUMBER_WITH_EIGHT_DIGITS);
-        assertEquals(companyNumber, COMPANY_NUMBER_WITH_EIGHT_DIGITS);
+        assertEquals(COMPANY_NUMBER_WITH_EIGHT_DIGITS, companyNumber);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class CompanyServiceImplTest {
     void validationSixDigitCompanyNumberReturnedWithAppendedZeros() throws Exception {
 
         String companyNumber = mockCompanyService.appendToCompanyNumber(COMPANY_NUMBER_WITH_SIX_DIGITS);
-        assertEquals(companyNumber, APPENDED_SIX_DIGIT_COMPANY_NUMBER);
+        assertEquals(APPENDED_SIX_DIGIT_COMPANY_NUMBER, companyNumber);
     }
 
     private void initGetCompany() {

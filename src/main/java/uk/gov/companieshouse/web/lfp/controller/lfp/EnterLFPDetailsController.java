@@ -31,7 +31,7 @@ public class EnterLFPDetailsController extends BaseController {
     private static String LFP_ENTER_DETAILS = "lfp/details";
 
     @Autowired
-    private LateFilingPenaltyService LateFilingPenaltyService;
+    private LateFilingPenaltyService lateFilingPenaltyService;
 
     @Autowired
     private CompanyService companyService;
@@ -72,10 +72,11 @@ public class EnterLFPDetailsController extends BaseController {
         String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
         try {
-            List<LateFilingPenalty> payableLateFilingPenalties = LateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber);
+            List<LateFilingPenalty> payableLateFilingPenalties = lateFilingPenaltyService
+                    .getLateFilingPenalties(companyNumber, penaltyNumber);
 
             // If there are no payable late filing penalties either the company does not exist or has no penalties.
-            if (payableLateFilingPenalties.size() == 0) {
+            if (payableLateFilingPenalties.isEmpty()) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
             }
 

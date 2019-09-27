@@ -31,7 +31,7 @@ public class ConfirmationController extends BaseController {
     }
 
     @Autowired
-    private PayableLateFilingPenaltyService PayableLateFilingPenaltyService;
+    private PayableLateFilingPenaltyService payableLateFilingPenaltyService;
 
     @Autowired
     private SessionService sessionService;
@@ -69,7 +69,8 @@ public class ConfirmationController extends BaseController {
 
             PayableLateFilingPenalty payableLateFilingPenalty;
             try {
-                payableLateFilingPenalty = PayableLateFilingPenaltyService.getPayableLateFilingPenalty(companyNumber, penaltyId);
+                payableLateFilingPenalty = payableLateFilingPenaltyService
+                        .getPayableLateFilingPenalty(companyNumber, penaltyId);
             } catch (ServiceException ex) {
                 LOGGER.errorRequest(request, ex.getMessage(), ex);
                 return ERROR_VIEW;
