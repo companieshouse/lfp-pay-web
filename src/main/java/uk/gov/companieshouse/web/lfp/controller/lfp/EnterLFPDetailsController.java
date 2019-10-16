@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/late-filing-penalty/enter-details")
 public class EnterLFPDetailsController extends BaseController {
 
-    private static String LFP_ENTER_DETAILS = "lfp/serviceUnavailable";
+    private static String LFP_ENTER_DETAILS = "lfp/details";
 
     @Autowired
     private LateFilingPenaltyService LateFilingPenaltyService;
