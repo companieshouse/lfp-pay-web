@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import java.util.Objects;
+import uk.gov.companieshouse.web.lfp.exception.ServiceException;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 
 @Controller
 @NextController(EnterLFPDetailsController.class)
@@ -16,8 +18,24 @@ import java.util.Objects;
 public class LFPStartController extends BaseController {
 
     private static String LFP_TEMP_HOME = "lfp/home";
+    private static String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
 
-    @Override protected String getTemplateName() {
+    @Autowired
+    private LateFilingPenaltyService LateFilingPenaltyService;
+
+    @Override
+    protected String getTemplateName() {
+
+        boolean serviceAvailable;
+        try {
+            serviceAvailable = LateFilingPenaltyService.isFinanceSystemAvailable();
+        } catch (ServiceException ex) {
+            return LFP_TEMP_HOME;
+        }
+        if (!serviceAvailable) {
+
+            return LFP_SERVICE_UNAVAILABLE;
+        }
         return LFP_TEMP_HOME;
     }
 

@@ -21,6 +21,9 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
     private static final UriTemplate GET_LFP_URI =
             new UriTemplate("/company/{companyNumber}/penalties/late-filing");
 
+    private static final UriTemplate FINANCE_HEALTHCHECK_URI =
+            new UriTemplate("/healthcheck/finance-system");
+
     private static final String PENALTY_TYPE = "penalty";
 
     @Autowired
@@ -57,5 +60,22 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
         }
 
         return payableLateFilingPenalties;
+    }
+
+    @Override
+    public boolean isFinanceSystemAvailable() throws ServiceException {
+        ApiClient apiClient = apiClientService.getPublicApiClient();
+
+        int healthcheckGet;
+
+        try {
+            healthcheckGet = apiClient.financeHealthcheckResourceHandler().get(FINANCE_HEALTHCHECK_URI.toString()).execute().getStatusCode();
+        } catch (ApiErrorResponseException ex) {
+            throw new ServiceException("Error retrieving Late Filing Penalty", ex);
+        } catch (URIValidationException ex) {
+            throw new ServiceException("Invalid URI for Late Filing Penalty", ex);
+        }
+
+        return healthcheckGet == 200;
     }
 }
