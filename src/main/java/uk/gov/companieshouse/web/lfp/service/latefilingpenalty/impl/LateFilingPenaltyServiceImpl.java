@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.lfp.service.latefilingpenalty.impl;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -8,6 +10,8 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
@@ -63,19 +67,23 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
     }
 
     @Override
-    public boolean isFinanceSystemAvailable() throws ServiceException {
+    public Object checkFinanceSystemAvailableTime() throws ServiceException {
         ApiClient apiClient = apiClientService.getPublicApiClient();
 
-        int healthcheckGet;
-
         try {
-            healthcheckGet = apiClient.financeHealthcheckResourceHandler().get(FINANCE_HEALTHCHECK_URI.toString()).execute().getStatusCode();
+            apiClient.financeHealthcheckResourceHandler().get(FINANCE_HEALTHCHECK_URI.toString()).execute();
         } catch (ApiErrorResponseException ex) {
-            throw new ServiceException("Error retrieving Late Filing Penalty", ex);
+            JSONObject jsonObject;
+            try {
+                jsonObject = new JSONObject(ex.getContent());
+            } catch (JSONException jsonex){
+                throw new ServiceException("Invalid JSON returned from Finance Healthcheck", jsonex);
+            }
+            return jsonObject.get("maintenance_end_time");
         } catch (URIValidationException ex) {
-            throw new ServiceException("Invalid URI for Late Filing Penalty", ex);
+            throw new ServiceException("Invalid URI for Finance Healthcheck", ex);
         }
 
-        return healthcheckGet == 200;
+        return null;
     }
 }

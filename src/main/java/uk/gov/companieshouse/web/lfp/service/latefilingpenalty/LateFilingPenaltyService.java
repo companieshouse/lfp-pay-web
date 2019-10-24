@@ -8,5 +8,5 @@ import java.util.List;
 public interface LateFilingPenaltyService {
 
     List<LateFilingPenalty> getLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException;
-    boolean isFinanceSystemAvailable() throws ServiceException;
+    Object checkFinanceSystemAvailableTime() throws ServiceException;
 }
