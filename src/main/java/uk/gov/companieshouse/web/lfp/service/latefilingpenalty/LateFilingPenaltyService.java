@@ -3,10 +3,11 @@ package uk.gov.companieshouse.web.lfp.service.latefilingpenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 
+import java.util.Date;
 import java.util.List;
 
 public interface LateFilingPenaltyService {
 
     List<LateFilingPenalty> getLateFilingPenalties(String companyNumber, String penaltyNumber) throws ServiceException;
-    Object checkFinanceSystemAvailableTime() throws ServiceException;
+    Date checkFinanceSystemAvailableTime() throws ServiceException;
 }

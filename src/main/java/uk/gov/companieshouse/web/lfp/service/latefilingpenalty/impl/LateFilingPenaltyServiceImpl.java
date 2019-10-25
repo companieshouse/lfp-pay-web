@@ -10,13 +10,15 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,7 +69,7 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
     }
 
     @Override
-    public Object checkFinanceSystemAvailableTime() throws ServiceException {
+    public Date checkFinanceSystemAvailableTime() throws ServiceException {
         ApiClient apiClient = apiClientService.getPublicApiClient();
 
         try {
@@ -76,10 +78,19 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
             JSONObject jsonObject;
             try {
                 jsonObject = new JSONObject(ex.getContent());
-            } catch (JSONException jsonex){
-                throw new ServiceException("Invalid JSON returned from Finance Healthcheck", jsonex);
+            } catch (JSONException jsonEx){
+                throw new ServiceException("Invalid JSON returned from Finance Healthcheck", jsonEx);
             }
-            return jsonObject.get("maintenance_end_time");
+            Date d;
+            try {
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+                d = dateFormat.parse(jsonObject.get("maintenance_end_time").toString());
+            } catch (ParseException parseEx) {
+
+                throw new ServiceException("Error parsing date", parseEx);
+            }
+            return d;
+
         } catch (URIValidationException ex) {
             throw new ServiceException("Invalid URI for Finance Healthcheck", ex);
         }

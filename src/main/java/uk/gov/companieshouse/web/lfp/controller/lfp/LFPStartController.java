@@ -12,6 +12,10 @@ import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller
 @NextController(EnterLFPDetailsController.class)
 @RequestMapping("/late-filing-penalty")
@@ -33,22 +37,18 @@ public class LFPStartController extends BaseController {
 
     @GetMapping
     public String getLFPHome(Model model) {
-        Object serviceAvailableTime = null;
+        Date serviceAvailableTime = null;
         try {
             serviceAvailableTime = LateFilingPenaltyService.checkFinanceSystemAvailableTime();
         } catch (ServiceException ex) {
-
-            if (serviceAvailableTime != null) {
-                model.addAttribute("date", serviceAvailableTime);
-                return LFP_SERVICE_UNAVAILABLE;
-            }
-            return getTemplateName();
+            return LFP_TEMP_HOME;
         }
         if (serviceAvailableTime == null) {
-
-            return LFP_SERVICE_UNAVAILABLE;
+            return LFP_TEMP_HOME;
         }
-        return getTemplateName();
+        DateFormat dateFormat = new SimpleDateFormat("h:mm a z 'on' EEEE d MMMM yyyy");
+        model.addAttribute("date", dateFormat.format(serviceAvailableTime));
+        return LFP_SERVICE_UNAVAILABLE;
     }
 
 
