@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.lfp.service.latefilingpenalty.impl;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,17 +7,14 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheck;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -69,32 +65,30 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
     }
 
     @Override
-    public Date checkFinanceSystemAvailableTime() throws ServiceException {
+    public FinanceHealthcheck checkFinanceSystemAvailableTime() throws ServiceException {
         ApiClient apiClient = apiClientService.getPublicApiClient();
+        FinanceHealthcheck financeHealthcheck;
 
         try {
-            apiClient.financeHealthcheckResourceHandler().get(FINANCE_HEALTHCHECK_URI.toString()).execute();
+            String uri = FINANCE_HEALTHCHECK_URI.toString();
+            financeHealthcheck = apiClient.financeHealthcheckResourceHandler().get(uri).execute().getData();
         } catch (ApiErrorResponseException ex) {
-            JSONObject jsonObject;
-            try {
-                jsonObject = new JSONObject(ex.getContent());
-            } catch (JSONException jsonEx){
-                throw new ServiceException("Invalid JSON returned from Finance Healthcheck", jsonEx);
-            }
-            Date d;
-            try {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-                d = dateFormat.parse(jsonObject.get("maintenance_end_time").toString());
-            } catch (ParseException parseEx) {
+            if (ex.getStatusCode() == 503) {
+                // Generate a financeHealthcheck object to return from the exception
+                financeHealthcheck = new FinanceHealthcheck();
+                financeHealthcheck.setMessage(new JSONObject(ex.getContent()).get("message").toString());
+                financeHealthcheck.setMaintenanceEndTime(new JSONObject(ex.getContent()).get("maintenance_end_time").toString());
 
-                throw new ServiceException("Error parsing date", parseEx);
+                return financeHealthcheck;
             }
-            return d;
+            else {
+                throw new ServiceException("Error retrieving Finance Healthcheck", ex);
+            }
 
         } catch (URIValidationException ex) {
             throw new ServiceException("Invalid URI for Finance Healthcheck", ex);
         }
 
-        return null;
+        return financeHealthcheck;
     }
 }
