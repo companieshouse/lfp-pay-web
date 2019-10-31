@@ -29,6 +29,7 @@ import java.util.List;
 public class EnterLFPDetailsController extends BaseController {
 
     private static String LFP_ENTER_DETAILS = "lfp/details";
+    private static String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
 
     @Autowired
     private LateFilingPenaltyService lateFilingPenaltyService;

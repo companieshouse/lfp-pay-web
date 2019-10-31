@@ -29,8 +29,8 @@
         <web-security-java.version>1.1.0-rc1</web-security-java.version>
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
-        <sdk-manager-java.version>1.4.0-rc1</sdk-manager-java.version>
-        <api-sdk-java.version>4.1.22</api-sdk-java.version>
+        <sdk-manager-java.version>1.5.2</sdk-manager-java.version>
+        <api-sdk-java.version>4.1.43</api-sdk-java.version>
         <spring-test.version>5.1.3.RELEASE</spring-test.version>
         <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
 

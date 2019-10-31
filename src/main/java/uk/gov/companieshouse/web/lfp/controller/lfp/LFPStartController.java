@@ -3,12 +3,20 @@ package uk.gov.companieshouse.web.lfp.controller.lfp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheck;
+import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheckStatus;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
-import java.util.Objects;
+import uk.gov.companieshouse.web.lfp.exception.ServiceException;
+import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @Controller
 @NextController(EnterLFPDetailsController.class)
@@ -16,21 +24,39 @@ import java.util.Objects;
 public class LFPStartController extends BaseController {
 
     private static String LFP_TEMP_HOME = "lfp/home";
+    private static String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
 
-    @Override protected String getTemplateName() {
+    @Autowired
+    private LateFilingPenaltyService LateFilingPenaltyService;
+
+    @Override
+    protected String getTemplateName() {
         return LFP_TEMP_HOME;
     }
-
 
     @Autowired
     private Environment environment;
 
     @GetMapping
-    public String getLFPHome() {
-        if (Objects.equals(environment.getProperty("maintenance"), "1")) {
-            return "lfp/serviceUnavailable";
-        } else {
+    public String getLFPHome(Model model) throws ParseException {
+
+        FinanceHealthcheck financeHealthcheck;
+        try {
+            financeHealthcheck = LateFilingPenaltyService.checkFinanceSystemAvailableTime();
+        } catch (ServiceException ex) {
+            return ERROR_VIEW;
+        }
+
+        if (financeHealthcheck.getMessage().equals(FinanceHealthcheckStatus.HEALTHY.getStatus())) {
             return getTemplateName();
+        } else if (financeHealthcheck.getMessage().equals(FinanceHealthcheckStatus.UNHEALTHY_PLANNED_MAINTENANCE.getStatus())) {
+            DateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+            DateFormat displayDateFormat = new SimpleDateFormat("h:mm a z 'on' EEEE d MMMM yyyy");
+            model.addAttribute("date", displayDateFormat.format(
+                    inputDateFormat.parse(financeHealthcheck.getMaintenanceEndTime())));
+            return LFP_SERVICE_UNAVAILABLE;
+        } else {
+            return ERROR_VIEW;
         }
     }
 

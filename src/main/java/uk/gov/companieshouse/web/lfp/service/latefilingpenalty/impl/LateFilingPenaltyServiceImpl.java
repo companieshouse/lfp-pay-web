@@ -1,11 +1,13 @@
 package uk.gov.companieshouse.web.lfp.service.latefilingpenalty.impl;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheck;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
@@ -20,6 +22,9 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
     private static final UriTemplate GET_LFP_URI =
             new UriTemplate("/company/{companyNumber}/penalties/late-filing");
+
+    private static final UriTemplate FINANCE_HEALTHCHECK_URI =
+            new UriTemplate("/healthcheck/finance-system");
 
     private static final String PENALTY_TYPE = "penalty";
 
@@ -57,5 +62,33 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
         }
 
         return payableLateFilingPenalties;
+    }
+
+    @Override
+    public FinanceHealthcheck checkFinanceSystemAvailableTime() throws ServiceException {
+        ApiClient apiClient = apiClientService.getPublicApiClient();
+        FinanceHealthcheck financeHealthcheck;
+
+        try {
+            String uri = FINANCE_HEALTHCHECK_URI.toString();
+            financeHealthcheck = apiClient.financeHealthcheckResourceHandler().get(uri).execute().getData();
+        } catch (ApiErrorResponseException ex) {
+            if (ex.getStatusCode() == 503) {
+                // Generate a financeHealthcheck object to return from the exception
+                financeHealthcheck = new FinanceHealthcheck();
+                financeHealthcheck.setMessage(new JSONObject(ex.getContent()).get("message").toString());
+                financeHealthcheck.setMaintenanceEndTime(new JSONObject(ex.getContent()).get("maintenance_end_time").toString());
+
+                return financeHealthcheck;
+            }
+            else {
+                throw new ServiceException("Error retrieving Finance Healthcheck", ex);
+            }
+
+        } catch (URIValidationException ex) {
+            throw new ServiceException("Invalid URI for Finance Healthcheck", ex);
+        }
+
+        return financeHealthcheck;
     }
 }
