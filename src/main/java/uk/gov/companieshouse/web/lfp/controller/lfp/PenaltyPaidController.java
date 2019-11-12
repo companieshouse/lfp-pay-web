@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/penalty-paid")
 public class PenaltyPaidController extends BaseController {
 
-    private static String LFP_PENALTY_PAID = "lfp/penaltyPaid";
+    private static final String LFP_PENALTY_PAID = "lfp/penaltyPaid";
 
     @Override protected String getTemplateName() {
         return LFP_PENALTY_PAID;

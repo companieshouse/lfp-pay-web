@@ -11,7 +11,7 @@ import uk.gov.companieshouse.session.handler.SessionHandler;
 import uk.gov.companieshouse.auth.filter.HijackFilter;
 
 @EnableWebSecurity
-public class WebSecurity {
+public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 
     @Configuration

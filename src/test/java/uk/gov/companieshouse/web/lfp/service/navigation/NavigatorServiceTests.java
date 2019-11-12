@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerFi
 import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerFour;
 import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerOne;
 import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerSeven;
+import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerSix;
 import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerThree;
 import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerTwo;
 import uk.gov.companieshouse.web.lfp.service.navigation.success.MockSuccessJourneyControllerOne;
@@ -93,6 +94,15 @@ public class NavigatorServiceTests {
 
         Throwable exception = assertThrows(NavigationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER));
+
+        assertEquals("No mapping found that matches the number of path variables provided", exception.getMessage());
+    }
+
+    @Test
+    public void missingExpectedNumberOfPathVariablesForPreviousController() {
+
+        Throwable exception = assertThrows(NavigationException.class, () ->
+                navigatorService.getPreviousControllerPath(MockControllerSix.class, COMPANY_NUMBER));
 
         assertEquals("No mapping found that matches the number of path variables provided", exception.getMessage());
     }

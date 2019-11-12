@@ -9,7 +9,6 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
-import uk.gov.companieshouse.web.lfp.controller.BranchController;
 import uk.gov.companieshouse.web.lfp.controller.ConditionalController;
 import uk.gov.companieshouse.web.lfp.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.lfp.exception.NavigationException;
@@ -42,14 +41,14 @@ public class NavigatorService {
      * @param  direction the direction to follow when scanning the controller chain
      * @return the next or previous controller class in the chain dependent on {@code direction}
      */
-    private Class getControllerClass(Class clazz, Direction direction, String ... pathVars) {
+    private Class getControllerClass(Class clazz, Direction direction) {
 
         Class controllerClass;
 
         if (direction == Direction.FORWARD) {
-            controllerClass = getNextControllerClass(clazz, pathVars);
+            controllerClass = getNextControllerClass(clazz);
         } else {
-            controllerClass = getPreviousControllerClass(clazz, pathVars);
+            controllerClass = getPreviousControllerClass(clazz);
         }
 
         return controllerClass;
@@ -62,51 +61,13 @@ public class NavigatorService {
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the next controller class in the chain
      */
-    private Class getNextControllerClass(Class clazz, String ... pathVars) {
-        Annotation nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
+    private Class getNextControllerClass(Class clazz) {
+        NextController nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
             throw new MissingAnnotationException("Missing @NextController annotation on " + clazz.toString());
         }
 
-        Class[] classList = ((NextController) nextControllerAnnotation).value();
-
-        if (classList.length > 0) {
-
-            if (classList.length == 1) {
-                return ((NextController) nextControllerAnnotation).value()[0];
-            } else {
-
-                Class notImplementingBranch = null;
-
-                for (int i = 0, j = 0; i < classList.length; i++) {
-
-                    Class specificClass = classList[i];
-
-                    if (!isBranchController(specificClass)) {
-                        j++;
-                        notImplementingBranch = specificClass;
-
-                        if (j > 1) {
-                            throw new NavigationException("getNextControllerClass: More than one default branch " + clazz.toString());
-                        }
-                    } else {
-                        BranchController potential = (BranchController)applicationContext.getBean(specificClass);
-
-                        if (potential.shouldBranch(pathVars)) {
-                            return potential.getClass();
-                        }
-                    }
-                }
-
-                if (notImplementingBranch != null) {
-                    return notImplementingBranch;
-                } else {
-                    throw new NavigationException("getNextControllerClass: No default branch and no branch is valid " + clazz.toString());
-                }
-            }
-        } else {
-            throw new NavigationException("getNextControllerClass: No next controller to navigate to " + clazz.toString());
-        }
+        return (nextControllerAnnotation).value();
     }
 
     /**
@@ -116,52 +77,13 @@ public class NavigatorService {
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the previous controller class in the chain
      */
-    private Class getPreviousControllerClass(Class clazz, String ... pathVars) {
-        Annotation previousControllerAnnotation = AnnotationUtils
-                .findAnnotation(clazz, PreviousController.class);
+    private Class getPreviousControllerClass(Class clazz) {
+        PreviousController previousControllerAnnotation = AnnotationUtils.findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
             throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz.toString());
         }
 
-        Class[] classList = ((PreviousController) previousControllerAnnotation).value();
-
-        if (classList.length > 0) {
-
-            if (classList.length == 1) {
-                return ((PreviousController) previousControllerAnnotation).value()[0];
-            } else {
-
-                Class notImplementingBranch = null;
-
-                for (int i = 0, j = 0; i < classList.length; i++) {
-
-                    Class specificClass = classList[i];
-
-                    if (!isBranchController(specificClass)) {
-                        j++;
-                        notImplementingBranch = specificClass;
-
-                        if (j > 1) {
-                            throw new NavigationException("getPreviousControllerClass: More than one default branch " + clazz.toString());
-                        }
-                    } else {
-                        BranchController potential = (BranchController)applicationContext.getBean(specificClass);
-
-                        if (potential.shouldBranch(pathVars)) {
-                            return potential.getClass();
-                        }
-                    }
-                }
-
-                if (notImplementingBranch != null) {
-                    return notImplementingBranch;
-                } else {
-                    throw new NavigationException("getPreviousControllerClass: No default branch and no branch is valid " + clazz.toString());
-                }
-            }
-        } else {
-            throw new NavigationException("getPreviousControllerClass: No previous controller to navigate to " + clazz.toString());
-        }
+        return (previousControllerAnnotation).value();
     }
 
     /**
@@ -178,7 +100,7 @@ public class NavigatorService {
      */
     private Class findControllerClass(Class clazz, Direction direction, String... pathVars) {
 
-        Class controllerClass = getControllerClass(clazz, direction, pathVars);
+        Class controllerClass = getControllerClass(clazz, direction);
         if (!isConditionalController(controllerClass) || pathVars.length != EXPECTED_PATH_VAR_COUNT) {
             return controllerClass;
         }
@@ -296,10 +218,6 @@ public class NavigatorService {
      */
     private boolean isConditionalController(Class clazz) {
         return ConditionalController.class.isAssignableFrom(clazz);
-    }
-
-    private boolean isBranchController(Class clazz) {
-        return BranchController.class.isAssignableFrom(clazz);
     }
 
     private enum Direction {

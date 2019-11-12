@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyId}/confirmation")
 public class ConfirmationController extends BaseController {
 
-    private static String LFP_CONFIRMATION_PAGE = "lfp/confirmationPage";
+    private static final String LFP_CONFIRMATION_PAGE = "lfp/confirmationPage";
 
     private static final String PAYMENT_STATE = "payment_state";
 
