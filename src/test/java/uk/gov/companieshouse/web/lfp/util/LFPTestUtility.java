@@ -1,13 +1,14 @@
 package uk.gov.companieshouse.web.lfp.util;
 
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheck;
+import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheckStatus;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,5 +162,27 @@ public class LFPTestUtility {
         lateFilingPenalties.setTotalResults(0);
 
         return lateFilingPenalties;
+    }
+
+    public static FinanceHealthcheck financeHealthcheckHealthy() {
+        FinanceHealthcheck financeHealthcheck = new FinanceHealthcheck();
+        financeHealthcheck.setMessage(FinanceHealthcheckStatus.HEALTHY.getStatus());
+
+        return financeHealthcheck;
+    }
+
+    public static FinanceHealthcheck financeHealthcheckServiceUnavailable(String maintenanceEndTime) {
+        FinanceHealthcheck financeHealthcheck = new FinanceHealthcheck();
+        financeHealthcheck.setMessage(FinanceHealthcheckStatus.UNHEALTHY_PLANNED_MAINTENANCE.getStatus());
+        financeHealthcheck.setMaintenanceEndTime(maintenanceEndTime);
+
+        return financeHealthcheck;
+    }
+
+    public static FinanceHealthcheck financeHealthcheckServiceInvalid() {
+        FinanceHealthcheck financeHealthcheck = new FinanceHealthcheck();
+        financeHealthcheck.setMessage("invalid");
+
+        return financeHealthcheck;
     }
 }
