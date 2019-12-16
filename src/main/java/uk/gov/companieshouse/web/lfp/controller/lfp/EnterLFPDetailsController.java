@@ -69,7 +69,7 @@ public class EnterLFPDetailsController extends BaseController {
             return getTemplateName();
         }
 
-        String companyNumber = companyService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber());
+        String companyNumber = companyService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber().toUpperCase());
         String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
         try {

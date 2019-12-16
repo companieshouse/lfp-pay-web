@@ -54,6 +54,10 @@ public class EnterLFPDetailsControllerTest {
 
     private static final String VALID_COMPANY_NUMBER = "00987654";
 
+    private static final String UPPER_CASE_LLP = "OC123456";
+
+    private static final String LOWER_CASE_LLP = "oc123456";
+
     private static final String SIX_DIGIT_COMPANY_NUMBER = "987654";
 
     private static final String ENTER_LFP_DETAILS_PATH = "/late-filing-penalty/enter-details";
@@ -111,6 +115,42 @@ public class EnterLFPDetailsControllerTest {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeHasFieldErrors(ENTER_LFP_DETAILS_MODEL_ATTR, COMPANY_NUMBER_ATTRIBUTE))
                 .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 1));
+    }
+
+    @Test
+    @DisplayName("Post LFP Details success path - lower case LLP, correct penalty number")
+    void postRequestCompanyNumberLowerCase() throws Exception {
+        configureNextController();
+        configureAppendCompanyNumber(UPPER_CASE_LLP);
+        configureValidPenalty(UPPER_CASE_LLP, VALID_PENALTY_NUMBER);
+
+        this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
+                .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
+                .param(COMPANY_NUMBER_ATTRIBUTE, LOWER_CASE_LLP))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(UPPER_CASE_LLP);
+    }
+
+    @Test
+    @DisplayName("Post LFP Details success path - upper case LLP, correct penalty number")
+    void postRequestCompanyNumberUpperCase() throws Exception {
+        configureNextController();
+        configureAppendCompanyNumber(UPPER_CASE_LLP);
+        configureValidPenalty(UPPER_CASE_LLP, VALID_PENALTY_NUMBER);
+
+        this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
+                .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
+                .param(COMPANY_NUMBER_ATTRIBUTE, UPPER_CASE_LLP))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(mockCompanyService, times(1)).appendToCompanyNumber(UPPER_CASE_LLP);
     }
 
     @Test
@@ -247,7 +287,7 @@ public class EnterLFPDetailsControllerTest {
     void postRequestPenaltyHasNegativeOutstandingAmount() throws Exception {
 
         configureValidAppendCompanyNumber(VALID_COMPANY_NUMBER);
-        configurePenaltyNegativeOustanding(VALID_COMPANY_NUMBER, VALID_PENALTY_NUMBER);
+        configurePenaltyNegativeOutstanding(VALID_COMPANY_NUMBER, VALID_PENALTY_NUMBER);
 
         this.mockMvc.perform(post(ENTER_LFP_DETAILS_PATH)
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
@@ -347,6 +387,11 @@ public class EnterLFPDetailsControllerTest {
                 .thenReturn(VALID_COMPANY_NUMBER);
     }
 
+    private void configureAppendCompanyNumber(String companyNumber) {
+        when(mockCompanyService.appendToCompanyNumber(companyNumber))
+                .thenReturn(companyNumber);
+    }
+
     private void configureValidPenalty(String companyNumber, String penaltyNumber) throws ServiceException {
         List<LateFilingPenalty> validLFPs = new ArrayList<>();
         validLFPs.add(LFPTestUtility.validLateFilingPenalty(penaltyNumber));
@@ -391,7 +436,7 @@ public class EnterLFPDetailsControllerTest {
                 .thenReturn(paidLfp);
     }
 
-    private void configurePenaltyNegativeOustanding(String companyNumber, String penaltyNumber)
+    private void configurePenaltyNegativeOutstanding(String companyNumber, String penaltyNumber)
             throws ServiceException {
         List<LateFilingPenalty> negativeLFP = new ArrayList<>();
         negativeLFP.add(LFPTestUtility.negativeOustandingLateFilingPenalty(penaltyNumber));
