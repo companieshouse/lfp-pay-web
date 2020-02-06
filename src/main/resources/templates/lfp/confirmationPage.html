@@ -18,12 +18,12 @@
 
                     <div class="govuk-panel__body govuk-!-margin-bottom-6" id="confirmation-company-name-number">
                         <h1 class="govuk-panel__title">
-                            Payment received
+                            Payment received by Companies House
                         </h1>
                         <div class="govuk-panel__body">
-                            Your reference number is
+                            Your reference number is your company number
                             <br>
-                            <span class="govuk-!-font-weight-bold" th:text="*{penaltyNumber}"/>
+                            <span class="govuk-!-font-weight-bold" th:text="*{companyNumber}"/>
 
                         </div>
                     </div>
@@ -43,6 +43,22 @@
                     Your penalty has been paid and you don't need to do anything else.
 
                     It may take up to 24 hours for your payment to be allocated to your account.
+                </p>
+                <h2 class="govuk-heading-m">
+                    Questions about this payment
+                </h2>
+                <p class="govuk-body">
+                    You can contact Companies House if you have questions about this payment.
+                </p>
+                <p class="govuk-body">
+                    <a href="mailto:enquiries@companieshouse.gov.uk" class="govuk-link">enquiries@companieshouse.gov.uk</a><br>
+                    Telephone: 0303 1234 500<br>
+                    Minicom/Textphone: 02920 381 245<br>
+                    Welsh language: 02920 380 065<br>
+                    Monday to Friday, 8:30am to 5pm<br>
+                </p>
+                <p class="govuk-body">
+                    If you need to contact us about your payment, use the payment reference number <span class="govuk-!-font-weight-bold" th:text="${penaltyNumber}"></span>
                 </p>
                 <h2 class="govuk-heading-m">Email reminders</h2>
                 <p class="govuk-body">
