@@ -81,6 +81,7 @@ public class ConfirmationController extends BaseController {
 
         }
 
+        model.addAttribute("companyNumber", companyNumber);
         model.addAttribute("penaltyNumber", penaltyId);
 
         return getTemplateName();
