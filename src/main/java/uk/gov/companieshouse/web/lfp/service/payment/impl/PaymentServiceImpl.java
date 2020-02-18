@@ -67,7 +67,7 @@ public class PaymentServiceImpl implements PaymentService {
             return apiResponse.getData().getLinks().get(JOURNEY_LINK);
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException("Error creating payment session", e);
+            throw new ServiceException("Error creating payment session, status code: " + e.getStatusCode(), e);
         } catch (URIValidationException e) {
 
             throw new ServiceException("Invalid URI for payment resource", e);
