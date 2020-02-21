@@ -9,11 +9,15 @@ import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalt
 import uk.gov.companieshouse.api.model.payment.PaymentApi;
 import uk.gov.companieshouse.api.model.payment.PaymentSessionApi;
 import uk.gov.companieshouse.environment.EnvironmentReader;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
+import uk.gov.companieshouse.web.lfp.LFPWebApplication;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 @Service
@@ -37,6 +41,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final String PAYMENT_STATE = "payment_state";
 
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);
+
     @Autowired
     public PaymentServiceImpl(ApiClientService apiClientService, SessionService sessionService, EnvironmentReader environmentReader) {
 
@@ -57,6 +64,10 @@ public class PaymentServiceImpl implements PaymentService {
         paymentSessionApi.setResource(apiUrl + payableLateFilingPenaltySession.getLinks().get("self") + "/payment");
         paymentSessionApi.setReference("late_filing_penalty_" + payableLateFilingPenaltySession.getId());
         paymentSessionApi.setState(paymentState);
+        LOGGER.info("SESSION REDIRECT URI: " + paymentSessionApi.getRedirectUri());
+        LOGGER.info("SESSION REFERENCE: " + paymentSessionApi.getReference());
+        LOGGER.info("SESSION RESOURCE: " + paymentSessionApi.getResource());
+        LOGGER.info("SESSION STATE: " + paymentSessionApi.getState());
 
         try {
             ApiResponse<PaymentApi> apiResponse = apiClientService.getPublicApiClient()
@@ -66,6 +77,11 @@ public class PaymentServiceImpl implements PaymentService {
 
             return apiResponse.getData().getLinks().get(JOURNEY_LINK);
         } catch (ApiErrorResponseException e) {
+            LOGGER.info("API RESPONSE HEADERS: " + e.getHeaders());
+            LOGGER.info("API RESPONSE STACKTRACE: " + Arrays.toString(e.getStackTrace()));
+            LOGGER.info("API RESPONSE DETAILS: " + e.getDetails());
+            LOGGER.info("API RESPONSE MESSAGE: " + e.getMessage());
+            LOGGER.info("API RESPONSE CONTENT: " + e.getContent());
 
             throw new ServiceException("Error creating payment session, status code: " + e.getStatusCode(), e);
         } catch (URIValidationException e) {
