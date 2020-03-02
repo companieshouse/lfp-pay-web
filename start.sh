@@ -28,4 +28,4 @@ else
 fi
 
 #exec java ${JAVA_MEM_ARGS} -jar -Dserver.port="${PORT}" "${APP_DIR}/lfp-pay-web.jar"
-exec java ${JAVA_MEM_ARGS} -Djava.util.logging.config.file=${APP_DIR}/logging.properties -jar -Dserver.port="${PORT}" "${APP_DIR}/lfp-pay-web.jar"
+exec java ${JAVA_MEM_ARGS} -Djava.util.logging.config.file="${APP_DIR}/logging.properties" -jar -Dserver.port="${PORT}" "${APP_DIR}/lfp-pay-web.jar"
