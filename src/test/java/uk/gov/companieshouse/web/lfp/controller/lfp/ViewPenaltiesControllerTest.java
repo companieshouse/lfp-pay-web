@@ -75,6 +75,7 @@ public class ViewPenaltiesControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
     private static final String REDIRECT_PATH = "redirect:";
     private static final String MOCK_PAYMENTS_URL = "pay.companieshouse/payments/987654321987654321/pay";
+    private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
 
     @BeforeEach
     private void setup() {
@@ -179,7 +180,7 @@ public class ViewPenaltiesControllerTest {
 
         this.mockMvc.perform(post(VIEW_PENALTIES_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(REDIRECT_PATH + MOCK_PAYMENTS_URL));
+                .andExpect(view().name(REDIRECT_PATH + MOCK_PAYMENTS_URL + SUMMARY_FALSE_PARAMETER));
 
         verify(mockLateFilingPenaltyService, times(1)).getLateFilingPenalties(COMPANY_NUMBER, PENALTY_NUMBER);
         verify(mockPayableLateFilingPenaltyService, times(1))
