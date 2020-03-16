@@ -123,8 +123,9 @@ public class ViewPenaltiesController extends BaseController {
         }
 
         try {
+            // Return the payment session URL and add query parameter to indicate Review Payments screen isn't wanted
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                    paymentService.createPaymentSession(payableLateFilingPenaltySession, companyNumber);
+                    paymentService.createPaymentSession(payableLateFilingPenaltySession, companyNumber) + "?summary=false";
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
