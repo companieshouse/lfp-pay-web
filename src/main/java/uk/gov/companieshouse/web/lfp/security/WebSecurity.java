@@ -25,8 +25,20 @@ public class WebSecurity {
         }
     }
 
+
     @Configuration
     @Order(2)
+    public static class AccessibilityStatementPageSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/late-filing-penalty/accessibility-statement");
+        }
+    }
+
+    @Configuration
+    @Order(3)
     public static class LFPWebSecurityFilterConfig extends WebSecurityConfigurerAdapter {
 
         @Override
