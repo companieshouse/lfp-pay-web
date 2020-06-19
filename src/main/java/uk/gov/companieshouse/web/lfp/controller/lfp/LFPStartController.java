@@ -23,11 +23,11 @@ import java.text.SimpleDateFormat;
 @RequestMapping("/late-filing-penalty")
 public class LFPStartController extends BaseController {
 
-    private static String LFP_TEMP_HOME = "lfp/home";
-    private static String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
+    private static final String LFP_TEMP_HOME = "lfp/home";
+    private static final String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
 
     @Autowired
-    private LateFilingPenaltyService LateFilingPenaltyService;
+    private LateFilingPenaltyService lateFilingPenaltyService;
 
     @Override
     protected String getTemplateName() {
@@ -42,7 +42,7 @@ public class LFPStartController extends BaseController {
 
         FinanceHealthcheck financeHealthcheck;
         try {
-            financeHealthcheck = LateFilingPenaltyService.checkFinanceSystemAvailableTime();
+            financeHealthcheck = lateFilingPenaltyService.checkFinanceSystemAvailableTime();
         } catch (ServiceException ex) {
             return ERROR_VIEW;
         }

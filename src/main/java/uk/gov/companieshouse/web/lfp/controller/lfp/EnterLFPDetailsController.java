@@ -28,8 +28,7 @@ import java.util.List;
 @RequestMapping("/late-filing-penalty/enter-details")
 public class EnterLFPDetailsController extends BaseController {
 
-    private static String LFP_ENTER_DETAILS = "lfp/details";
-    private static String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
+    private static final String LFP_ENTER_DETAILS = "lfp/details";
 
     @Autowired
     private LateFilingPenaltyService lateFilingPenaltyService;
@@ -37,13 +36,13 @@ public class EnterLFPDetailsController extends BaseController {
     @Autowired
     private CompanyService companyService;
 
-    private static String LFP_NO_PENALTY_FOUND = "/no-penalties-found";
+    private static final String LFP_NO_PENALTY_FOUND = "/no-penalties-found";
 
-    private static String LFP_PENALTY_PAID = "/penalty-paid";
+    private static final String LFP_PENALTY_PAID = "/penalty-paid";
 
-    private static String LFP_DCA = "/legal-fees-required";
+    private static final String LFP_DCA = "/legal-fees-required";
 
-    private static String LFP_ONLINE_PAYMENT_UNAVAILABLE = "/online-payment-unavailable";
+    private static final String LFP_ONLINE_PAYMENT_UNAVAILABLE = "/online-payment-unavailable";
 
     private static final String PENALTY_TYPE = "penalty";
 

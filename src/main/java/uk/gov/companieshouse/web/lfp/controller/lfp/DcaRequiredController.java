@@ -13,7 +13,7 @@ import uk.gov.companieshouse.web.lfp.controller.BaseController;
 @RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/legal-fees-required")
 public class DcaRequiredController extends BaseController {
 
-    private static String LFP_DCA_REQUIRED = "lfp/legalFeesDCA";
+    private static final String LFP_DCA_REQUIRED = "lfp/legalFeesDCA";
 
     @Override protected String getTemplateName() {
         return LFP_DCA_REQUIRED;

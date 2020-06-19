@@ -30,7 +30,7 @@ import java.util.Locale;
 @RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/view-penalties")
 public class ViewPenaltiesController extends BaseController {
 
-    private static String LFP_VIEW_PENALTIES = "lfp/viewPenalties";
+    private static final String LFP_VIEW_PENALTIES = "lfp/viewPenalties";
 
     private static final String PENALTY_TYPE = "penalty";
 

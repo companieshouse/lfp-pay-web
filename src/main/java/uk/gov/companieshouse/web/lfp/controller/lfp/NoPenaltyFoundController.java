@@ -13,7 +13,7 @@ import uk.gov.companieshouse.web.lfp.controller.BaseController;
 @RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/no-penalties-found")
 public class NoPenaltyFoundController extends BaseController {
 
-    private static String LFP_NO_PENALTY_FOUND = "lfp/noPenaltyFound";
+    private static final String LFP_NO_PENALTY_FOUND = "lfp/noPenaltyFound";
 
     @Override protected String getTemplateName() {
         return LFP_NO_PENALTY_FOUND;
