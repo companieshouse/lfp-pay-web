@@ -4,4 +4,3 @@ group: web
 weight: 900
 routes:
    1: /late-filing-penalty/*
-   2: /healthcheck/*
