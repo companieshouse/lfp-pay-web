@@ -22,7 +22,7 @@ public class HealthcheckControllerTest {
     @InjectMocks
     private HealthcheckController controller;
 
-    private static final String HEALTHCHECK_PATH = "/healthcheck";
+    private static final String HEALTHCHECK_PATH = "/late-filing-penalty/healthcheck";
 
     @BeforeEach
     private void setup() {
