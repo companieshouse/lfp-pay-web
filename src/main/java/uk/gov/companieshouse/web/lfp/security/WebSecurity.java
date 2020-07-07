@@ -37,8 +37,19 @@ public class WebSecurity {
         }
     }
 
+
     @Configuration
     @Order(3)
+    public static class HealthcheckSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.antMatcher("/late-filing-penalty/healthcheck");
+        }
+    }
+
+    @Configuration
+    @Order(4)
     public static class LFPWebSecurityFilterConfig extends WebSecurityConfigurerAdapter {
 
         @Override
