@@ -26,11 +26,14 @@ Key                | Description
 -------------------|------------------------------------
 `LFP_PAY_WEB_PORT` |The port of the LFP-PAY-WEB service
 `HUMAN_LOG`        |For human readable logs
+`CH_BANK_ACC_NUM`  |Companies House Bank account number (for lFP start page)
+`CH_BANK_SORT_CODE`|Companies House Bank sort code (for lFP start page)
+`CH_BANK_ACC_NAME` |Companies House Bank Bank account name (for lFP start page)
 
 
 ### Web Pages
 
 Page                                     | Address
 -----------------------------------------|-----------------------------
-Temporary page replacing GovUk start     | `/late-filing-penalty`
+Start page for LFP Service               | `/late-filing-penalty`
 Tell us your penalty details             | `/late-filing-penalty/enter-details`
