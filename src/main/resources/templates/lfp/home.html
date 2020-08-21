@@ -32,6 +32,9 @@
                 </p>
 
                 <div class="form-group">
+                    <span th:if="${#httpServletRequest.getParameter('start') == 0}">
+                        <input type="hidden" id="hidden-button" class="piwik-event" data-event-id="lfp - GovUk Redirect"/>
+                    </span>
                     <input id="next-button" class="govuk-button" data-event-id="lfp - Start now" onclick="_paq.push(['trackGoal', 3]);" type="submit" role="button" value="Start now"/>
                 </div>
 
