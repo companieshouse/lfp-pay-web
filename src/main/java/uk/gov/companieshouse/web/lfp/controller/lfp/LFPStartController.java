@@ -27,22 +27,19 @@ import java.util.Optional;
 @RequestMapping("/late-filing-penalty")
 public class LFPStartController extends BaseController {
 
-    @Value("${account.url}")
-    private String accountsUrl;
-
-    private static String LFP_TEMP_HOME = "lfp/home";
-    private static String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
+    private static final String LFP_TEMP_HOME = "lfp/home";
+    private static final String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
 
     @Autowired
     private LateFilingPenaltyService LateFilingPenaltyService;
+
+    @Autowired
+    private Environment environment;
 
     @Override
     protected String getTemplateName() {
         return LFP_TEMP_HOME;
     }
-
-    @Autowired
-    private Environment environment;
 
     @GetMapping
     public String getLFPHome(@RequestParam("start") Optional<Integer> startId, Model model) throws ParseException {
