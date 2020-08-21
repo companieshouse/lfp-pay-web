@@ -52,6 +52,7 @@ public class LFPStartControllerTest {
     }
 
     private static final String LFP_START_PATH = "/late-filing-penalty";
+    private static final String LFP_START_PATH_PARAM = "/late-filing-penalty?start=0";
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String LFP_START_VIEW = "lfp/home";
@@ -104,6 +105,20 @@ public class LFPStartControllerTest {
 
         verify(mockLateFilingPenaltyService, times(1)).checkFinanceSystemAvailableTime();
 
+    }
+
+    @Test
+    @DisplayName("Get View Start Page - redirect to sign in")
+    void getRequestRedirectToSignInWhenVisitFromGovUk() throws Exception {
+
+        configureValidFinanceHealthcheckResponse();
+        configureNextController();
+
+        this.mockMvc.perform(get(LFP_START_PATH_PARAM))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(mockLateFilingPenaltyService, times(1)).checkFinanceSystemAvailableTime();
     }
 
     @Test
