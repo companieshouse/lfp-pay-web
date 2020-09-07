@@ -55,12 +55,52 @@
                 <p class="govuk-body">
                     You'll need to use the Companies House sort code, account number and account name.
                 </p>
-
                 <div class="govuk-details__text" aria-hidden="true" id="banking-details">
                     <p th:text="'Sort code: ' + ${@environment.getProperty('chBankSortCode')}"></p>
                     <p th:text="'Account number: ' + ${@environment.getProperty('chBankAccNumber')}"></p>
                     <p th:text="'Account name: ' + ${@environment.getProperty('chBankAccName')}"></p>
                 </div>
+                <p class="govuk-body"></p>
+                <h2 class="govuk-heading-s">If you're paying from an overseas account</h2>
+                <p class="govuk-body">You can pay through a bank transfer from an overseas account.</p>
+                <p class="govuk-body">You'll need to use Companies House swift code, account number and account name.</p>
+                <div class="govuk-details__text" aria-hidden="true" id="overseas-banking-details">
+                    <p>Swift code: NW BK GB 2L
+                        <br>
+                        Account number (IBAN): GB34NWBK52210741005309
+                        <br>
+                        Account name: Late filing penalties receipts
+                    </p>
+                </div>
+                <p class="govuk-body"></p>
+                <p class="govuk-body">Email the LFP finance team at Companies House to tell them you've paid. Include in your email the:</p>
+                <ul class="govuk-list govuk-list--bullet" id="list-requirements-overseas-payments">
+                    <li>company number</li>
+                    <li>company name</li>
+                    <li>reference number on the penalty notice</li>
+                    <li>amount paid</li>
+                    <li>date paid</li>
+                </ul>
+                <div class="govuk-details__text" aria-hidden="true" id="companies-house-finance-team-email">
+                    <p class="govuk-body">LFP finance team, Companies House lfpfinance@companieshouse.gov.uk</p>
+                </div>
+
+                <p class="govuk-body"></p>
+                <h2 class="govuk-heading-s">Pay by cheque</h2>
+                <p class="govuk-body">You can pay by cheque through the post. Make the cheque payable to 'Companies House only' and send it along with the slip on the penalty notice ('remittance advice') to Companies House.</p>
+                <div class="govuk-details__text" aria-hidden="true" id="companies-house-address-cheque">
+                    <p>Companies House
+                        <br>
+                        PO Box 710
+                        <br>
+                        Crown Way
+                        <br>
+                        CF14 3UZ
+                    </p>
+                </div>
+                <p class="govuk-body"></p>
+                <p class="govuk-body">Write the company name and number on the back of the cheque. You'll find the company number on your penalty notice.</p>
+
 
             </div>
             <div class="govuk-grid-column-one-third">
