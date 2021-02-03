@@ -26,8 +26,10 @@
 <body>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent-poc.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
 
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header (headerText = 'Pay a late filing penalty')"></div>
@@ -45,7 +47,6 @@
     <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/selection-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-
-    <div th:replace="fragments/piwik :: piwik (moduleName = 'lfp')"></div>
+    <div th:replace="fragments/piwikWithCookieCheck :: piwikWithCookieCheck (moduleName = 'lfp')"></div>
 </body>
 </html>
