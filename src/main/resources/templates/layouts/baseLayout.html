@@ -15,13 +15,17 @@
             th:href="@{{cdnUrl}/stylesheets/services/late-filing-penalties/application.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
             media="all" rel="stylesheet" type="text/css" />
     <link
-            th:href="@{{cdnUrl}/stylesheets/govuk-frontend/v3.4.0/govuk-frontend-3.4.0.min.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+            th:href="@{{cdnUrl}/stylesheets/govuk-frontend/v3.11.0/govuk-frontend-3.11.0.min.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
             media="all" rel="stylesheet" type="text/css" />
     <link
             rel="icon"
             th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
             type="image/x-icon" />
-
+    <script th:inline="javascript">
+        window.SERVICE_NAME = 'lfp'
+        window.PIWIK_URL = [[${@environment.getProperty('piwik.url')}]];
+        window.PIWIK_SITE_ID = [[${@environment.getProperty('piwik.siteId')}]];
+    </script>
 </head>
 <body>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
@@ -29,20 +33,7 @@
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        var SERVICE_NAME = 'lfp'
-        var PIWIK_URL = /*[[${@environment.getProperty('piwik.url')}]]*/ null;
-        var PIWIK_SITE_ID = /*[[${@environment.getProperty('piwik.siteId')}]]*/ null;
-    </script>
-    <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/cookie-consent-1.0.0.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/piwik-only-cookie-consent.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-    <div th:replace="fragments/piwikWithCookieCheck :: piwikWithCookieCheck (moduleName = 'lfp')"></div>
     <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
-    <script>
-        CookieConsent.start(startPiwik)
-    </script>
 
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header (headerText = 'Pay a late filing penalty')"></div>
@@ -50,7 +41,6 @@
             <div th:replace="fragments/betaBanner :: betaBanner (surveyLink = 'https://www.research.net/r/pay-lfp-feedback')"></div>
             <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
             <main id="content" role="main" class="govuk-main-wrapper">
-                <a class="govuk-link" th:href="${@environment.getProperty('chs.url')}">View cookies</a>
                 <div layout:fragment="content"></div>
             </main>
         </div>
@@ -60,5 +50,8 @@
 
     <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/selection-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/cookie-consent-1.0.0.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/piwik-only-cookie-consent.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 </body>
 </html>
