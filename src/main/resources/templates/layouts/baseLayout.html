@@ -28,17 +28,21 @@
     <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var SERVICE_NAME = 'lfp'
+        var PIWIK_URL = /*[[${@environment.getProperty('piwik.url')}]]*/ null;
+        var PIWIK_SITE_ID = /*[[${@environment.getProperty('piwik.siteId')}]]*/ null;
+    </script>
     <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-
-    <th:block th:if="${@environment.getProperty('cookie_consent') == 'true'}">
-        <div th:replace="fragments/piwikWithCookieCheck :: piwikWithCookieCheck (moduleName = 'lfp')"></div>
-        <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
-        <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent-poc.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-    </th:block>
-    <th:block th:unless="${@environment.getProperty('cookie_consent') == 'true'}">
-        <div th:replace="fragments/piwik :: piwik (moduleName = 'lfp')"></div>
-    </th:block>
-
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/cookie-consent-1.0.0.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/piwik-only-cookie-consent.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <div th:replace="fragments/piwikWithCookieCheck :: piwikWithCookieCheck (moduleName = 'lfp')"></div>
+    <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
+    <script>
+        CookieConsent.start(startPiwik)
+    </script>
 
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header (headerText = 'Pay a late filing penalty')"></div>
@@ -46,6 +50,7 @@
             <div th:replace="fragments/betaBanner :: betaBanner (surveyLink = 'https://www.research.net/r/pay-lfp-feedback')"></div>
             <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
             <main id="content" role="main" class="govuk-main-wrapper">
+                <a class="govuk-link" th:href="${@environment.getProperty('chs.url')}">View cookies</a>
                 <div layout:fragment="content"></div>
             </main>
         </div>
