@@ -76,7 +76,7 @@
         <dependency>
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>common-web-java</artifactId>
-            <version>unversioned</version>
+            <version>${common-web-java.version}</version>
         </dependency>
 
         <dependency>
