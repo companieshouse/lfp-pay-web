@@ -22,7 +22,7 @@
                 <ul class="govuk-list govuk-list--bullet" id="list-requirements">
                     <li>the company number</li>
                     <li>the reference number on the penalty notice</li>
-                    <li>a Companies House account - you'll be able to create one if you do not have one already</li>
+                    <li>to sign in to or create a Companies House account, which is different from a WebFiling account</li>
                     <li>a credit or debit card</li>
                 </ul>
 
@@ -48,14 +48,11 @@
                      </span>
                     </summary>
                     <div class="govuk-details__text">
-
                         <h2 class="govuk-heading-m">Pay by phone</h2>
-                        <p class="govuk-body">
-                            You can pay by phone using your credit or debit card.<br/>
-                            Telephone: 0303 1234 500<br/>
-                            Contact Centre lines are open between 8.30am to 5pm (Monday to Friday).<br/>
-                        </p>
-                        <h2 class="govuk-heading-s">Pay by Bacs</h2>
+                        <p class="govuk-body">You can pay by phone using your credit or debit card.</p>
+                        <p class="govuk-body">Telephone: 0303 1234 500</p>
+                        <p class="govuk-body">Contact Centre lines are open between 8.30am to 5pm (Monday to Friday).</p>
+                        <h2 class="govuk-heading-m">Pay by Bacs</h2>
                         <p class="govuk-body">
                             You can pay using Bacs payment.
                         </p>
@@ -72,7 +69,7 @@
                             <p th:text="'Account name: ' + ${@environment.getProperty('chBankAccName')}"></p>
                         </div>
                         <p class="govuk-body"></p>
-                        <h2 class="govuk-heading-s">Paying from an overseas account</h2>
+                        <h2 class="govuk-heading-m">Paying from an overseas account</h2>
                         <p class="govuk-body">
                             You can pay through a bank transfer from an overseas account.
                         </p>
@@ -80,13 +77,9 @@
                             You'll need to use Companies House swift code, account number and account name.
                         </p>
                         <div class="govuk-details__text" aria-hidden="true" id="overseas-banking-details">
-                            <p>Swift Code: NW BK GB 2L
-                                <br>
-                                Account Number (IBAN): GB 34 NWBK 522107 41005309
-                                <br>
-                                Account name: Late Filing Penalties Receipts
-                                <br>
-                            </p>
+                            <p class="govuk-body">Swift Code: NW BK GB 2L</p>
+                            <p class="govuk-body">Account Number (IBAN): GB 34 NWBK 522107 41005309</p>
+                            <p class="govuk-body">Account name: Late Filing Penalties Receipts</p>
                         </div>
                         <p class="govuk-body"></p>
                         <p class="govuk-body">Email the LFP finance team at Companies House to tell them you've paid.
@@ -104,7 +97,7 @@
                             </p>
                         </div>
                         <p class="govuk-body"></p>
-                        <h2 class="govuk-heading-s">Pay by cheque</h2>
+                        <h2 class="govuk-heading-m">Pay by cheque</h2>
                         <p class="govuk-body">You can pay by cheque through the post. Make the cheque payable to
                             'Companies House only' and send it along with the slip on the penalty notice ('remittance
                             advice') to Companies House.</p>
