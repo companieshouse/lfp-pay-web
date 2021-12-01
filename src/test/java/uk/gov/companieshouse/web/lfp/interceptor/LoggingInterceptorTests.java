@@ -51,7 +51,7 @@ public class LoggingInterceptorTests {
 
     @Test
     @DisplayName("Tests the interceptor logs the start of the request")
-    public void preHandle() throws JSONException {
+    void preHandle() throws JSONException {
         loggingInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
         verify(session, times(1)).setAttribute(eq(LogContextProperties.START_TIME_KEY.value()), anyLong());
         String data = this.getOutputJson().toString();
@@ -61,7 +61,7 @@ public class LoggingInterceptorTests {
 
     @Test
     @DisplayName("Tests the interceptor logs the end of the request")
-    public void postHandle() throws JSONException {
+    void postHandle() throws JSONException {
         when(session.getAttribute(LogContextProperties.START_TIME_KEY.value()))
                 .thenReturn(System.currentTimeMillis());
         when(httpServletResponse.getStatus()).thenReturn(HttpStatus.SC_OK);
