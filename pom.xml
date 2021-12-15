@@ -16,7 +16,8 @@
     </parent>
     <properties>
         <java.version>1.8</java.version>
-        <structured-logging.version>1.5.0-rc2</structured-logging.version>
+        <structured-logging.version>1.9.10</structured-logging.version>
+        <log4j-bom.version>2.15.0</log4j-bom.version>
         <common-web-java.version>1.5.0</common-web-java.version>
         <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
         <java-session-handler.version>2.2.0</java-session-handler.version>
@@ -31,6 +32,7 @@
         <spring-boot-dependencies.version>2.4.13</spring-boot-dependencies.version>
         <spring-test.version>5.2.3.RELEASE</spring-test.version>
         <spring-boot-maven-plugin.version>2.4.13</spring-boot-maven-plugin.version>
+        <json.version>20211205</json.version>
         <!-- Maven and Surefire plugins -->
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -39,6 +41,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${log4j-bom.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -91,6 +100,11 @@
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>java-session-handler</artifactId>
             <version>${java-session-handler.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.companieshouse</groupId>
