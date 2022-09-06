@@ -8,6 +8,9 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.lfp.LFPWebApplication;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
 public abstract class BaseController {
 
     @Autowired
@@ -28,4 +31,5 @@ public abstract class BaseController {
 
         model.addAttribute("backButton", navigatorService.getPreviousControllerPath(this.getClass(), pathVars));
     }
+
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title>
+        Paying a penalty with fees
+    </title>
+</head>
+
+<div id="sign-out-details" layout:fragment="content">
+    <form th:action="@{''}" method="post" class="form" id="sign-out">
+                    <div th:if="${errorMessage} == true">
+                        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-disable-auto-focus="true" data-module="govuk-error-summary">
+                            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                                There is a problem
+                            </h2>
+                            <div class="govuk-error-summary__body">
+                                <ul class="govuk-list govuk-error-summary__list">
+                                    <li>
+                                        <a href="#yes-sign-out">Select yes if you want to sign out</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="govuk-form-group">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading">
+                                Are you sure you want to sign out?
+                            </h1>
+                        </legend>
+                                <div th:if="${errorMessage} == true">
+                                    <p id="sign-out-error" class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> Select yes if you want to sign out
+                                    </p>
+                                </div>
+                                <div id="sign-out-hint" class="govuk-hint">
+                            Your answers will not be saved. You will need to start again if you want to file a confirmation
+                            statement.
+                        </div>
+                        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="yes-sign-out" name="radio" type="radio" value="yes">
+                                <label class="govuk-label govuk-radios__label" for="yes-sign-out">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="no-sign-out" name="radio" type="radio" value="no">
+                                <label class="govuk-label govuk-radios__label" for="no-sign-out">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+        <p class="govuk-body"></p>
+        <button class="govuk-button" data-module="govuk-button" data-event-id="continue-button" id="submit">
+            Continue
+        </button>
+        </div>
+    </form>
+</div>
+</html>
