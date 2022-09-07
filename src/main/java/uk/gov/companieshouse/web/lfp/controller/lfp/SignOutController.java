@@ -6,13 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
+import uk.gov.companieshouse.web.lfp.validation.AllowlistChecker;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
@@ -27,6 +30,8 @@ public class SignOutController extends BaseController {
     @Autowired
     private SessionService sessionService;
 
+@Autowired
+    private AllowlistChecker allowlistChecker;
 
 
 
@@ -43,14 +48,24 @@ public class SignOutController extends BaseController {
         return LFP_SIGN_OUT;
     }
 
-    private static final String REDIRECT_PAGE = "lfp/home";
+
 
     @GetMapping
     public String getSignOut(HttpServletResponse response,
                              final HttpServletRequest request, Model model) {
 
+
+
         LOGGER.debug("Processing sign out");
         Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
+        String referrer = request.getHeader("Referer");
+
+        if(referrer!= null){
+            String url = referrer.substring(referrer.lastIndexOf("/"));
+            LOGGER.info("url: " + referrer);
+            String allowedUrl = allowlistChecker.checkURL(referrer);
+            request.getSession().setAttribute("url_prior_login", allowedUrl);
+        }
 
         //check session is there first
         if (!sessionData.containsKey(SIGN_IN_KEY)) {
@@ -63,30 +78,33 @@ public class SignOutController extends BaseController {
 
 
     @PostMapping
-    public String postSignOut( HttpServletRequest request, Model model) {
+    public RedirectView postSignOut(HttpServletRequest request, Model model) {
         Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
-
+        String account = System.getenv("ACCOUNT_WEB_URL");
         String valueGet = request.getParameter("radio");
 
-        if(valueGet == null || valueGet == "") {
+        if(valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
             model.addAttribute("errorMessage",true);
-            return getTemplateName();
+            return new RedirectView("late-filing-penalty/sign-out");
         }
         if (valueGet.equals("yes")) {
 
             LOGGER.info("value: " + valueGet);
             sessionData.clear();
-            /*needs to go to generic ch local page, if you go there manually cache is cleared & no email, but if you go to first
-            page of service, it signs you back in...
-            */
-            navigatorService.getNextControllerRedirect(this.getClass());
+            Map<String, Object> sessionData2 = sessionService.getSessionDataFromContext();
+            LOGGER.info("session data 2: " + sessionData2);
+
+            return new RedirectView(account);
         }
         if (valueGet.equals("no")) {
-//this needs to go to previous page (a the moment it is said via previous controller annotation to details page
-            return navigatorService.getPreviousControllerPath(this.getClass());
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                String url = (String) request.getSession().getAttribute("url_prior_login");
+                return new RedirectView(url);
+            }
         }
-        return navigatorService.getNextControllerRedirect(this.getClass());
+        return new RedirectView("/late-filing-penalty/sign-out");
     }
 
 }
