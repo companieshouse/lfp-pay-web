@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.support.SessionAttributeStore;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import uk.gov.companieshouse.session.Session;
 import uk.gov.companieshouse.session.handler.SessionHandler;
@@ -83,10 +85,11 @@ public class SignOutController extends BaseController {
 
 
     @PostMapping
-    public RedirectView postSignOut(HttpServletRequest request, Model model) {
+    public RedirectView postSignOut(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         LOGGER.debug("Processing sign out POST");
         // Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
         // HttpSession session = request.getSession(false);
+
         String account = System.getenv("CHS_URL");
         String valueGet = request.getParameter("radio");
 
@@ -95,8 +98,8 @@ public class SignOutController extends BaseController {
 
         if(valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
-            model.addAttribute("errorMessage",true);
-            return new RedirectView("late-filing-penalty/sign-out");
+            redirectAttributes.addFlashAttribute("errorMessage", true);
+            return new RedirectView("/late-filing-penalty/sign-out");
         }
         if (valueGet.equals("yes")) {
             LOGGER.info("Before : " + s );
