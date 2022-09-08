@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title layout:title-pattern="$CONTENT_TITLE"></title>
-    <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
     <link
             th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
             media="all" rel="stylesheet" type="text/css" />
@@ -21,6 +20,7 @@
             rel="icon"
             th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
             type="image/x-icon" />
+    <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
     <script th:inline="javascript">
         window.SERVICE_NAME = 'lfp'
         window.PIWIK_URL = [[${@environment.getProperty('piwik.url')}]];
