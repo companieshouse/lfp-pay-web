@@ -37,6 +37,7 @@
 
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header (headerText = 'Pay a late filing penalty')"></div>
+        <div th:if="${#httpServletRequest.requestURI != '/late-filing-penalty/sign-out'}">
         <div th:if="${userEmail != null}" layout:fragment="signOut">
             <ul class="js-signout" id="signout-navigation">
                 <li class="content-email" id="signed-in-user" th:text="${userEmail}"></li>
@@ -44,6 +45,7 @@
                     <a href="/late-filing-penalty/sign-out" id="user-signout">Sign out</a>
                 </li>
             </ul>
+        </div>
         </div>
         <div class="govuk-width-container">
             <div th:replace="fragments/betaBanner :: betaBanner (surveyLink = 'https://www.smartsurvey.co.uk/s/pay-lfp-feedback/')"></div>

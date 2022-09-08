@@ -18,12 +18,14 @@ import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
+import uk.gov.companieshouse.web.lfp.session.SessionService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Controller
 @PreviousController(EnterLFPDetailsController.class)
@@ -50,6 +52,9 @@ public class ViewPenaltiesController extends BaseController {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private SessionService sessionService;
+
     @GetMapping
     public String getViewPenalties(@PathVariable String companyNumber,
                                    @PathVariable String penaltyNumber,
@@ -63,6 +68,9 @@ public class ViewPenaltiesController extends BaseController {
         CompanyProfileApi companyProfileApi;
 
         try {
+            Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
+
+            LOGGER.info("session data view penalty : " + sessionData);
             companyProfileApi = companyService.getCompanyProfile(companyNumber);
             lateFilingPenalties = lateFilingPenaltyService.getLateFilingPenalties(companyNumber, penaltyNumber);
             lateFilingPenalty = lateFilingPenalties.get(0);

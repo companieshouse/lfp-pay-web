@@ -10,16 +10,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
+import uk.gov.companieshouse.web.lfp.LFPWebApplication;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
 
 @Component
 public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
 
     private static final String USER_EMAIL = "userEmail";
-
     private static final String SIGN_IN_KEY = "signin_info";
     private static final String USER_PROFILE_KEY = "user_profile";
     private static final String EMAIL_KEY = "email";
+
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);
 
     @Autowired
     private SessionService sessionService;
@@ -34,9 +39,11 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
 
             Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
             Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
+            LOGGER.info("Session Post Handle" + sessionData);
             if (signInInfo != null) {
                 Map<String, Object> userProfile = (Map<String, Object>) signInInfo
                         .get(USER_PROFILE_KEY);
+                LOGGER.info("sign in inf session data: " + sessionData);
                 modelAndView.addObject(USER_EMAIL, userProfile.get(EMAIL_KEY));
             }
         }
