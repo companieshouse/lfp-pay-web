@@ -36,7 +36,7 @@
     <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
 
     <div class="entire-wrapper">
-        <div th:replace="fragments/header :: header (headerText = 'Pay a late filing penalty')"></div>
+        <div th:replace="fragments/header :: header (headerText = 'Pay a penalty for filing your company accounts late')"></div>
         <div class="govuk-width-container">
             <div th:replace="fragments/betaBanner :: betaBanner (surveyLink = 'https://www.smartsurvey.co.uk/s/pay-lfp-feedback/')"></div>
             <div th:if="${userEmail != null}" layout:fragment="signout">
