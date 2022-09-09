@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
-import uk.gov.companieshouse.session.Session;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
@@ -23,7 +22,7 @@ import uk.gov.companieshouse.web.lfp.session.SessionService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 @PreviousController(LFPStartController.class)
@@ -75,10 +74,6 @@ public class EnterLFPDetailsController extends BaseController {
             return getTemplateName();
         }
 
-        Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
-
-
-        LOGGER.info("session data enter details : " + sessionData);
         String companyNumber = companyService.appendToCompanyNumber(enterLFPDetails.getCompanyNumber().toUpperCase());
         String penaltyNumber = enterLFPDetails.getPenaltyNumber();
 
