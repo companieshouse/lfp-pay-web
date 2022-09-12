@@ -8,9 +8,6 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.lfp.LFPWebApplication;
 import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
-
 public abstract class BaseController {
 
     @Autowired

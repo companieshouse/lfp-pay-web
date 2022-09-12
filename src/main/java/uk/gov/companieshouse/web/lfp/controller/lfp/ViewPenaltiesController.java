@@ -50,7 +50,6 @@ public class ViewPenaltiesController extends BaseController {
     @Autowired
     private PaymentService paymentService;
 
-
     @GetMapping
     public String getViewPenalties(@PathVariable String companyNumber,
                                    @PathVariable String penaltyNumber,

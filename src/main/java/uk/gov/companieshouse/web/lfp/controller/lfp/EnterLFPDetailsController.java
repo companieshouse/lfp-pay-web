@@ -17,12 +17,10 @@ import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
 import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
-import uk.gov.companieshouse.web.lfp.session.SessionService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-
 
 @Controller
 @PreviousController(LFPStartController.class)
@@ -52,9 +50,6 @@ public class EnterLFPDetailsController extends BaseController {
     @Override protected String getTemplateName() {
         return LFP_ENTER_DETAILS;
     }
-
-    @Autowired
-    private SessionService sessionService;
 
     @GetMapping
     public String getLFPEnterDetails(Model model) {
