@@ -6,15 +6,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.access.method.P;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -30,6 +25,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -56,9 +53,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Mock
     final Environment env = mock(Environment.class);
 
-
-
-
     @InjectMocks
     private SignOutController controller;
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
@@ -70,6 +64,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     private static final String RADIO = "radio";
     private static final String PREVIOUS_PATH = "/late-filing-penalty/enter-details";
     private static final String SIGN_OUT = System.getProperty("ACCOUNT_LOCAL_URL");
+    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
 
     @BeforeEach
@@ -86,6 +81,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         this.mockMvc.perform(get(SIGN_OUT_PATH))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                 .andExpect(view().name(SIGN_OUT_VIEW));
 
     }
@@ -101,6 +97,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         this.mockMvc.perform(get(SIGN_OUT_PATH).header("Referer", PREVIOUS_PATH))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                 .andExpect(view().name(SIGN_OUT_VIEW));
 
 
@@ -164,6 +161,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         this.mockMvc.perform(post(SIGN_OUT_PATH))
                 .andExpect(redirectedUrl(SIGN_OUT_PATH))
-                .andExpect(MockMvcResultMatchers.flash().attribute("errorMessage",true));
+                .andExpect(flash().attribute("errorMessage",true));
     }
 }

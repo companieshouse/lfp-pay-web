@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.lfp.controller.lfp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,10 @@ public class SignOutController extends BaseController {
 
 
     @GetMapping
-    public String getSignOut(final HttpServletRequest request) {
+    public String getSignOut(final HttpServletRequest request, Model model) {
+
+
+
         Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
         if (!sessionData.containsKey(SIGN_IN_KEY)) {
             LOGGER.info("No session data present: " + sessionData);
@@ -59,6 +63,7 @@ public class SignOutController extends BaseController {
 
         String referrer = request.getHeader("Referer");
         if (referrer == null) {
+            model.addAttribute("backButton", HOME);
             LOGGER.info("No Referer has been found");
         } else {
             String allowedUrl = allowlistChecker.checkURL(referrer);
@@ -68,27 +73,28 @@ public class SignOutController extends BaseController {
             }
             LOGGER.info("Referer is " + allowedUrl);
             request.getSession().setAttribute("url_prior_signout", allowedUrl);
+            model.addAttribute("backButton", allowedUrl);
         }
-
         return getTemplateName();
     }
 
 
     @PostMapping
-    public RedirectView postSignOut(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public RedirectView postSignOut(HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) {
         LOGGER.debug("Processing sign out POST");
         String valueGet = request.getParameter("radio");
+        String url =  (String) request.getSession().getAttribute("url_prior_signout");
 
         if (valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
+            redirectAttributes.addFlashAttribute("backButton", url);
             return new RedirectView(SIGN_OUT_URL);
         }
         if (valueGet.equals("yes")) {
             return new RedirectView(ACCOUNT_URL + "/signout");
         }
         if (valueGet.equals("no")) {
-            String url =  (String) request.getSession().getAttribute("url_prior_signout");
             return new RedirectView(url);
         }
         return new RedirectView(HOME);
