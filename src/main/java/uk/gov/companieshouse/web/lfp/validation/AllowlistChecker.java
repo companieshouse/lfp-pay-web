@@ -24,7 +24,7 @@ public class AllowlistChecker {
         Pattern p = Pattern.compile(REGEX);
         Matcher m = p.matcher(url);
         if (m.find()) {
-            LOGGER.error("URL valid, returning to " + url);
+            LOGGER.info("URL valid, returning to " + url);
             return url;
         }
         LOGGER.error("URL not valid. Returning home...");
