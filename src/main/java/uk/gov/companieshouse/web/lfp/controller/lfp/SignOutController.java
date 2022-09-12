@@ -40,6 +40,7 @@ public class SignOutController extends BaseController {
     private static final String ACCOUNT_URL = System.getenv("ACCOUNT_URL");
     private static final String SIGN_OUT_URL = "/late-filing-penalty/sign-out";
     private static final String HOME = "/late-filing-penalty/";
+    private static final String BACK_BUTTON = "backButton";
 
 
     @Override
@@ -63,7 +64,7 @@ public class SignOutController extends BaseController {
 
         String referrer = request.getHeader("Referer");
         if (referrer == null) {
-            model.addAttribute("backButton", HOME);
+            model.addAttribute(BACK_BUTTON, HOME);
             LOGGER.info("No Referer has been found");
         } else {
             String allowedUrl = allowlistChecker.checkURL(referrer);
@@ -73,7 +74,7 @@ public class SignOutController extends BaseController {
             }
             LOGGER.info("Referer is " + allowedUrl);
             request.getSession().setAttribute("url_prior_signout", allowedUrl);
-            model.addAttribute("backButton", allowedUrl);
+            model.addAttribute(BACK_BUTTON, allowedUrl);
         }
         return getTemplateName();
     }
@@ -88,7 +89,7 @@ public class SignOutController extends BaseController {
         if (valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
-            redirectAttributes.addFlashAttribute("backButton", url);
+            redirectAttributes.addFlashAttribute(BACK_BUTTON, url);
             return new RedirectView(SIGN_OUT_URL);
         }
         if (valueGet.equals("yes")) {
