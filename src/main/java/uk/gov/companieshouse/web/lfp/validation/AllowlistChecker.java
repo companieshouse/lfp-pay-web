@@ -15,7 +15,7 @@ public class AllowlistChecker {
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);
 
-    private static final String HOME = "late-filing-penalty";
+    private static final String HOME = "/late-filing-penalty";
     private static final String REGEX = "\\/late-filing-penalty[\\/[a-zA-Z0-9-]+]+$";
     private static final String SIGN_OUT = "late-filing-penalty/sign-out";
 
@@ -24,9 +24,10 @@ public class AllowlistChecker {
         Pattern p = Pattern.compile(REGEX);
         Matcher m = p.matcher(url);
         if (m.find()) {
+            LOGGER.error("URL valid, returning to " + url);
             return url;
         }
-        LOGGER.error("URL not valid. Returning to " + HOME);
+        LOGGER.error("URL not valid. Returning home...");
         return HOME;
     }
 

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
      class AllowListCheckerTest {
 
-    private static final String HOME = "late-filing-penalty";
+    private static final String HOME = "/late-filing-penalty";
     private static final String VALID_PENALTY_NUMBER = "12345678";
     private static final String VALID_COMPANY_NUMBER = "00987654";
     private static final String INVALID_URL  = "/late-filing-pen/enter-details/";
@@ -47,14 +47,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     @Test
     @DisplayName("test sign out is detected")
     void checkForSignOut() throws Exception {
-        boolean isSignOut = allowListChecker.checkSignout(SIGN_OUT);
+        boolean isSignOut = allowListChecker.checkSignOutIsReferer(SIGN_OUT);
         assertTrue(isSignOut);
     }
 
     @Test
     @DisplayName("test sign out is detected")
     void checkForSignOutWithNonSignOutUrl() throws Exception {
-        boolean isSignOut = allowListChecker.checkSignout(HOME);
+        boolean isSignOut = allowListChecker.checkSignOutIsReferer(HOME);
         assertFalse(isSignOut);
     }
 
