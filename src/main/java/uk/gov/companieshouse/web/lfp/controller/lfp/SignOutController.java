@@ -39,6 +39,8 @@ public class SignOutController extends BaseController {
     private static final String LFP_SIGN_OUT = "lfp/signOut";
     private static final String SIGN_IN_KEY = "signin_info";
     private static final String ACCOUNT_URL = System.getenv("ACCOUNT_URL");
+    private static final String SIGN_OUT_URL = "/late-filing-penalty/sign-out";
+    private static final String HOME = "/late-filing-penalty/";
 
 
     @Override
@@ -84,7 +86,7 @@ public class SignOutController extends BaseController {
         if (valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
-            return new RedirectView("/late-filing-penalty/sign-out");
+            return new RedirectView(SIGN_OUT_URL);
         }
         if (valueGet.equals("yes")) {
             return new RedirectView(ACCOUNT_URL + "/signout");
@@ -93,7 +95,7 @@ public class SignOutController extends BaseController {
             String url = (String) request.getSession().getAttribute("url_prior_signout");
             return new RedirectView(url);
         }
-        return new RedirectView("/late-filing-penalty/");
+        return new RedirectView(HOME);
     }
 
 
