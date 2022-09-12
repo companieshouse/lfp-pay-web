@@ -18,6 +18,4 @@ public interface SessionService {
      * @return a map of session data
      */
     Map<String, Object> getSessionDataFromContext();
-
-    Session getSessionFromContext();
 }

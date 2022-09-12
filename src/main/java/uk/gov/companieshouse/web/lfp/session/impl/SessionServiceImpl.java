@@ -18,9 +18,4 @@ public class SessionServiceImpl implements SessionService {
 
         return SessionHandler.getSessionDataFromContext();
     }
-
-    @Override
-    public Session getSessionFromContext() {
-        return SessionHandler.getSessionFromContext();
-    }
 }

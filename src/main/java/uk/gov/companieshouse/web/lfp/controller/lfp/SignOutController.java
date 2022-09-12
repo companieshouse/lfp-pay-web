@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import uk.gov.companieshouse.session.Session;
-
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
@@ -81,8 +79,6 @@ public class SignOutController extends BaseController {
         LOGGER.debug("Processing sign out POST");
         String valueGet = request.getParameter("radio");
 
-        Session s = sessionService.getSessionFromContext();
-
         if (valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
@@ -91,12 +87,10 @@ public class SignOutController extends BaseController {
         if (valueGet.equals("yes")) {
             return new RedirectView(ACCOUNT_URL + "/signout");
         }
-        if (valueGet.equals("no") && s != null) {
-            String url = (String) request.getSession().getAttribute("url_prior_signout");
+        if (valueGet.equals("no")) {
+            String url =  (String) request.getSession().getAttribute("url_prior_signout");
             return new RedirectView(url);
         }
         return new RedirectView(HOME);
     }
-
-
 }

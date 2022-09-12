@@ -6,10 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.access.method.P;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,6 +22,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
 import uk.gov.companieshouse.web.lfp.validation.AllowlistChecker;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Mockito.mock;
@@ -51,6 +57,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     final Environment env = mock(Environment.class);
 
 
+
+
     @InjectMocks
     private SignOutController controller;
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
@@ -67,12 +75,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @BeforeEach
     private void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
     }
 
-
     @Test
-    @DisplayName("Get Sign out page- success path")
+    @DisplayName("Get Sign out page- success path with no referer")
     void getRequestSuccess() throws Exception {
         when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
         when(sessionData.containsKey(SIGN_IN_KEY)).thenReturn(true);
@@ -81,6 +87,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         this.mockMvc.perform(get(SIGN_OUT_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(SIGN_OUT_VIEW));
+
+    }
+
+
+    @Test
+    @DisplayName("Check if Referer is populated to return a previous page")
+    void getPreviousReferer() throws Exception {
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+        when(sessionData.containsKey(SIGN_IN_KEY)).thenReturn(true);
+        when(allowlistChecker.checkURL(PREVIOUS_PATH)).thenReturn(PREVIOUS_PATH);
+
+
+        this.mockMvc.perform(get(SIGN_OUT_PATH).header("Referer", PREVIOUS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SIGN_OUT_VIEW));
+
+
+    }
+
+
+    @Test
+    @DisplayName("Check Sign out set referer then keep alternative path set")
+    void getCheckSignOutIsReferer() throws Exception {
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+        when(sessionData.containsKey(SIGN_IN_KEY)).thenReturn(true);
+        when(allowlistChecker.checkSignOutIsReferer(SIGN_OUT)).thenReturn(true);
+
+        this.mockMvc.perform(get(SIGN_OUT_PATH).header("Referer", PREVIOUS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SIGN_OUT_VIEW));
+
 
     }
 
@@ -106,13 +143,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     }
 
-    @Test
-    @DisplayName("Post Sign Out - no on radio button")
-    void postRequestRadioNoWithNoValidReferer() throws Exception {
 
-        this.mockMvc.perform(post(SIGN_OUT_PATH)
+    @Test
+    @DisplayName("Post Sign Out - no on radio button with previous referer")
+    void postRequestRadioNoWithValidReferer() throws Exception {
+        HashMap<String, Object> sessionattr = new HashMap<String, Object>();
+        sessionattr.put("url_prior_signout", PREVIOUS_PATH);
+
+        this.mockMvc.perform(post(SIGN_OUT_PATH).header("Referer", PREVIOUS_PATH)
+                .sessionAttrs(sessionattr).param("url_prior_signout", PREVIOUS_PATH)
                 .param(RADIO, "no"))
-                .andExpect(redirectedUrl(HOME));
+                .andExpect(redirectedUrl(PREVIOUS_PATH));
 
     }
 
