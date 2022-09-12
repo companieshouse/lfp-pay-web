@@ -28,5 +28,4 @@ public abstract class BaseController {
 
         model.addAttribute("backButton", navigatorService.getPreviousControllerPath(this.getClass(), pathVars));
     }
-
 }

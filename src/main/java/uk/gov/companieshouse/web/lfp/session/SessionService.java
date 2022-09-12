@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.lfp.session;
 
+
+import uk.gov.companieshouse.session.Session;
+
 import java.util.Map;
 
 /**
@@ -16,4 +19,5 @@ public interface SessionService {
      */
     Map<String, Object> getSessionDataFromContext();
 
+    Session getSessionFromContext();
 }
