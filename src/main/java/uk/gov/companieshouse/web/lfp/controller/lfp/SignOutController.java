@@ -90,7 +90,7 @@ public class SignOutController extends BaseController {
             LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
             redirectAttributes.addFlashAttribute(BACK_BUTTON, url);
-            return new RedirectView(SIGN_OUT_URL);
+            return new RedirectView(SIGN_OUT_URL, true, false);
         }
         if (valueGet.equals("yes")) {
             return new RedirectView(ACCOUNT_URL + "/signout");
