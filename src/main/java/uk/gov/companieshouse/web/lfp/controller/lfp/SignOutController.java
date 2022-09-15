@@ -30,7 +30,6 @@ public class SignOutController extends BaseController {
     @Autowired
     private SessionService sessionService;
 
-
     @Autowired
     private AllowlistChecker allowlistChecker;
 
@@ -50,10 +49,7 @@ public class SignOutController extends BaseController {
 
 
     @GetMapping
-    public String getSignOut(final HttpServletRequest request, Model model) {
-
-
-
+    public String getSignOut(final HttpServletRequest request,  Model model) {
         Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
         if (!sessionData.containsKey(SIGN_IN_KEY)) {
             LOGGER.info("No session data present: " + sessionData);
@@ -68,10 +64,6 @@ public class SignOutController extends BaseController {
             LOGGER.info("No Referer has been found");
         } else {
             String allowedUrl = allowlistChecker.checkURL(referrer);
-            if (allowlistChecker.checkSignOutIsReferer(allowedUrl)) {
-                LOGGER.info("Refer is sign-out- not updating attribute");
-                return getTemplateName();
-            }
             LOGGER.info("Referer is " + allowedUrl);
             request.getSession().setAttribute("url_prior_signout", allowedUrl);
             model.addAttribute(BACK_BUTTON, allowedUrl);
@@ -81,7 +73,7 @@ public class SignOutController extends BaseController {
 
 
     @PostMapping
-    public RedirectView postSignOut(HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) {
+    public RedirectView postSignOut(HttpServletRequest request,  RedirectAttributes redirectAttributes, Model model) {
         LOGGER.debug("Processing sign out POST");
         String valueGet = request.getParameter("radio");
         String url =  (String) request.getSession().getAttribute("url_prior_signout");
@@ -89,7 +81,6 @@ public class SignOutController extends BaseController {
         if (valueGet == null || valueGet.equals("")) {
             LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
-            redirectAttributes.addFlashAttribute(BACK_BUTTON, url);
             return new RedirectView(SIGN_OUT_URL);
         }
         if (valueGet.equals("yes")) {

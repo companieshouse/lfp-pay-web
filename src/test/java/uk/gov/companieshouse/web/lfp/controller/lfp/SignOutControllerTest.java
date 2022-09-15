@@ -32,11 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    class SignOutControllerTest {
-
+class SignOutControllerTest {
 
     private MockMvc mockMvc;
-
 
     @Mock
     private SessionService sessionService;
@@ -85,7 +83,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     }
 
-
     @Test
     @DisplayName("Check if Referer is populated to return a previous page")
     void getPreviousReferer() throws Exception {
@@ -98,25 +95,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                 .andExpect(view().name(SIGN_OUT_VIEW));
-
-
     }
-
-
-    @Test
-    @DisplayName("Check Sign out set referer then keep alternative path set")
-    void getCheckSignOutIsReferer() throws Exception {
-        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
-        when(sessionData.containsKey(SIGN_IN_KEY)).thenReturn(true);
-        when(allowlistChecker.checkSignOutIsReferer(SIGN_OUT)).thenReturn(true);
-
-        this.mockMvc.perform(get(SIGN_OUT_PATH).header("Referer", PREVIOUS_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(SIGN_OUT_VIEW));
-
-
-    }
-
 
     @Test
     @DisplayName("Test sign out page- cannot get sign out page when no session data is present")
@@ -125,8 +104,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         this.mockMvc.perform(get(SIGN_OUT_PATH))
                 .andExpect(view().name(ERROR_VIEW))
                 .andExpect(status().isOk());
-
-
     }
 
     @Test
@@ -136,9 +113,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         this.mockMvc.perform(post(SIGN_OUT_PATH)
                 .param(RADIO, "yes"))
                 .andExpect(redirectedUrl(SIGN_OUT+"/signout"));
-
     }
-
 
     @Test
     @DisplayName("Post Sign Out - no on radio button with previous referer")
@@ -150,15 +125,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .sessionAttrs(sessionattr).param("url_prior_signout", PREVIOUS_PATH)
                 .param(RADIO, "no"))
                 .andExpect(redirectedUrl(PREVIOUS_PATH));
-
     }
 
 
-      @Test
+    @Test
     @DisplayName("Post Sign Out - error message - a radio button has not been selected")
     void postRequestRadioNull() throws Exception {
 
         this.mockMvc.perform(post(SIGN_OUT_PATH))
+
                 .andExpect(redirectedUrl(SIGN_OUT_PATH))
                 .andExpect(flash().attribute("errorMessage",true));
     }
