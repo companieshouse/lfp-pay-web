@@ -5,12 +5,11 @@ import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.controller.ConditionalController;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorServiceTests;
 
 /**
  * Mock conditional controller class for testing exception handling.
  *
- * @see NavigatorServiceTests
+ * @see 'NavigatorServiceTests'
  * @see uk.gov.companieshouse.web.lfp.exception.NavigationException
  */
 @RequestMapping("/mock-controller-eight")

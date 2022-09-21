@@ -6,13 +6,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.auth.filter.UserAuthFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
-import uk.gov.companieshouse.auth.filter.HijackFilter;
 
 @EnableWebSecurity
 public class WebSecurity {
 
+    private WebSecurity() {
+        // private constructor, to hide the implicit public one.
+    }
 
     @Configuration
     @Order(1)

@@ -10,5 +10,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PreviousController {
-    Class<? extends BaseController>[] value();
+    Class<? extends BaseController> value();
 }

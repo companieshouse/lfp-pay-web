@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CompanyServiceImplTest {
+class CompanyServiceImplTest {
 
     @Mock
     private ApiClient apiClient;
