@@ -35,11 +35,11 @@ public class NavigatorService {
      * web journey. The controller search begins at the controller {@code clazz}
      * in the chain and the scan will be performed in the direction specified.
      *
-     * @param  clazz     the controller class in the chain to begin the scan at
-     * @param  direction the direction to follow when scanning the controller chain
+     * @param clazz     the controller class in the chain to begin the scan at
+     * @param direction the direction to follow when scanning the controller chain
      * @return the next or previous controller class in the chain dependent on {@code direction}
      */
-    private Class<?> getControllerClass(Class<?> clazz, Direction direction, String ... pathVars) {
+    private Class<?> getControllerClass(Class<?> clazz, Direction direction) {
 
         Class<?> controllerClass;
 
@@ -111,7 +111,7 @@ public class NavigatorService {
      */
     private Class<?> findControllerClass(Class<?> clazz, Direction direction, String... pathVars) {
 
-        Class<?> controllerClass = getControllerClass(clazz, direction, pathVars);
+        Class<?> controllerClass = getControllerClass(clazz, direction);
         if (!isConditionalController(controllerClass) || pathVars.length != EXPECTED_PATH_VAR_COUNT) {
             return controllerClass;
         }
