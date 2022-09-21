@@ -9,7 +9,6 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
-import uk.gov.companieshouse.web.lfp.controller.BranchController;
 import uk.gov.companieshouse.web.lfp.controller.ConditionalController;
 import uk.gov.companieshouse.web.lfp.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.lfp.exception.NavigationException;
@@ -45,9 +44,9 @@ public class NavigatorService {
         Class<?> controllerClass;
 
         if (direction == Direction.FORWARD) {
-            controllerClass = getNextControllerClass(clazz, pathVars);
+            controllerClass = getNextControllerClass(clazz);
         } else {
-            controllerClass = getPreviousControllerClass(clazz, pathVars);
+            controllerClass = getPreviousControllerClass(clazz);
         }
 
         return controllerClass;
@@ -57,10 +56,10 @@ public class NavigatorService {
      * Returns the class of the next controller in the chain that follows
      * the controller class {@code clazz}.
      *
-     * @param  clazz the controller class in the chain to begin the scan at
+     * @param clazz the controller class in the chain to begin the scan at
      * @return the next controller class in the chain
      */
-    private Class<?> getNextControllerClass(Class<?> clazz, String ... pathVars) {
+    private Class<?> getNextControllerClass(Class<?> clazz) {
         NextController nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
             throw new MissingAnnotationException("Missing @NextController annotation on " + clazz);
@@ -79,10 +78,10 @@ public class NavigatorService {
      * Returns the class of the previous controller in the chain that precedes
      * the controller class {@code clazz}.
      *
-     * @param  clazz the controller class in the chain to begin the scan at
+     * @param clazz the controller class in the chain to begin the scan at
      * @return the previous controller class in the chain
      */
-    private Class<?> getPreviousControllerClass(Class<?> clazz, String ... pathVars) {
+    private Class<?> getPreviousControllerClass(Class<?> clazz) {
         PreviousController previousControllerAnnotation = AnnotationUtils
                 .findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
@@ -230,10 +229,6 @@ public class NavigatorService {
      */
     private boolean isConditionalController(Class<?> clazz) {
         return ConditionalController.class.isAssignableFrom(clazz);
-    }
-
-    private boolean isBranchController(Class<?> clazz) {
-        return BranchController.class.isAssignableFrom(clazz);
     }
 
     private enum Direction {
