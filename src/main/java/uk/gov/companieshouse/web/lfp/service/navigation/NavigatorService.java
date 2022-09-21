@@ -66,13 +66,13 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @NextController annotation on " + clazz);
         }
 
-        Class<?>[] classList = nextControllerAnnotation.value();
+        Class<?> classFound = nextControllerAnnotation.value();
 
-        if (classList.length == 0) {
+        if (classFound == null) {
             throw new NavigationException("getNextControllerClass: No next controller to navigate to " + clazz);
         }
 
-        return findControllerFromClassList("getNextControllerClass", clazz, classList, pathVars);
+        return classFound;
     }
 
     /**
@@ -89,50 +89,13 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz);
         }
 
-        Class<?>[] classList = previousControllerAnnotation.value();
+        Class<?> classValue = previousControllerAnnotation.value();
 
-        if (classList.length == 0) {
+        if (classValue == null) {
             throw new NavigationException("getPreviousControllerClass: No previous controller to navigate to " + clazz);
         }
 
-        return findControllerFromClassList("getPreviousControllerClass", clazz, classList, pathVars);
-    }
-
-    private Class<?> findControllerFromClassList(String direction,
-                                                 Class<?> clazz,
-                                                 Class<?>[] classList,
-                                                 String[] pathVars) {
-        if (classList.length == 1) {
-            return classList[0];
-        }
-
-        Class<?> notImplementingBranch = null;
-
-        for (int i = 0, j = 0; i < classList.length; i++) {
-
-            Class<?> specificClass = classList[i];
-
-            if (!isBranchController(specificClass)) {
-                j++;
-                notImplementingBranch = specificClass;
-
-                if (j > 1) {
-                    throw new NavigationException(direction + ": More than one default branch " + clazz);
-                }
-            } else {
-                BranchController potential = (BranchController)applicationContext.getBean(specificClass);
-
-                if (potential.shouldBranch(pathVars)) {
-                    return potential.getClass();
-                }
-            }
-        }
-
-        if (notImplementingBranch != null) {
-            return notImplementingBranch;
-        } else {
-            throw new NavigationException(direction + ": No default branch and no branch is valid " + clazz);
-        }
+        return classValue;
     }
 
     /**
