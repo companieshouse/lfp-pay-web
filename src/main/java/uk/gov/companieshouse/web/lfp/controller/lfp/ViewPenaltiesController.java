@@ -30,7 +30,7 @@ import java.util.Locale;
 @RequestMapping("/late-filing-penalty/company/{companyNumber}/penalty/{penaltyNumber}/view-penalties")
 public class ViewPenaltiesController extends BaseController {
 
-    private static final String LFP_VIEW_PENALTIES = "lfp/viewPenalties";
+    private static String LFP_VIEW_PENALTIES = "lfp/viewPenalties";
 
     private static final String PENALTY_TYPE = "penalty";
 
@@ -75,8 +75,8 @@ public class ViewPenaltiesController extends BaseController {
         if (lateFilingPenalty == null
                 || lateFilingPenalties.size() != 1
                 || !lateFilingPenalty.getId().equals(penaltyNumber)
-                || Boolean.TRUE.equals(lateFilingPenalty.getDca())
-                || Boolean.TRUE.equals(lateFilingPenalty.getPaid())
+                || lateFilingPenalty.getDca()
+                || lateFilingPenalty.getPaid()
                 || lateFilingPenalty.getOutstanding() <= 0
                 || !lateFilingPenalty.getOriginalAmount().equals(lateFilingPenalty.getOutstanding())
                 || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
@@ -101,6 +101,7 @@ public class ViewPenaltiesController extends BaseController {
     @PostMapping
     public String postViewPenalties(@PathVariable String companyNumber,
                                     @PathVariable String penaltyNumber,
+                                    Model model,
                                     HttpServletRequest request) {
 
         PayableLateFilingPenaltySession payableLateFilingPenaltySession;

@@ -3,7 +3,8 @@ package uk.gov.companieshouse.web.lfp.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Healthcheck controller returns a 200 response if the service is running.
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HealthcheckController {
 
-    @GetMapping(value = "/late-filing-penalty/healthcheck")
-    public ResponseEntity<HttpStatus> performHealthCheck() {
+    @RequestMapping(value = "/late-filing-penalty/healthcheck", method = RequestMethod.GET)
+    public ResponseEntity<?> performHealthCheck() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class EnterLFPDetailsControllerTest {
+public class EnterLFPDetailsControllerTest {
 
     private MockMvc mockMvc;
 

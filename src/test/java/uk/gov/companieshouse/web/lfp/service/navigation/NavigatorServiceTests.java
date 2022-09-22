@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.lfp.controller.ConditionalController;
 import uk.gov.companieshouse.web.lfp.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.lfp.exception.NavigationException;
 import uk.gov.companieshouse.web.lfp.service.navigation.failure.MockControllerEight;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class NavigatorServiceTests {
+public class NavigatorServiceTests {
 
     @Mock
     private ApplicationContext applicationContext;
@@ -42,7 +41,7 @@ class NavigatorServiceTests {
     private static final String COMPANY_lfp_ID = "companylfpId";
 
     @Test
-    void missingNextControllerAnnotation() {
+    public void missingNextControllerAnnotation() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
@@ -50,7 +49,7 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void missingPreviousControllerAnnotation() {
+    public void missingPreviousControllerAnnotation() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getPreviousControllerPath(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
@@ -58,7 +57,7 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void missingRequestMappingAnnotationOnNextController() {
+    public void missingRequestMappingAnnotationOnNextController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
@@ -66,7 +65,7 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void missingRequestMappingAnnotationOnPreviousController() {
+    public void missingRequestMappingAnnotationOnPreviousController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getPreviousControllerPath(MockControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
@@ -74,7 +73,7 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void missingRequestMappingValueOnNextController() {
+    public void missingRequestMappingValueOnNextController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerFive.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
@@ -82,7 +81,7 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void missingRequestMappingValueOnPreviousController() {
+    public void missingRequestMappingValueOnPreviousController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getPreviousControllerPath(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
@@ -90,7 +89,7 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void missingExpectedNumberOfPathVariablesForMandatoryController() {
+    public void missingExpectedNumberOfPathVariablesForMandatoryController() {
 
         Throwable exception = assertThrows(NavigationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER));
@@ -99,10 +98,9 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void successfulRedirectStartingFromMandatoryControllerWithExpectedNumberOfPathVariables() {
-        when(applicationContext.getBean(ConditionalController.class))
-                .thenReturn(new MockSuccessJourneyControllerTwo())
-                .thenReturn(new MockSuccessJourneyControllerThree());
+    public void successfulRedirectStartingFromMandatoryControllerWithExpectedNumberOfPathVariables() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
         String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID);
 
@@ -111,8 +109,8 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void successfulRedirectStartingFromConditionalControllerWithExpectedNumberOfPathVariables() {
-        when(applicationContext.getBean(ConditionalController.class)).thenReturn(new MockSuccessJourneyControllerThree());
+    public void successfulRedirectStartingFromConditionalControllerWithExpectedNumberOfPathVariables() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
         String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID);
 
@@ -121,10 +119,9 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void successfulPathReturnedWithSingleConditionalControllerInChain() {
-        when(applicationContext.getBean(ConditionalController.class))
-                .thenReturn(new MockSuccessJourneyControllerTwo())
-                .thenReturn(new MockSuccessJourneyControllerThree());
+    public void successfulPathReturnedWithSingleConditionalControllerInChain() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
         String redirect = navigatorService.getPreviousControllerPath(MockSuccessJourneyControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID);
 
@@ -133,13 +130,9 @@ class NavigatorServiceTests {
     }
 
     @Test
-    void navigationExceptionThrownWhenWillRenderThrowsServiceException() {
-        when(applicationContext.getBean(ConditionalController.class))
-                .thenReturn(new MockSuccessJourneyControllerTwo())
-                .thenReturn(new MockSuccessJourneyControllerThree());
-        when(applicationContext.getBean(ConditionalController.class))
-                .thenReturn(new MockControllerSeven())
-                .thenReturn(new MockControllerEight());
+    public void navigationExceptionThrownWhenWillRenderThrowsServiceException() {
+        when(applicationContext.getBean(MockControllerSeven.class)).thenReturn(new MockControllerSeven());
+        when(applicationContext.getBean(MockControllerEight.class)).thenReturn(new MockControllerEight());
 
         assertThrows(NavigationException.class, () -> navigatorService.getNextControllerRedirect(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_lfp_ID));
 
