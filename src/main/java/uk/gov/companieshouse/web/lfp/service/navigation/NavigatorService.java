@@ -35,8 +35,8 @@ public class NavigatorService {
      * web journey. The controller search begins at the controller {@code clazz}
      * in the chain and the scan will be performed in the direction specified.
      *
-     * @param  clazz     the controller class in the chain to begin the scan at
-     * @param  direction the direction to follow when scanning the controller chain
+     * @param clazz     the controller class in the chain to begin the scan at
+     * @param direction the direction to follow when scanning the controller chain
      * @return the next or previous controller class in the chain dependent on {@code direction}
      */
     private Class<?> getControllerClass(Class<?> clazz, Direction direction) {
@@ -56,7 +56,7 @@ public class NavigatorService {
      * Returns the class of the next controller in the chain that follows
      * the controller class {@code clazz}.
      *
-     * @param  clazz the controller class in the chain to begin the scan at
+     * @param clazz the controller class in the chain to begin the scan at
      * @return the next controller class in the chain
      */
     private Class<?> getNextControllerClass(Class<?> clazz) {
@@ -65,20 +65,20 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @NextController annotation on " + clazz);
         }
 
-        Class<?> controllerValue = nextControllerAnnotation.value();
+        Class<?> classFound = nextControllerAnnotation.value();
 
-        if (controllerValue == null) {
+        if (classFound == null) {
             throw new NavigationException("getNextControllerClass: No next controller to navigate to " + clazz);
         }
 
-        return controllerValue;
+        return classFound;
     }
 
     /**
      * Returns the class of the previous controller in the chain that precedes
      * the controller class {@code clazz}.
      *
-     * @param  clazz the controller class in the chain to begin the scan at
+     * @param clazz the controller class in the chain to begin the scan at
      * @return the previous controller class in the chain
      */
     private Class<?> getPreviousControllerClass(Class<?> clazz) {
@@ -88,13 +88,13 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz);
         }
 
-        Class<?> controllerValue = previousControllerAnnotation.value();
+        Class<?> classValue = previousControllerAnnotation.value();
 
-        if (controllerValue == null) {
+        if (classValue == null) {
             throw new NavigationException("getPreviousControllerClass: No previous controller to navigate to " + clazz);
         }
 
-        return controllerValue;
+        return classValue;
     }
 
     /**
