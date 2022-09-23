@@ -59,7 +59,7 @@ class CompanyServiceImplTest {
 
     @Test
     @DisplayName("Append - Do not append to company number with letters")
-    void validateCompanyNumberWithLettersNotAppended() throws Exception {
+    void validateCompanyNumberWithLettersNotAppended() {
 
         String companyNumber = mockCompanyService.appendToCompanyNumber(COMPANY_NUMBER_WITH_LETTERS);
         assertEquals(COMPANY_NUMBER_WITH_LETTERS, companyNumber);
@@ -67,7 +67,7 @@ class CompanyServiceImplTest {
 
     @Test
     @DisplayName("Append - Eight Digit company number returned the same")
-    void validationEightDigitCompanyNumberReturnedTheSame() throws Exception {
+    void validationEightDigitCompanyNumberReturnedTheSame() {
 
         String companyNumber = mockCompanyService.appendToCompanyNumber(COMPANY_NUMBER_WITH_EIGHT_DIGITS);
         assertEquals(COMPANY_NUMBER_WITH_EIGHT_DIGITS, companyNumber);
@@ -75,7 +75,7 @@ class CompanyServiceImplTest {
 
     @Test
     @DisplayName("Append - Six Digit company number should have 0's appended to beginning")
-    void validationSixDigitCompanyNumberReturnedWithAppendedZeros() throws Exception {
+    void validationSixDigitCompanyNumberReturnedWithAppendedZeros() {
 
         String companyNumber = mockCompanyService.appendToCompanyNumber(COMPANY_NUMBER_WITH_SIX_DIGITS);
         assertEquals(APPENDED_SIX_DIGIT_COMPANY_NUMBER, companyNumber);

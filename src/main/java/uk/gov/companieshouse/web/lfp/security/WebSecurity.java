@@ -10,12 +10,9 @@ import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.auth.filter.UserAuthFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
 
+@SuppressWarnings("java:S1118")  // Constructor is required for Spring Application
 @EnableWebSecurity
 public class WebSecurity {
-
-    private WebSecurity() {
-        // private constructor, to hide the implicit public one.
-    }
 
     @Configuration
     @Order(1)
