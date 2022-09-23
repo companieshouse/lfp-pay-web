@@ -9,13 +9,10 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
-import uk.gov.companieshouse.web.lfp.controller.BranchController;
 import uk.gov.companieshouse.web.lfp.controller.ConditionalController;
 import uk.gov.companieshouse.web.lfp.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.lfp.exception.NavigationException;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
-
-import java.lang.annotation.Annotation;
 
 /**
  * The {@code NavigatorService} class provides support methods for handling
@@ -42,14 +39,14 @@ public class NavigatorService {
      * @param  direction the direction to follow when scanning the controller chain
      * @return the next or previous controller class in the chain dependent on {@code direction}
      */
-    private Class getControllerClass(Class clazz, Direction direction, String ... pathVars) {
+    private Class<?> getControllerClass(Class<?> clazz, Direction direction) {
 
-        Class controllerClass;
+        Class<?> controllerClass;
 
         if (direction == Direction.FORWARD) {
-            controllerClass = getNextControllerClass(clazz, pathVars);
+            controllerClass = getNextControllerClass(clazz);
         } else {
-            controllerClass = getPreviousControllerClass(clazz, pathVars);
+            controllerClass = getPreviousControllerClass(clazz);
         }
 
         return controllerClass;
@@ -62,106 +59,42 @@ public class NavigatorService {
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the next controller class in the chain
      */
-    private Class getNextControllerClass(Class clazz, String ... pathVars) {
-        Annotation nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
+    private Class<?> getNextControllerClass(Class<?> clazz) {
+        NextController nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
-            throw new MissingAnnotationException("Missing @NextController annotation on " + clazz.toString());
+            throw new MissingAnnotationException("Missing @NextController annotation on " + clazz);
         }
 
-        Class[] classList = ((NextController) nextControllerAnnotation).value();
+        Class<?> controllerValue = nextControllerAnnotation.value();
 
-        if (classList.length > 0) {
-
-            if (classList.length == 1) {
-                return ((NextController) nextControllerAnnotation).value()[0];
-            } else {
-
-                Class notImplementingBranch = null;
-
-                for (int i = 0, j = 0; i < classList.length; i++) {
-
-                    Class specificClass = classList[i];
-
-                    if (!isBranchController(specificClass)) {
-                        j++;
-                        notImplementingBranch = specificClass;
-
-                        if (j > 1) {
-                            throw new NavigationException("getNextControllerClass: More than one default branch " + clazz.toString());
-                        }
-                    } else {
-                        BranchController potential = (BranchController)applicationContext.getBean(specificClass);
-
-                        if (potential.shouldBranch(pathVars)) {
-                            return potential.getClass();
-                        }
-                    }
-                }
-
-                if (notImplementingBranch != null) {
-                    return notImplementingBranch;
-                } else {
-                    throw new NavigationException("getNextControllerClass: No default branch and no branch is valid " + clazz.toString());
-                }
-            }
-        } else {
-            throw new NavigationException("getNextControllerClass: No next controller to navigate to " + clazz.toString());
+        if (controllerValue == null) {
+            throw new NavigationException("getNextControllerClass: No next controller to navigate to " + clazz);
         }
+
+        return controllerValue;
     }
 
     /**
-     * Returns the class of the previous controller in the chain that preceedes
+     * Returns the class of the previous controller in the chain that precedes
      * the controller class {@code clazz}.
      *
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the previous controller class in the chain
      */
-    private Class getPreviousControllerClass(Class clazz, String ... pathVars) {
-        Annotation previousControllerAnnotation = AnnotationUtils
+    private Class<?> getPreviousControllerClass(Class<?> clazz) {
+        PreviousController previousControllerAnnotation = AnnotationUtils
                 .findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
-            throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz.toString());
+            throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz);
         }
 
-        Class[] classList = ((PreviousController) previousControllerAnnotation).value();
+        Class<?> controllerValue = previousControllerAnnotation.value();
 
-        if (classList.length > 0) {
-
-            if (classList.length == 1) {
-                return ((PreviousController) previousControllerAnnotation).value()[0];
-            } else {
-
-                Class notImplementingBranch = null;
-
-                for (int i = 0, j = 0; i < classList.length; i++) {
-
-                    Class specificClass = classList[i];
-
-                    if (!isBranchController(specificClass)) {
-                        j++;
-                        notImplementingBranch = specificClass;
-
-                        if (j > 1) {
-                            throw new NavigationException("getPreviousControllerClass: More than one default branch " + clazz.toString());
-                        }
-                    } else {
-                        BranchController potential = (BranchController)applicationContext.getBean(specificClass);
-
-                        if (potential.shouldBranch(pathVars)) {
-                            return potential.getClass();
-                        }
-                    }
-                }
-
-                if (notImplementingBranch != null) {
-                    return notImplementingBranch;
-                } else {
-                    throw new NavigationException("getPreviousControllerClass: No default branch and no branch is valid " + clazz.toString());
-                }
-            }
-        } else {
-            throw new NavigationException("getPreviousControllerClass: No previous controller to navigate to " + clazz.toString());
+        if (controllerValue == null) {
+            throw new NavigationException("getPreviousControllerClass: No previous controller to navigate to " + clazz);
         }
+
+        return controllerValue;
     }
 
     /**
@@ -176,9 +109,9 @@ public class NavigatorService {
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the previous controller class in the chain
      */
-    private Class findControllerClass(Class clazz, Direction direction, String... pathVars) {
+    private Class<?> findControllerClass(Class<?> clazz, Direction direction, String... pathVars) {
 
-        Class controllerClass = getControllerClass(clazz, direction, pathVars);
+        Class<?> controllerClass = getControllerClass(clazz, direction);
         if (!isConditionalController(controllerClass) || pathVars.length != EXPECTED_PATH_VAR_COUNT) {
             return controllerClass;
         }
@@ -192,7 +125,7 @@ public class NavigatorService {
         while (!foundController) {
 
             if (isConditionalController(controllerClass)) {
-                ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
+                ConditionalController conditionalController = applicationContext.getBean(ConditionalController.class);
 
                 try {
                     if (!conditionalController.willRender(companyNumber, transactionId, companyAccountsId)) {
@@ -214,7 +147,7 @@ public class NavigatorService {
     /**
      * Searches the controller chain for the next controller, taking into
      * consideration any conditional controllers that may not have data to
-     * render, and returns a string comprising of the redirect prefix and
+     * render, and returns a string consisting of the redirect prefix and
      * {@link RequestMapping} path of the next controller after populating
      * with the path variables specified.
      *
@@ -223,27 +156,27 @@ public class NavigatorService {
      * @return a string comprising redirect prefix and {@link RequestMapping}
      *         path of the next controller
      */
-    public String getNextControllerRedirect(Class clazz, String... pathVars) {
+    public String getNextControllerRedirect(Class<?> clazz, String... pathVars) {
 
-        Class nextControllerClass = findControllerClass(clazz, Direction.FORWARD, pathVars);
+        Class<?> nextControllerClass = findControllerClass(clazz, Direction.FORWARD, pathVars);
 
-        Annotation requestMappingAnnotation = AnnotationUtils
+        RequestMapping requestMappingAnnotation = AnnotationUtils
                 .findAnnotation(nextControllerClass, RequestMapping.class);
         if (requestMappingAnnotation == null) {
-            throw new MissingAnnotationException("Missing @RequestMapping annotation on " + nextControllerClass.toString());
+            throw new MissingAnnotationException("Missing @RequestMapping annotation on " + nextControllerClass);
         }
 
-        String[] mappings = ((RequestMapping) requestMappingAnnotation).value();
+        String[] mappings = requestMappingAnnotation.value();
 
-        if (mappings.length <= 0) {
-            throw new MissingAnnotationException("Missing @RequestMapping value on " + nextControllerClass.toString());
+        if (mappings.length == 0) {
+            throw new MissingAnnotationException("Missing @RequestMapping value on " + nextControllerClass);
         }
 
         for (String mapping : mappings) {
             UriTemplate mappingTemplate = new UriTemplate(mapping);
 
             if (pathVars.length == mappingTemplate.getVariableNames().size()) {
-                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + mappingTemplate.expand((Object[]) pathVars).toString();
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + mappingTemplate.expand((Object[]) pathVars);
             }
         }
 
@@ -261,20 +194,20 @@ public class NavigatorService {
      * @return a string comprising the {@link RequestMapping} path from the
      *         previous controller
      */
-    public String getPreviousControllerPath(Class clazz, String... pathVars) {
+    public String getPreviousControllerPath(Class<?> clazz, String... pathVars) {
 
-        Class previousControllerClass = findControllerClass(clazz, Direction.BACKWARD, pathVars);
+        Class<?> previousControllerClass = findControllerClass(clazz, Direction.BACKWARD, pathVars);
 
-        Annotation requestMappingAnnotation = AnnotationUtils
+        RequestMapping requestMappingAnnotation = AnnotationUtils
                 .findAnnotation(previousControllerClass, RequestMapping.class);
         if (requestMappingAnnotation == null) {
-            throw new MissingAnnotationException("Missing @RequestMapping annotation on " + previousControllerClass.toString());
+            throw new MissingAnnotationException("Missing @RequestMapping annotation on " + previousControllerClass);
         }
 
-        String[] mappings = ((RequestMapping) requestMappingAnnotation).value();
+        String[] mappings = requestMappingAnnotation.value();
 
-        if (mappings.length <= 0) {
-            throw new MissingAnnotationException("Missing @RequestMapping value on " + previousControllerClass.toString());
+        if (mappings.length == 0) {
+            throw new MissingAnnotationException("Missing @RequestMapping value on " + previousControllerClass);
         }
 
         for (String mapping : mappings) {
@@ -294,12 +227,8 @@ public class NavigatorService {
      *
      * @return true if {@code clazz} implements the {@link ConditionalController} interface
      */
-    private boolean isConditionalController(Class clazz) {
+    private boolean isConditionalController(Class<?> clazz) {
         return ConditionalController.class.isAssignableFrom(clazz);
-    }
-
-    private boolean isBranchController(Class clazz) {
-        return BranchController.class.isAssignableFrom(clazz);
     }
 
     private enum Direction {

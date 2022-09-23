@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.lfp.api;
 
 import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.InternalApiClient;
 
 /**
  * The {@code ApiClientServiceImpl} interface provides an abstraction that can be

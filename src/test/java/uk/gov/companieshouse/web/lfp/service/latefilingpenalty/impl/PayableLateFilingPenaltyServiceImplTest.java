@@ -15,7 +15,6 @@ import uk.gov.companieshouse.api.handler.latefilingpenalty.payablelatefilingpena
 import uk.gov.companieshouse.api.handler.latefilingpenalty.payablelatefilingpenalty.request.PayableLateFilingPenaltyCreate;
 import uk.gov.companieshouse.api.handler.latefilingpenalty.payablelatefilingpenalty.request.PayableLateFilingPenaltyGet;
 import uk.gov.companieshouse.api.model.ApiResponse;
-import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenaltySession;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenalty;
 import uk.gov.companieshouse.api.model.latefilingpenalty.PayableLateFilingPenaltySession;
@@ -23,8 +22,6 @@ import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.util.LFPTestUtility;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PayableLateFilingPenaltyServiceImplTest {
+class PayableLateFilingPenaltyServiceImplTest {
 
     @Mock
     private ApiClient apiClient;

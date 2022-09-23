@@ -4,13 +4,12 @@ import uk.gov.companieshouse.web.lfp.annotation.NextController;
 import uk.gov.companieshouse.web.lfp.annotation.PreviousController;
 import uk.gov.companieshouse.web.lfp.controller.BaseController;
 import uk.gov.companieshouse.web.lfp.controller.ConditionalController;
-import uk.gov.companieshouse.web.lfp.service.navigation.NavigatorServiceTests;
 
 /**
  * Mock conditional controller class for testing missing expected number of
  * path variables.
  *
- * @see NavigatorServiceTests
+ * @see N'avigatorServiceTests'
  */
 @NextController(MockControllerFive.class)
 @PreviousController(MockControllerThree.class)

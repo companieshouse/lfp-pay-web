@@ -29,7 +29,7 @@ public class LFPStartController extends BaseController {
     private static final String LFP_SERVICE_UNAVAILABLE = "lfp/serviceUnavailable";
 
     @Autowired
-    private LateFilingPenaltyService LateFilingPenaltyService;
+    private LateFilingPenaltyService lateFilingPenaltyService;
 
     @Autowired
     private Environment environment;
@@ -44,7 +44,7 @@ public class LFPStartController extends BaseController {
 
         FinanceHealthcheck financeHealthcheck;
         try {
-            financeHealthcheck = LateFilingPenaltyService.checkFinanceSystemAvailableTime();
+            financeHealthcheck = lateFilingPenaltyService.checkFinanceSystemAvailableTime();
         } catch (ServiceException ex) {
             return ERROR_VIEW;
         }
