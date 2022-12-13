@@ -15,6 +15,9 @@
     <link
             th:href="@{{cdnUrl}/stylesheets/govuk-frontend/v3.11.0/govuk-frontend-3.11.0.min.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
             media="all" rel="stylesheet" type="text/css" />
+    <link 
+            th:href="@{{cdnUrl}/stylesheets/session-timeout.css(cdnUrl=${@environment.getProperty('cdn.url')})}" 
+            media="all" rel="stylesheet" type="text/css" />
     <link
             rel="icon"
             th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
@@ -31,6 +34,7 @@
 <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/session-timeout.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 
 <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
 
