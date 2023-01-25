@@ -10,6 +10,9 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.latefilingpenalty.FinanceHealthcheck;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalties;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
+import uk.gov.companieshouse.web.lfp.LFPWebApplication;
 import uk.gov.companieshouse.web.lfp.api.ApiClientService;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
@@ -28,6 +31,9 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
     private static final String PENALTY_TYPE = "penalty";
 
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);
+
     @Autowired
     private ApiClientService apiClientService;
 
@@ -38,9 +44,10 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
         try {
             String uri = GET_LFP_URI.expand(companyNumber).toString();
+            LOGGER.debug("Sending request to API to fetch late filing penalties");
             lateFilingPenalties = apiClient.lateFilingPenalty().get(uri).execute().getData();
         } catch (ApiErrorResponseException ex) {
-            throw new ServiceException("Error retrieving Late Filing Penalty", ex);
+            throw new ServiceException("Error retrieving Late Filing Penalty from API", ex);
         } catch (URIValidationException ex) {
             throw new ServiceException("Invalid URI for Late Filing Penalty", ex);
         }

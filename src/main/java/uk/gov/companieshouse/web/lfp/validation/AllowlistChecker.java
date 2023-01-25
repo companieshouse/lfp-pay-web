@@ -27,7 +27,7 @@ public class AllowlistChecker {
             LOGGER.info("URL valid, returning to " + url);
             return url;
         }
-        LOGGER.error("URL not valid. Returning home...");
+        LOGGER.error("URL not valid. Returning to landing page...");
         return HOME;
     }
 
