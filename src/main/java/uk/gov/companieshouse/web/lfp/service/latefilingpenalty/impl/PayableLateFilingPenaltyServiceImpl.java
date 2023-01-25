@@ -38,7 +38,7 @@ public class PayableLateFilingPenaltyServiceImpl implements PayableLateFilingPen
             String uri = GET_PAYABLE_LFP_URI.expand(companyNumber, penaltyId).toString();
             payableLateFilingPenalty = apiClient.payableLateFilingPenalty().get(uri).execute().getData();
         } catch (ApiErrorResponseException ex) {
-            throw new ServiceException("Error retrieving Payable Late Filing Penalty", ex);
+            throw new ServiceException("Error retrieving Payable Late Filing Penalty from API", ex);
         } catch (URIValidationException ex) {
             throw new ServiceException("Invalid URI for Payable Late Filing Penalty", ex);
         }
@@ -57,7 +57,7 @@ public class PayableLateFilingPenaltyServiceImpl implements PayableLateFilingPen
             LateFilingPenaltySession lateFilingPenaltySession = generateLateFilingPenaltySessionData(penaltyNumber, amount);
             apiResponse = apiClient.payableLateFilingPenalty().create(uri, lateFilingPenaltySession).execute();
         } catch (ApiErrorResponseException ex) {
-            throw new ServiceException("Error retrieving Late Filing Penalty", ex);
+            throw new ServiceException("Error retrieving Late Filing Penalty from API", ex);
         } catch (URIValidationException ex) {
             throw new ServiceException("Invalid URI for Late Filing Penalty", ex);
         }

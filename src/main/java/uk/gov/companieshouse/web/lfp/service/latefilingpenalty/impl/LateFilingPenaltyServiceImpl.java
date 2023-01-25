@@ -31,7 +31,7 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
     private static final String PENALTY_TYPE = "penalty";
 
-    protected static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = LoggerFactory
             .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);
 
     @Autowired
