@@ -80,6 +80,7 @@ public class ViewPenaltiesController extends BaseController {
                 || lateFilingPenalty.getOutstanding() <= 0
                 || !lateFilingPenalty.getOriginalAmount().equals(lateFilingPenalty.getOutstanding())
                 || !lateFilingPenalty.getType().equals(PENALTY_TYPE)) {
+            LOGGER.info("Penalty" + lateFilingPenalty + " is invalid, cannot access 'view penalty' screen");
             return ERROR_VIEW;
         }
 
@@ -114,6 +115,7 @@ public class ViewPenaltiesController extends BaseController {
                     companyNumber,
                     penaltyNumber,
                     lateFilingPenalty.getOutstanding());
+            LOGGER.info("Call late filing penalty service and create payable session");
 
         } catch (ServiceException e) {
 

@@ -87,7 +87,6 @@ public class SignOutController extends BaseController {
         String url =  (String) request.getSession().getAttribute("url_prior_signout");
 
         if (valueGet == null || valueGet.equals("")) {
-            LOGGER.info("radio: " + valueGet);
             redirectAttributes.addFlashAttribute("errorMessage", true);
             redirectAttributes.addFlashAttribute(BACK_BUTTON, url);
             return new RedirectView(SIGN_OUT_URL, true, false);

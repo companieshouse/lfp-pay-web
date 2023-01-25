@@ -50,16 +50,19 @@ public class LFPStartController extends BaseController {
         }
 
         if (financeHealthcheck.getMessage().equals(FinanceHealthcheckStatus.HEALTHY.getStatus())) {
+            LOGGER.debug("financial health check: " + financeHealthcheck.getMessage());
             if(startId.isPresent() && startId.get() == 0) {
                 return navigatorService.getNextControllerRedirect(this.getClass());
             }
 
             return getTemplateName();
         } else if (financeHealthcheck.getMessage().equals(FinanceHealthcheckStatus.UNHEALTHY_PLANNED_MAINTENANCE.getStatus())) {
+            LOGGER.debug("financial health check: " + financeHealthcheck.getMessage());
             DateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
             DateFormat displayDateFormat = new SimpleDateFormat("h:mm a z 'on' EEEE d MMMM yyyy");
             model.addAttribute("date", displayDateFormat.format(
                     inputDateFormat.parse(financeHealthcheck.getMaintenanceEndTime())));
+            LOGGER.error("Service is unavailable");
             return LFP_SERVICE_UNAVAILABLE;
         } else {
             return ERROR_VIEW;
