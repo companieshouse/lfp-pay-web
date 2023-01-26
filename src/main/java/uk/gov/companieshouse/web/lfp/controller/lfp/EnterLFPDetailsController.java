@@ -83,7 +83,7 @@ public class EnterLFPDetailsController extends BaseController {
             // If there are no payable late filing penalties either the company does not exist or has no penalties.
             if (payableLateFilingPenalties.isEmpty()) {
                 LOGGER.info("No late filing penalties for company no. "  +  companyNumber
-                        + " and penalty: " +   penaltyNumber + " . Or the company no. does not exist");
+                        + " and penalty: " +   penaltyNumber);
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_NO_PENALTY_FOUND;
             }
 
@@ -97,7 +97,6 @@ public class EnterLFPDetailsController extends BaseController {
             LateFilingPenalty lateFilingPenalty;
             // If the only penalty in the List does not have the provided penalty number return Penalty Not Found.
             if (payableLateFilingPenalties.get(0).getId().equals(penaltyNumber)) {
-                LOGGER.info("Penalty number " + penaltyNumber + " has been found.");
                 lateFilingPenalty = payableLateFilingPenalties.get(0);
             } else {
                 LOGGER.info("Penalty Not Found - the penalty for " + companyNumber
@@ -128,7 +127,6 @@ public class EnterLFPDetailsController extends BaseController {
                         + "Or is not of type penalty, type : " + lateFilingPenalty.getType() );
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + urlGenerator(companyNumber, penaltyNumber) + LFP_ONLINE_PAYMENT_UNAVAILABLE;
             }
-            LOGGER.debug("Redirecting to payment screen");
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, penaltyNumber);
 
         } catch (ServiceException ex) {
@@ -143,6 +141,3 @@ public class EnterLFPDetailsController extends BaseController {
     }
 
 }
-
-
-

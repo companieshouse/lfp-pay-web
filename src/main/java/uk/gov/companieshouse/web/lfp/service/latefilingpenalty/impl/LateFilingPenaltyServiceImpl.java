@@ -31,6 +31,8 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
     private static final String PENALTY_TYPE = "penalty";
 
+    private static final String LOG_MESSAGE_RETURNING_DETAILS = "API has responded. Returning details for company number and penalty number: ";
+
     private static final Logger LOGGER = LoggerFactory
             .getLogger(LFPWebApplication.APPLICATION_NAME_SPACE);
 
@@ -44,7 +46,8 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
         try {
             String uri = GET_LFP_URI.expand(companyNumber).toString();
-            LOGGER.debug("Sending request to API to fetch late filing penalties");
+            LOGGER.debug("Sending request to API to fetch late filing penalties for company number "
+                    + companyNumber + " and penalty " + penaltyNumber);
             lateFilingPenalties = apiClient.lateFilingPenalty().get(uri).execute().getData();
         } catch (ApiErrorResponseException ex) {
             throw new ServiceException("Error retrieving Late Filing Penalty from API", ex);
@@ -56,18 +59,19 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
         // If no Late Filing Penalties for company return an empty list.
         if (lateFilingPenalties.getTotalResults() == 0) {
+            LOGGER.debug(LOG_MESSAGE_RETURNING_DETAILS + companyNumber + "  " + penaltyNumber);
             return payableLateFilingPenalties;
         }
 
         // Compile all payable penalties into one List to be returned.
         // Always include penalty with the ID provided so the correct error page can be displayed.
-        for (LateFilingPenalty lateFilingPenalty: lateFilingPenalties.getItems()) {
+        for (LateFilingPenalty lateFilingPenalty : lateFilingPenalties.getItems()) {
             if ((!lateFilingPenalty.getPaid() && lateFilingPenalty.getType().equals(PENALTY_TYPE))
                     || lateFilingPenalty.getId().equals(penaltyNumber)) {
                 payableLateFilingPenalties.add(lateFilingPenalty);
             }
         }
-
+        LOGGER.debug(LOG_MESSAGE_RETURNING_DETAILS + companyNumber + "  " + penaltyNumber);
         return payableLateFilingPenalties;
     }
 
@@ -87,8 +91,7 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
                 financeHealthcheck.setMaintenanceEndTime(new JSONObject(ex.getContent()).get("maintenance_end_time").toString());
 
                 return financeHealthcheck;
-            }
-            else {
+            } else {
                 throw new ServiceException("Error retrieving Finance Healthcheck", ex);
             }
 

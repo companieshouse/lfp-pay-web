@@ -115,7 +115,6 @@ public class ViewPenaltiesController extends BaseController {
                     companyNumber,
                     penaltyNumber,
                     lateFilingPenalty.getOutstanding());
-            LOGGER.info("Call late filing penalty service and create payable session");
 
         } catch (ServiceException e) {
 
