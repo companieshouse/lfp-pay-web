@@ -64,6 +64,7 @@ public class PaymentServiceImpl implements PaymentService {
         paymentSessionApi.setResource(apiUrl + payableLateFilingPenaltySession.getLinks().get("self") + "/payment");
         paymentSessionApi.setReference("late_filing_penalty_" + payableLateFilingPenaltySession.getId());
         paymentSessionApi.setState(paymentState);
+        LOGGER.info("Creating payment session");
         LOGGER.info("SESSION REDIRECT URI: " + paymentSessionApi.getRedirectUri());
         LOGGER.info("SESSION REFERENCE: " + paymentSessionApi.getReference());
         LOGGER.info("SESSION RESOURCE: " + paymentSessionApi.getResource());

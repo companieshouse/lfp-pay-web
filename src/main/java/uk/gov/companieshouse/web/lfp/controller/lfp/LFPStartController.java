@@ -50,7 +50,7 @@ public class LFPStartController extends BaseController {
         }
 
         if (financeHealthcheck.getMessage().equals(FinanceHealthcheckStatus.HEALTHY.getStatus())) {
-            LOGGER.debug("financial health check: " + financeHealthcheck.getMessage());
+            LOGGER.debug("Financial health check: " + financeHealthcheck.getMessage());
             if(startId.isPresent() && startId.get() == 0) {
                 return navigatorService.getNextControllerRedirect(this.getClass());
             }

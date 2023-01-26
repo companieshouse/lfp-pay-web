@@ -44,7 +44,8 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
         try {
             String uri = GET_LFP_URI.expand(companyNumber).toString();
-            LOGGER.debug("Sending request to API to fetch late filing penalties");
+            LOGGER.debug("Sending request to API to fetch late filing penalties for " 
+            + companyNumber + " and penalty number: " + penaltyNumber);
             lateFilingPenalties = apiClient.lateFilingPenalty().get(uri).execute().getData();
         } catch (ApiErrorResponseException ex) {
             throw new ServiceException("Error retrieving Late Filing Penalty from API", ex);
@@ -56,6 +57,8 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
 
         // If no Late Filing Penalties for company return an empty list.
         if (lateFilingPenalties.getTotalResults() == 0) {
+            LOGGER.debug("API has responded. Returning details for company number: " 
+            + companyNumber + " and penalty number: " + penaltyNumber);
             return payableLateFilingPenalties;
         }
 
@@ -67,7 +70,8 @@ public class LateFilingPenaltyServiceImpl implements LateFilingPenaltyService {
                 payableLateFilingPenalties.add(lateFilingPenalty);
             }
         }
-
+        LOGGER.debug("API has responded. Returning details for company number: " 
+        + companyNumber + " and penalty number: " + penaltyNumber);
         return payableLateFilingPenalties;
     }
 
