@@ -46,6 +46,7 @@ public class LFPStartController extends BaseController {
         try {
             financeHealthcheck = lateFilingPenaltyService.checkFinanceSystemAvailableTime();
         } catch (ServiceException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ERROR_VIEW;
         }
 
