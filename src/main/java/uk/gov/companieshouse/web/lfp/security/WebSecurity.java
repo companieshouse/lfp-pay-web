@@ -1,66 +1,54 @@
 package uk.gov.companieshouse.web.lfp.security;
-
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.auth.filter.UserAuthFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
 
-@SuppressWarnings("java:S1118")  // Constructor is required for Spring Application
+@Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurity {
-
-    @Configuration
+    @Bean
     @Order(1)
-    public static class TemporaryStartPageSecurityConfig extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/late-filing-penalty");
-        }
+    public SecurityFilterChain temporaryStartPageSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .antMatcher("/late-filing-penalty");
+        return http.build();
     }
 
-
-    @Configuration
+    @Bean
     @Order(2)
-    public static class AccessibilityStatementPageSecurityConfig extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/late-filing-penalty/accessibility-statement");
-        }
+        protected SecurityFilterChain accessibilityStatementPageSecurityConfig(HttpSecurity http) throws Exception {
+        http
+                .antMatcher("/late-filing-penalty/accessibility-statement");
+        return http.build();
     }
 
-
-    @Configuration
+    @Bean
     @Order(3)
-    public static class HealthcheckSecurityConfig extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/late-filing-penalty/healthcheck");
-        }
+        protected SecurityFilterChain healthcheckSecurityFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/late-filing-penalty/healthcheck");
+        return http.build();
     }
 
-    @Configuration
+    @Bean
     @Order(4)
-    public static class LFPWebSecurityFilterConfig extends WebSecurityConfigurerAdapter {
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-
-            http.antMatcher("/late-filing-penalty/**")
+        public SecurityFilterChain lFPWebSecurityFilterConfig (HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/late-filing-penalty/**")
                     .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new UserAuthFilter(), BasicAuthenticationFilter.class);
-        }
-    }
 
+            return http.build();
+        }
 }
 
