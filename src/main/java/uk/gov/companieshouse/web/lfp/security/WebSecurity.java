@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.lfp.security;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -9,8 +11,9 @@ import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.auth.filter.UserAuthFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
 
-@SuppressWarnings("java:S1118")
+@Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurity {
     @Bean
     @Order(1)
