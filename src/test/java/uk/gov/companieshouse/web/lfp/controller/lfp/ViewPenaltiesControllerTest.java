@@ -78,7 +78,7 @@ class ViewPenaltiesControllerTest {
     private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -245,7 +245,7 @@ class ViewPenaltiesControllerTest {
 
 
     private void configurePreviousController() {
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
+        when(mockNavigatorService.getPreviousControllerPath(any()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
     }
 

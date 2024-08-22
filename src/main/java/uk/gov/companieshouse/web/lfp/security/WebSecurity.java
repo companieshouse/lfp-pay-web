@@ -19,7 +19,7 @@ public class WebSecurity {
     @Order(1)
     public SecurityFilterChain temporaryStartPageSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/late-filing-penalty");
+                .securityMatcher("/late-filing-penalty");
         return http.build();
     }
 
@@ -27,7 +27,7 @@ public class WebSecurity {
     @Order(2)
         protected SecurityFilterChain accessibilityStatementPageSecurityConfig(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/late-filing-penalty/accessibility-statement");
+                .securityMatcher("/late-filing-penalty/accessibility-statement");
         return http.build();
     }
 
@@ -35,7 +35,7 @@ public class WebSecurity {
     @Order(3)
         protected SecurityFilterChain healthcheckSecurityFilterChain(HttpSecurity http) throws Exception {
             http
-                    .antMatcher("/late-filing-penalty/healthcheck");
+                    .securityMatcher("/late-filing-penalty/healthcheck");
         return http.build();
     }
 
@@ -43,7 +43,7 @@ public class WebSecurity {
     @Order(4)
         public SecurityFilterChain lFPWebSecurityFilterConfig (HttpSecurity http) throws Exception {
             http
-                    .antMatcher("/late-filing-penalty/**")
+                    .securityMatcher("/late-filing-penalty/**")
                     .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new UserAuthFilter(), BasicAuthenticationFilter.class);

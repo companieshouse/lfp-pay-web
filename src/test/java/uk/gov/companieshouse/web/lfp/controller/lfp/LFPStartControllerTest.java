@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.security.WebSecurity;
@@ -50,8 +52,8 @@ class LFPStartControllerTest {
     private LFPStartController controller;
 
     @BeforeEach
-    private void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(viewResolver()).build();
     }
 
     private static final String LFP_START_PATH = "/late-filing-penalty";
@@ -183,7 +185,16 @@ class LFPStartControllerTest {
     }
 
     private void configureNextController() {
-        when(mockNavigatorService.getNextControllerRedirect(any(), any()))
+       when(mockNavigatorService.getNextControllerRedirect(any()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
+    }
+    private ViewResolver viewResolver()
+    {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+
+        viewResolver.setPrefix("classpath:templates/");
+        viewResolver.setSuffix(".html");
+
+        return viewResolver;
     }
 }

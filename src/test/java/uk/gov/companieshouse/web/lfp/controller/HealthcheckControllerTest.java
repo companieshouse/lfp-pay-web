@@ -25,7 +25,7 @@ class HealthcheckControllerTest {
     private static final String HEALTHCHECK_PATH = "/late-filing-penalty/healthcheck";
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

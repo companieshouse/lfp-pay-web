@@ -3,8 +3,8 @@ package uk.gov.companieshouse.web.lfp.validation;
 import org.thymeleaf.util.StringUtils;
 import uk.gov.companieshouse.web.lfp.annotation.Penalty;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class PenaltyValidator implements ConstraintValidator<Penalty, String> {
 
