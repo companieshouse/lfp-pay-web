@@ -7,7 +7,7 @@ The Companies House Web Service for handling payments of LFPs. This application 
 ### Requirements
 In order to run this Web App locally you will need to install:
 
-- [Java 21](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Java 21](https://www.oracle.com/java/technologies/downloads/?er=221886#java21)
 - [Maven](https://maven.apache.org/download.cgi)
 - [Git](https://git-scm.com/downloads)
 - [Payments API](https://github.com/companieshouse/payments.api.ch.gov.uk)
