@@ -19,7 +19,7 @@ import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenalty
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.service.payment.PaymentService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

@@ -1,7 +1,7 @@
 package uk.gov.companieshouse.web.lfp.models;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import uk.gov.companieshouse.web.lfp.annotation.Penalty;
 
 public class EnterLFPDetails {

@@ -67,7 +67,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

@@ -63,7 +63,7 @@ class ConfirmationControllerTest {
     private static final String PAYMENT_STATE = "payment_state";
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

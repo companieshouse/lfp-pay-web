@@ -28,7 +28,7 @@ class AccessibilityStatementControllerTest {
     private static final String LFP_ACCESSIBILITY_STATEMENT = "lfp/accessibilityStatement";
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

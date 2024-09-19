@@ -43,7 +43,7 @@ class DcaRequiredControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -61,7 +61,7 @@ class DcaRequiredControllerTest {
     }
 
     private void configurePreviousController() {
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
+        when(mockNavigatorService.getPreviousControllerPath(any()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
     }
 

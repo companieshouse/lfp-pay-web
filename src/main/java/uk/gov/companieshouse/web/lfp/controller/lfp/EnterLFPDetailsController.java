@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.latefilingpenalty.LateFilingPenalty;
 import uk.gov.companieshouse.web.lfp.annotation.NextController;
@@ -19,8 +20,8 @@ import uk.gov.companieshouse.web.lfp.models.EnterLFPDetails;
 import uk.gov.companieshouse.web.lfp.service.company.CompanyService;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.LateFilingPenaltyService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -46,6 +47,9 @@ public class EnterLFPDetailsController extends BaseController {
     private static final String LFP_ONLINE_PAYMENT_UNAVAILABLE = "/online-payment-unavailable";
 
     private static final String PENALTY_TYPE = "penalty";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String ENTER_LFP_DETAILS_MODEL_ATTR = "enterLFPDetails";
+    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     @Override protected String getTemplateName() {
         return LFP_ENTER_DETAILS;
@@ -53,7 +57,7 @@ public class EnterLFPDetailsController extends BaseController {
 
     @GetMapping
     public String getLFPEnterDetails(Model model) {
-        model.addAttribute("enterLFPDetails", new EnterLFPDetails());
+        model.addAttribute(ENTER_LFP_DETAILS_MODEL_ATTR, new EnterLFPDetails());
 
         addBackPageAttributeToModel(model);
 
@@ -61,9 +65,9 @@ public class EnterLFPDetailsController extends BaseController {
     }
 
     @PostMapping
-    public String postLFPEnterDetails(@ModelAttribute("enterLFPDetails") @Valid EnterLFPDetails enterLFPDetails,
+    public String postLFPEnterDetails(@ModelAttribute(ENTER_LFP_DETAILS_MODEL_ATTR) @Valid EnterLFPDetails enterLFPDetails,
                                       BindingResult bindingResult,
-                                      HttpServletRequest request) {
+                                      HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) {
 
         if (bindingResult.hasErrors()) {
             List<FieldError> errors = bindingResult.getFieldErrors();
@@ -79,6 +83,11 @@ public class EnterLFPDetailsController extends BaseController {
         try {
             List<LateFilingPenalty> payableLateFilingPenalties = lateFilingPenaltyService
                     .getLateFilingPenalties(companyNumber, penaltyNumber);
+
+
+                redirectAttributes.addFlashAttribute(TEMPLATE_NAME_MODEL_ATTR, getTemplateName());
+                redirectAttributes.addFlashAttribute(BACK_BUTTON_MODEL_ATTR, model.getAttribute(BACK_BUTTON_MODEL_ATTR));
+                redirectAttributes.addFlashAttribute(ENTER_LFP_DETAILS_MODEL_ATTR, enterLFPDetails);
 
             // If there are no payable late filing penalties either the company does not exist or has no penalties.
             if (payableLateFilingPenalties.isEmpty()) {

@@ -14,7 +14,7 @@ import uk.gov.companieshouse.web.lfp.exception.ServiceException;
 import uk.gov.companieshouse.web.lfp.service.latefilingpenalty.PayableLateFilingPenaltyService;
 import uk.gov.companieshouse.web.lfp.session.SessionService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 

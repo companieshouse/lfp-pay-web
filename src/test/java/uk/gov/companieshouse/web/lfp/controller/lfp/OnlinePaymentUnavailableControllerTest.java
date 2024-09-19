@@ -43,7 +43,7 @@ class OnlinePaymentUnavailableControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -60,7 +60,7 @@ class OnlinePaymentUnavailableControllerTest {
     }
 
     private void configurePreviousController() {
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
+        when(mockNavigatorService.getPreviousControllerPath(any()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
     }
 }
