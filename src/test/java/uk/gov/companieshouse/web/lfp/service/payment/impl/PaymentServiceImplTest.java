@@ -84,7 +84,7 @@ class PaymentServiceImplTest {
     private static final String COMPANY_NUMBER = "12345678";
 
     @BeforeEach
-    private void setUp() {
+    void setUp() {
 
         mockPaymentService = new PaymentServiceImpl(apiClientService, sessionService, environmentReader);
 

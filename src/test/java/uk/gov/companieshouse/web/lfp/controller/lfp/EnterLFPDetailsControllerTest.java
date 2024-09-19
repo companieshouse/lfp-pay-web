@@ -28,9 +28,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -87,7 +88,7 @@ class EnterLFPDetailsControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -128,8 +129,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, LOWER_CASE_LLP))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(UPPER_CASE_LLP);
@@ -146,8 +147,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, UPPER_CASE_LLP))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(UPPER_CASE_LLP);
@@ -203,8 +204,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(NO_PENALTY_FOUND_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -221,8 +222,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -239,8 +240,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(NO_PENALTY_FOUND_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -257,8 +258,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(DCA_PAYMENTS_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -275,8 +276,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(ALREADY_PAID_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -293,8 +294,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -311,9 +312,9 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
-                .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
+                .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
@@ -329,8 +330,8 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(ONLINE_PAYMENT_UNAVAILABLE_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
@@ -365,20 +366,20 @@ class EnterLFPDetailsControllerTest {
                 .param(PENALTY_NUMBER_ATTRIBUTE, VALID_PENALTY_NUMBER)
                 .param(COMPANY_NUMBER_ATTRIBUTE, VALID_COMPANY_NUMBER))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeErrorCount(ENTER_LFP_DETAILS_MODEL_ATTR, 0))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(ENTER_LFP_DETAILS_MODEL_ATTR))
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(mockCompanyService, times(1)).appendToCompanyNumber(VALID_COMPANY_NUMBER);
     }
 
     private void configurePreviousController() {
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
+        when(mockNavigatorService.getPreviousControllerPath(any()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
     }
 
     private void configureNextController() {
-        when(mockNavigatorService.getNextControllerRedirect(any(), any()))
+        when(mockNavigatorService.getNextControllerRedirect(any(),any(),any()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
     }
 

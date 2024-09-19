@@ -70,7 +70,7 @@ class PayableLateFilingPenaltyServiceImplTest {
     private static final String GET_PAYABLE_LFP_URI = "/company/" + COMPANY_NUMBER + "/penalties/late-filing/payable/" + PENALTY_ID;
 
     @BeforeEach
-    private void init() {
+    void init() {
 
         when(apiClientService.getPublicApiClient()).thenReturn(apiClient);
 

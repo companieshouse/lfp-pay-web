@@ -76,7 +76,7 @@ class LateFilingPenaltyServiceImplTest {
     private static final String MAINTENANCE_END_TIME = "2019-11-08T23:00:12Z";
 
     @BeforeEach
-    private void init() {
+    void init() {
 
         when(apiClientService.getPublicApiClient()).thenReturn(apiClient);
     }
