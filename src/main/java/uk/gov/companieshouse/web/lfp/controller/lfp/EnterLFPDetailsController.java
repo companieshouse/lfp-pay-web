@@ -57,7 +57,7 @@ public class EnterLFPDetailsController extends BaseController {
 
     @GetMapping
     public String getLFPEnterDetails(Model model) {
-        model.addAttribute("enterLFPDetails", new EnterLFPDetails());
+        model.addAttribute(ENTER_LFP_DETAILS_MODEL_ATTR, new EnterLFPDetails());
 
         addBackPageAttributeToModel(model);
 
@@ -65,7 +65,7 @@ public class EnterLFPDetailsController extends BaseController {
     }
 
     @PostMapping
-    public String postLFPEnterDetails(@ModelAttribute("enterLFPDetails") @Valid EnterLFPDetails enterLFPDetails,
+    public String postLFPEnterDetails(@ModelAttribute(ENTER_LFP_DETAILS_MODEL_ATTR) @Valid EnterLFPDetails enterLFPDetails,
                                       BindingResult bindingResult,
                                       HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) {
 
@@ -84,14 +84,10 @@ public class EnterLFPDetailsController extends BaseController {
             List<LateFilingPenalty> payableLateFilingPenalties = lateFilingPenaltyService
                     .getLateFilingPenalties(companyNumber, penaltyNumber);
 
-            try {
+
                 redirectAttributes.addFlashAttribute(TEMPLATE_NAME_MODEL_ATTR, getTemplateName());
                 redirectAttributes.addFlashAttribute(BACK_BUTTON_MODEL_ATTR, model.getAttribute(BACK_BUTTON_MODEL_ATTR));
                 redirectAttributes.addFlashAttribute(ENTER_LFP_DETAILS_MODEL_ATTR, enterLFPDetails);
-            }catch (NullPointerException exception){
-                LOGGER.errorRequest(request, "model.getAttribute(\"backButton\") was null :\n" + exception.getMessage(), exception);
-                return ERROR_VIEW;
-            }
 
             // If there are no payable late filing penalties either the company does not exist or has no penalties.
             if (payableLateFilingPenalties.isEmpty()) {
