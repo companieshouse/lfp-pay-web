@@ -8,7 +8,7 @@ locals {
   docker_repo                = "lfp-pay-web"
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority  = 87
-  lb_listener_paths          = ["/late-filing-penalty/*"]
+  lb_listener_paths          = ["/late-filing-penalty/*","/late-filing-penalty"]
   healthcheck_path           = "/late-filing-penalty/healthcheck" # healthcheck path for lfp-pay-web 
   healthcheck_matcher        = "200"
   vpc_name                   = local.stack_secrets["vpc_name"]
