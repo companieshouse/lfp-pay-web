@@ -1,5 +1,4 @@
 #!/bin/bash 
-
 # Start script for lfp-pay-web  
 
 PORT=8080
