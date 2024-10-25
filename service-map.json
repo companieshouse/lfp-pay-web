@@ -1,0 +1,18 @@
+{
+    "type": "Service",
+    "name": "lfp-pay-web",
+    "description": "The Companies House Web Service for handling payments of LFPs.",
+    "owned_by": "Titans",
+    "git_repo": "https://github.com/companieshouse/lfp-pay-web",
+    "public": "true",
+    "users": "public",
+    "code_analysis_link": "http://code-analysis.platform.aws.chdev.org:9000/dashboard?id=uk.gov.companieshouse%3Alfp-pay-web#",    
+    "service_area": "Intelligence and Enforcement",
+    "service_component": "LFP",
+    "language": "Java",
+    "integration_outgoing": [
+      "payments.web.ch.gov.uk,INTEGRATES_WITH",
+      "payments.api.ch.gov.uk,CALLS_API",
+      "lfp-pay-api,CALLS_API"
+    ]
+  }
