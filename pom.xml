@@ -26,7 +26,7 @@
         <api-sdk-java.version>6.6.23</api-sdk-java.version>
         <assertj-core.version>3.27.7</assertj-core.version>
         <!-- Add Tomcat version property for consistent override -->
-        <tomcat.version>10.1.57</tomcat.version>
+        <tomcat.version>10.1.59</tomcat.version>
         <opentelemetry-semconv.version>1.42.0</opentelemetry-semconv.version>
         <opentelemetry.version>2.31.0</opentelemetry.version>
         <jackson-databind.version>2.21.5</jackson-databind.version>
